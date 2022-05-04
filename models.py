@@ -1,4 +1,6 @@
+from tabnanny import check
 from app import db
+from werkzeug.security import check_password_hash, generate_password_hash
 
 class Producto(db.Model):
     __tablename__ = 'productos'
@@ -16,14 +18,19 @@ class Producto(db.Model):
         return f"<Producto id={self.id}>"
 
 
-
 class Usuario(db.Model):
     __tablename__ = 'usuarios'
-    usuario = db.Column(db.String(), primary_key=True, nullable=False)
-    clave = db.Column(db.String(), nullable=False)
-    nombre = db.Column(db.String(), nullable=False)
+    usuario = db.Column(db.String(80), primary_key=True, nullable=False)
+    clave = db.Column(db.String(120), nullable=False)
+    nombre = db.Column(db.String(80), nullable=False)
     celular = db.Column(db.Integer, nullable=False)
     productos = db.relationship("Producto", backref="usuarios", lazy=True)
 
     def __repr__(self):
         return f'<Usuario: usuario={self.usuario}>'
+
+    def check_clave(self, clave):
+        return check_password_hash(self.clave, clave)
+
+    def set_clave(self, clave):
+        self.clave = generate_password_hash(clave)
