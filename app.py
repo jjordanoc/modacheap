@@ -10,7 +10,7 @@ from models import *
 # Config
 app = Flask(__name__)
 app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://postgres:123@localhost:5432/modacheap"
+app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://jjoc:1234@localhost:5432/modacheap"
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
 db = SQLAlchemy(app)
 migrate = Migrate(app, db)
@@ -43,10 +43,37 @@ def login_usuario():
 
 
 # Controllers
+@login_manager.user_loader
+def load_user(user_id):
+    return Usuario.query.get(user_id)
+
 @app.route("/")
 @login_required
 def index():
     return render_template("index.html")
+
+@app.route("/register", methods=["GET", "POST"])
+def register():
+    if request.method == "POST":
+        try:
+            data = request.json
+            username = data["username"]
+            password = data["password"]
+            user = Usuario(usuario=username)
+            print(user)
+            user.set_password(password)
+            db.session.add(user)
+            db.session.commit()
+            load_user(user.usuario)
+            return redirect(url_for("index"))
+        except:
+            db.session.rollback()
+            print(sys.exc_info())
+            abort(500)
+        finally:
+            db.session.close()
+
+    return render_template("register.html")
 
 
 @app.route("/producto/crear" , methods=['POST'])
@@ -82,7 +109,7 @@ def create_ropa():
             'talla' : talla,
             'sexo' : sexo,
             'categoria' : categoria,
-            'distrito' : distrito       
+            'distrito' : distrito
         }
     except Exception as e :
         error=True
@@ -93,7 +120,7 @@ def create_ropa():
         db.session.close()
     if error:
         abort(500)
-    else: 
+    else:
         return jsonify(response)
 
 
