@@ -1,6 +1,8 @@
 # Imports
+from crypt import methods
 import json
 import sys
+from urllib import response
 from flask import Flask, redirect, request, render_template, jsonify, abort, url_for
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
@@ -54,6 +56,58 @@ def register():
             db.session.close()
 
     return render_template("register.html")
+
+
+#Cambiar route
+@app.route("/producto/create" , methods=['POST'])
+#Cambiar def
+def create_ropa():
+    error = False
+    response = {}
+    try:
+        id = request.get_json()['id']
+        usuario = request.get_json()['usuario']
+        precio = request.get_json()['precio']
+        descripcion = request.get_json()['descripcion']
+        talla = request.get_json()['talla']
+        sexo = request.get_json()['sexo']
+        categoria = request.get_json()['categoria']
+        distrito = request.get_json()['distrito']
+        productos = Producto (
+            id = id,
+            usuario = usuario,
+            precio = precio,
+            descripcion = descripcion,
+            talla = talla,
+            sexo = sexo,
+            categoria = categoria,
+            distrito = distrito
+        )
+        db.session.add(productos)
+        db.session.commit()
+        response = {
+            'id' : id,
+            'usuario' : usuario,
+            'precio' : precio,
+            'descripcion' : descripcion,
+            'talla' : talla,
+            'sexo' : sexo,
+            'categoria' : categoria,
+            'distrito' : distrito
+        }
+    except Exception as e :
+        error=True
+        print(e)
+        print(sys.exc_info())
+        db.session.rollback()
+    finally:
+        db.session.close()
+    if error:
+        abort(500)
+    else:
+        return jsonify(response)
+
+
 
 
 # Run
