@@ -6,3 +6,5 @@ class Usuario(db.Model):
     celular = db.Column(db.Integer, primary_key=False, nullable=False)
     productos = db.relationship("Producto", backref="usuario", lazy=True)
 
+    def __repr__(self):
+        return f'Usuario: _usuario_ = {self._usuario_}'
