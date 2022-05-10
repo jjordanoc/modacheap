@@ -1,11 +1,12 @@
-from tabnanny import check
-from app import db
+from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
+
+db = SQLAlchemy()
 
 class Producto(db.Model):
     __tablename__ = 'productos'
     id = db.Column(db.Integer, primary_key=True)
-    usuario = db.Column(db.String(80), db.ForeignKey("usuarios.username"), nullable=False)
+    usuario = db.Column(db.String(80), db.ForeignKey("usuarios.usuario"), nullable=False)
     precio = db.Column(db.Float, nullable=False)
     nombre = db.Column(db.String(80), nullable=False)
     descripcion = db.Column(db.Text, nullable=False)

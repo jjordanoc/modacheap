@@ -1,18 +1,21 @@
 # Imports
-import json
 import sys
+import os
 from flask import Flask, redirect, request, render_template, jsonify, abort, url_for
-from flask_sqlalchemy import SQLAlchemy
+from models import db, Producto, Usuario
 from flask_migrate import Migrate
 from flask_login import login_required, LoginManager, login_user
-from models import *
+from dotenv import load_dotenv
+
+
 
 # Config
+load_dotenv()
 app = Flask(__name__)
-app.secret_key = b'_5#y2L"F4Q8z\n\xec]/'
-app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql://jjoc:1234@localhost:5432/modacheap"
+app.secret_key = os.environ.get("SECRET_KEY")
+app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URI")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-db = SQLAlchemy(app)
+db.init_app(app)
 migrate = Migrate(app, db)
 login_manager = LoginManager()
 login_manager.init_app(app)
@@ -43,17 +46,13 @@ def login_usuario():
 
 
 # Controllers
-@login_manager.user_loader
-def load_user(user_id):
-    return Usuario.query.get(user_id)
-
 @app.route("/")
 @login_required
 def index():
     return render_template("index.html")
 
-@app.route("/register", methods=["GET", "POST"])
-def register():
+@app.route("/registrar", methods=["GET", "POST"])
+def registrar():
     if request.method == "POST":
         try:
             data = request.json
@@ -77,7 +76,7 @@ def register():
 
 
 @app.route("/producto/crear" , methods=['POST'])
-def create_ropa():
+def crear_producto():
     error = False
     response = {}
     try:
@@ -129,3 +128,5 @@ def create_ropa():
 # Run
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
+
+    
