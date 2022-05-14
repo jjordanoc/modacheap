@@ -37,6 +37,9 @@ class Usuario(db.Model, UserMixin):
 
     def set_clave(self, clave):
         self.clave = generate_password_hash(clave)
+    
+    def get_id(self):
+        return self.correo
 
 
 class Imagen(db.Model):
