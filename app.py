@@ -34,11 +34,11 @@ def load_user(user_id):
 def login_usuario():
     if request.method == "POST":
         data = request.json
-        nombre_usuario = data["usuario"]
+        correo = data["correo"]
         clave = data["clave"]
         nombre = data["nombre"]
         celular = data["celular"]
-        usuario = load_user(nombre_usuario)
+        usuario = load_user(correo)
         print(usuario)
         if not usuario or not usuario.check_clave(clave):
             return redirect(url_for("login"))

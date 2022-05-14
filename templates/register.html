@@ -13,11 +13,11 @@
             <input id="correo" name="correo" type="email" required placeholder="Correo" class="text-input">
         </div>
         <div class="form-field">
-            <!-- <label for="password">Password</label> -->
+            <!-- <label for="clave">Clave</label> -->
             <input id="clave" name="clave" type="password" required placeholder="Clave" class="text-input">
         </div>
         <div class="form-field">
-            <!-- <label for="password">Password</label> -->
+            <!-- <label for="nombre">Nombre</label> -->
             <input id="nombre" name="nombre" type="text" required placeholder="Nombre" class="text-input">
         </div>
         <div class="form-field">
@@ -29,13 +29,13 @@
     const loginForm = document.getElementById("login-form");
     loginForm.onsubmit = function(e) {
         e.preventDefault();
-        const username = document.getElementById("username");
-        const password = document.getElementById("password");
+        const correo = document.getElementById("correo");
+        const clave = document.getElementById("clave");
         fetch("/login", {
             method: "POST",
             body: JSON.stringify({
-                username: username.value,
-                password: password.value
+                correo: correo.value,
+                clave: clave.value
             }),
             headers: {
                 "Content-Type": "application/json"

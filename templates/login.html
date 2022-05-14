@@ -10,11 +10,11 @@
     <form id="login-form">
         <div class="form-field">
             <!-- <label for="username">Username</label> -->
-            <input id="username" name="username" type="text" required placeholder="Username" class="text-input">
+            <input id="correo" name="correo" type="email" required placeholder="Correo" class="text-input">
         </div>
         <div class="form-field">
             <!-- <label for="password">Password</label> -->
-            <input id="password" name="password" type="password" required placeholder="Password" class="text-input">
+            <input id="clave" name="clave" type="password" required placeholder="Clave" class="text-input">
         </div>
         <div class="form-field">
             <input type="submit" value="Log In" class="submit-input">
@@ -25,13 +25,13 @@
     const loginForm = document.getElementById("login-form");
     loginForm.onsubmit = function(e) {
         e.preventDefault();
-        const username = document.getElementById("username");
-        const password = document.getElementById("password");
+        const correo = document.getElementById("correo");
+        const clave = document.getElementById("clave");
         fetch("/login", {
             method: "POST",
             body: JSON.stringify({
-                username: username.value,
-                password: password.value
+                correo: correo.value,
+                clave: clave.value
             }),
             headers: {
                 "Content-Type": "application/json"
