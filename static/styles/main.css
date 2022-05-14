@@ -99,26 +99,6 @@ body {
     border: none;
 }
 
-<<<<<<< HEAD
-.card-text4 {
-    color: red;
-    text-align: right;
-
-}
-
-.card-title {
-    text-align: center;
-    font-weight: bold;
-}
-
-.card-text3 {
-    display: inline;
-}
-
-.card{
-    font-family: 'Josefin Sans', sans-serif;
-}
-=======
 /* Para slide de producto */
 .slider{
     width: 700px;
@@ -188,4 +168,17 @@ input[name="r"]{
 #r3:checked ~.s1{
     margin-left: -40%;
 }
->>>>>>> cb950785112c439c1ad465c2722b13fb3e71ca01
+
+.card-text3{
+    display: inline;
+}
+
+.card-text4{
+    text-align: right;
+    color: red;
+}
+
+.card{
+    font-family: 'Josefin Sans', sans-serif;
+
+}
