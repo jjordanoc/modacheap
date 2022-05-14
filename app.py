@@ -1,4 +1,5 @@
 # Imports
+from cmath import e
 import sys
 import os
 import uuid
@@ -27,23 +28,25 @@ login_manager.login_view = "/usuario/login"
 
 # Models
 @login_manager.user_loader
-def load_user(user_id):
-    return Usuario.query.get(user_id)
+def load_user(correo):
+    return Usuario.query.get(correo)
 
 @app.route("/usuario/login", methods=["GET", "POST"])
 def usuario_login():
     if request.method == "POST":
-        data = request.json
-        correo = data["correo"]
-        clave = data["clave"]
-        nombre = data["nombre"]
-        celular = data["celular"]
-        usuario = load_user(correo)
-        print(usuario)
-        if not usuario or not usuario.check_clave(clave):
-            return redirect(url_for("login"))
-        login_user(usuario, remember=True)
-        return redirect(url_for("index"))   
+        try:
+            data = request.json
+            correo = data["correo"]
+            clave = data["clave"]
+            usuario = load_user(correo)
+            print(usuario)
+            if not usuario or not usuario.check_clave(clave):
+                return redirect(url_for("usuario_login"))
+            login_user(usuario, remember=True)
+            return redirect(url_for("index"))   
+        except Exception as e:
+            print(e)
+            abort(500)
 
     return render_template("login.html")
 
@@ -58,11 +61,7 @@ def index():
 def usuario_registrar():
     if request.method == "POST":
         try:
-<<<<<<< HEAD
-            data = request.json()
-=======
             data = request.get_json()
->>>>>>> bc05945935f9c75858743c5cd24f260f906c436c
             correo = data["correo"]
             clave = data["clave"]
             nombre = data["nombre"]
@@ -89,14 +88,15 @@ def producto_crear():
     error = False
     response = {}
     try:
-        id = request.get_json()['id']
-        correo = request.get_json()['correo']
-        precio = request.get_json()['precio']
-        descripcion = request.get_json()['descripcion']
-        talla = request.get_json()['talla']
-        sexo = request.get_json()['sexo']
-        categoria = request.get_json()['categoria']
-        distrito = request.get_json()['distrito']
+        data = request.get_json()
+        id = data['id']
+        correo = data['correo']
+        precio = data['precio']
+        descripcion = data['descripcion']
+        talla = data['talla']
+        sexo = data['sexo']
+        categoria = data['categoria']
+        distrito = data['distrito']
         imagenes = request.files.getlist("imagenes")
         for imagen in imagenes:
             img_id = uuid.uuid4()

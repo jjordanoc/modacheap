@@ -2,7 +2,7 @@ const usuarioLogin = function(e) {
     e.preventDefault();
     const correo = document.getElementById("correo");
     const clave = document.getElementById("clave");
-    fetch("/login", {
+    fetch("/usuario/login", {
         method: "POST",
         body: JSON.stringify({
             correo: correo.value,
@@ -21,7 +21,7 @@ const usuarioRegistrar = function(e) {
     e.preventDefault();
     const correo = document.getElementById("correo");
     const clave = document.getElementById("clave");
-    fetch("/login", {
+    fetch("/usuario/registrar", {
         method: "POST",
         body: JSON.stringify({
             correo: correo.value,
