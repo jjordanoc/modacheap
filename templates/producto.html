@@ -2,14 +2,31 @@
 
 
 {% block main %}
-<div class="slider">
+<div class="slider mid">
 
     <div class="slides">
+        <input type="radio" name="r" id="r1" checked>
+        <input type="radio" name="r" id="r2" checked>
+        <input type="radio" name="r" id="r3" checked>
 
-        <div class="slide">
+        <div class="slide s1">
             <img src="{{url_for('static',filename='resources/1.jpg')}}" alt="chaqueta"/>
         </div>
 
+        <div class="slide">
+            <img src="{{url_for('static',filename='resources/2.jpg')}}" alt="chaqueta"/>
+        </div>
+
+        <div class="slide">
+            <img src="{{url_for('static',filename='resources/3.jpg')}}" alt="chaqueta"/>
+        </div>
+
+
+        <div class="navigation">
+            <label for="r1" class="bar"></label>
+            <label for="r2" class="bar"></label>
+            <label for="r3" class="bar"></label>
+        </div>
     </div>
 
 </div>

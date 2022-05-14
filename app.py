@@ -1,6 +1,7 @@
 # Imports
 from cmath import e
 import json
+import re
 import sys
 import os
 import uuid
@@ -11,7 +12,7 @@ from flask_login import login_required, LoginManager, login_user, current_user, 
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
 import unittest
-import requests
+
 # Config
 load_dotenv()
 app = Flask(__name__)
@@ -30,9 +31,11 @@ login_manager.login_view = "/usuario/login"
 @login_manager.user_loader
 def load_user(correo):
     return Usuario.query.get(correo)
+
 @app.route("/producto",methods=["GET", "POST"])
 def producto():
     return render_template("producto.html")
+
 @app.route("/usuario/login", methods=["GET", "POST"])
 def usuario_login():
     res = {}
@@ -69,6 +72,7 @@ def index():
 
 @app.route("/usuario/registrar", methods=["GET", "POST"])
 def usuario_registrar():
+    res = {}
     if request.method == "POST":
         res = {}
         try:
@@ -95,60 +99,61 @@ def usuario_registrar():
     return render_template("register.html")
 
 
-@app.route("/producto/crear" , methods=['POST'])
+@app.route("/producto/crear" , methods=["GET", 'POST'])
+@login_required
 def producto_crear():
-
-    error = False
-    response = {}
-    try:
-        data = request.get_json()
-        id = data['id']
-        correo = data['correo']
-        precio = data['precio']
-        descripcion = data['descripcion']
-        talla = data['talla']
-        sexo = data['sexo']
-        categoria = data['categoria']
-        distrito = data['distrito']
-        imagenes = request.files.getlist("imagenes")
-        for imagen in imagenes:
-            img_id = uuid.uuid4()
-            imagen.save(os.path.join(app.config["UPLOAD_FOLDER"], img_id))
-            db.session.add(Imagen(id=img_id))
-        producto = Producto (
-            id = id,
-            correo = correo,
-            precio = precio,
-            descripcion = descripcion,
-            talla = talla,
-            sexo = sexo,
-            categoria = categoria,
-            distrito = distrito
-        )
-        db.session.add(producto)
-        db.session.commit()
-        response = {
-            'id' : id,
-            'correo' : correo,
-            'precio' : precio,
-            'descripcion' : descripcion,
-            'talla' : talla,
-            'sexo' : sexo,
-            'categoria' : categoria,
-            'distrito' : distrito
-        }
-    except Exception as e :
-        error=True
-        print(e)
-        print(sys.exc_info())
-        db.session.rollback()
-    finally:
-        db.session.close()
-    if error:
-        abort(500)
-    else:
+    if request.method == "POST":
+        response = {}
+        try:
+            data = request.get_json()
+            nombre = data['nombre']
+            usuario_correo = data['usuario_correo']
+            precio = data['precio']
+            descripcion = data['descripcion']
+            talla = data['talla']
+            sexo = data['sexo']
+            categoria = data['categoria']
+            distrito = data['distrito']
+            imagenes = request.files.getlist("imagenes")
+            print("request files", request.files)
+            print(data)
+            imagenes2 = request.files.get("")
+            producto = Producto (
+                nombre = nombre,
+                usuario_correo = usuario_correo,
+                precio = precio,
+                descripcion = descripcion,
+                talla = talla,
+                sexo = sexo,
+                categoria = categoria,
+                distrito = distrito
+            )
+            print(imagenes)
+            for imagen in imagenes:
+                img_id = uuid.uuid4()
+                imagen.save(os.path.join(app.config["UPLOAD_FOLDER"], img_id))
+                db.session.add(Imagen(id=img_id, producto_id=producto.id))
+            db.session.add(producto)
+            db.session.commit()
+            response = {
+                'id' : producto.id,
+                'nombre' : nombre,
+                'usuario_correo' : usuario_correo,
+                'precio' : precio,
+                'descripcion' : descripcion,
+                'talla' : talla,
+                'sexo' : sexo,
+                'categoria' : categoria,
+                'distrito' : distrito
+            }
+        except Exception as e :
+            print(e)
+            db.session.rollback()
+            abort(500)
+        finally:
+            db.session.close()
         return jsonify(response)
-
+    return render_template("vender.html", usuario=current_user)
 
 @app.errorhandler(404)
 def handle_not_found(error):
