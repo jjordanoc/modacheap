@@ -58,7 +58,7 @@ def index():
 def registrar():
     if request.method == "POST":
         try:
-            data = request.json
+            data = request.json()
             correo = data["correo"]
             clave = data["clave"]
             user = Usuario(correo=correo)

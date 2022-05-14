@@ -21,9 +21,16 @@
             <input id="nombre" name="nombre" type="text" required placeholder="Nombre" class="text-input">
         </div>
         <div class="form-field">
+            <label for="celular">Celular</label>
+            <input id="celular" name="celular" type="text" required placeholder="Celular" class="text-input">
+        </div>
+        <div class="form-field">
             <input type="submit" value="Registrarse" class="submit-input">
         </div>
     </form>
+    <div>
+        ¿Ya tienes una cuenta de ModeCheap? <a href="{{url_for('login_usuario')}}">Ingresa</a>
+    </div>
 </div>
 <script>
     const loginForm = document.getElementById("login-form");
@@ -31,18 +38,23 @@
         e.preventDefault();
         const correo = document.getElementById("correo");
         const clave = document.getElementById("clave");
+        const nombre = document.getElementById("nombre");
+        const celular = document.getElementById("celular");
         fetch("/login", {
             method: "POST",
             body: JSON.stringify({
                 correo: correo.value,
-                clave: clave.value
+                clave: clave.value,
+                nombre: nombre.value,
+                celular: celular.value,
             }),
             headers: {
                 "Content-Type": "application/json"
             },
             redirect: "follow"
         }).then(function(res) {
-            
+            console.log('response=', res)
+            return response.json();
         });
     }
 </script>
