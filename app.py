@@ -1,16 +1,16 @@
 # Imports
+from cmath import e
 import sys
 import os
 import uuid
 from flask import Flask, redirect, request, render_template, jsonify, abort, url_for
 from models import db, Producto, Usuario, Imagen
 from flask_migrate import Migrate
-from flask_login import login_required, LoginManager, login_user
+from flask_login import login_required, LoginManager, login_user, current_user
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
-
-
-
+import unittest
+import requests
 # Config
 load_dotenv()
 app = Flask(__name__)
@@ -54,8 +54,18 @@ def login_usuario():
 def index():
     return render_template("index.html")
 
+#Test 1
+class APIunitTests(unittest.TestCase):
+    API_URL = "http://127.0.0.1:5000"
+    REGISTER_URL = "{}/registrar".format(API_URL)
+
+    def test1(self):
+        r = request.get(APIunitTests.REGISTER_URL)
+        self.assertEqual(r.len(r.json()),2)
+    
 @app.route("/registrar", methods=["GET", "POST"])
 def registrar():
+    
     if request.method == "POST":
         try:
             data = request.json
@@ -76,6 +86,16 @@ def registrar():
             db.session.close()
 
     return render_template("register.html")
+
+
+#Test 2
+class APIunitTests2(unittest.TestCase):
+    API_URL = "http://127.0.0.1:5000"
+    REGISTER_URL = "{}/producto/crear".format(API_URL)
+
+    def test2(self):
+        r = request.get(APIunitTests.REGISTER_URL)
+        self.assertEqual(r.len(r.json()),2)
 
 
 @app.route("/producto/crear" , methods=['POST'])
