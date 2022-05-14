@@ -30,31 +30,18 @@ const usuarioRegistrar = function(e) {
     const clave = document.getElementById("clave");
     const nombre = document.getElementById("nombre");
     const celular = document.getElementById("celular");
-<<<<<<< HEAD
-    fetch("/login", {
-=======
     fetch("/usuario/registrar", {
->>>>>>> 7e1b53fdee9fd84db745a7ca99d5dd007ba30174
         method: "POST",
         body: JSON.stringify({
             correo: correo.value,
             clave: clave.value,
             nombre: nombre.value,
-<<<<<<< HEAD
-            celular: celular.value,
-=======
             celular: celular.value
->>>>>>> 7e1b53fdee9fd84db745a7ca99d5dd007ba30174
         }),
         headers: {
             "Content-Type": "application/json"
         },
         redirect: "follow"
-<<<<<<< HEAD
-    }).then(function(res) {
-        console.log('response=', res)
-        return response.json();
-=======
     }).then(res => res.json()).then(function(resJson) {
         if (resJson["status"] == "success") {
             window.location.href = "/"
@@ -64,6 +51,5 @@ const usuarioRegistrar = function(e) {
         }
     }).catch(function(e) {
         console.log(e);
->>>>>>> 7e1b53fdee9fd84db745a7ca99d5dd007ba30174
     });
 }
