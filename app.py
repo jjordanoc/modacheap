@@ -31,7 +31,9 @@ login_manager.login_view = "/usuario/login"
 @login_manager.user_loader
 def load_user(correo):
     return Usuario.query.get(correo)
-
+@app.route("/producto",methods=["GET", "POST"])
+def producto():
+    return render_template("producto.html")
 @app.route("/usuario/login", methods=["GET", "POST"])
 def usuario_login():
     res = {}
