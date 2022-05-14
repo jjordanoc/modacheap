@@ -56,8 +56,16 @@ def usuario_login():
 def index():
     return render_template("index.html", productos=Producto.query.all(), usuario=current_user)
 
+def test2(self):
+    API_URL = "http://127.0.0.1:5000"
+    REGISTER_URL = "{}/producto/crear".format(API_URL)
+    r = request.get(REGISTER_URL)
+    self.assertEqual("HOal"!=r)
+    print("la")
+
 @app.route("/usuario/registrar", methods=["GET", "POST"])
 def usuario_registrar():
+
     if request.method == "POST":
         try:
             data = request.get_json()
@@ -82,18 +90,9 @@ def usuario_registrar():
     return render_template("register.html")
 
 
-#Test 2
-class APIunitTests2(unittest.TestCase):
-    API_URL = "http://127.0.0.1:5000"
-    REGISTER_URL = "{}/producto/crear".format(API_URL)
-
-    def test2(self):
-        r = request.get(APIunitTests.REGISTER_URL)
-        self.assertEqual(r.len(r.json()),2)
-
-
 @app.route("/producto/crear" , methods=['POST'])
 def producto_crear():
+
     error = False
     response = {}
     try:
