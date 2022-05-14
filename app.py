@@ -65,16 +65,12 @@ def usuario_logout():
 def index():
     return render_template("index.html", productos=Producto.query.all(), usuario=current_user)
 
-def test2(self):
-    API_URL = "http://127.0.0.1:5000"
-    REGISTER_URL = "{}/producto/crear".format(API_URL)
-    r = request.get(REGISTER_URL)
-    self.assertEqual("HOal"!=r)
-    print("la")
+
 
 @app.route("/usuario/registrar", methods=["GET", "POST"])
 def usuario_registrar():
     if request.method == "POST":
+        res = {}
         try:
             data = request.get_json()
             correo = data["correo"]
@@ -86,11 +82,7 @@ def usuario_registrar():
             user.set_clave(clave)
             db.session.add(user)
             db.session.commit()
-<<<<<<< HEAD
-            login_user(user.correo)
-=======
             login_user(user, remember=True)
->>>>>>> ba1167288ba523ed21158fdc77601e71ce40d113
             res["status"] = "success"
             return jsonify(res)
         except:

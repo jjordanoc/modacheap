@@ -98,3 +98,22 @@ body {
     background-color: white;
     border: none;
 }
+
+.card-text4 {
+    color: red;
+    text-align: right;
+
+}
+
+.card-title {
+    text-align: center;
+    font-weight: bold;
+}
+
+.card-text3 {
+    display: inline;
+}
+
+.card{
+    font-family: 'Josefin Sans', sans-serif;
+}
