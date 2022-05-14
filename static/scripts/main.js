@@ -10,8 +10,7 @@ const usuarioLogin = function(e) {
         }),
         headers: {
             "Content-Type": "application/json"
-        },
-        redirect: "follow"
+        }
     }).then(res => res.json()).then(function(resJson) {
         if (resJson["status"] == "success") {
             window.location.href = "/"
@@ -40,8 +39,7 @@ const usuarioRegistrar = function(e) {
         }),
         headers: {
             "Content-Type": "application/json"
-        },
-        redirect: "follow"
+        }
     }).then(res => res.json()).then(function(resJson) {
         if (resJson["status"] == "success") {
             window.location.href = "/"
