@@ -17,20 +17,75 @@ body {
 }
 
 #login-form {
+
+    width:650px;
+    margin:30px auto;
+    background:linear-gradient(to right, #bb5f5f 0%, #fafafa 50%, #914040 99%);
+    border-radius: 10px;
+}
+
+.form-header  {
+    background-color: rgb(155, 0, 155);
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+  }
+
+.form-header h1 {
+    font-size: 30px;
+    text-align:center;
+    color:black;
+    padding:20px 0;
+    border-bottom:2px solid black;
+  }
+
+.form-field {
+    margin: 15px;
+    text-align: center;
+    justify-content: center;
+}   
+
+.top{
+    background-color: var(--main-bg-color);
+    color: var(--logo-color);
+}
+
+.box{
+    padding:10px 40px;
+     color:black;
+    
+}
+.box .subtitle {
+    color:#90ba1b;
+    font-size: 17px;
+    font-weight: bold;
+  }
+
+
+  
+.another{
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-
-.form-field {
-    margin: 15px;
-}   
+.change {
+    background-color: white;
+    border: 2px solid black;
+    padding: 5px 10px;
+    text-align: center;
+    display: inline-block;
+    font-size: 20px;
+    margin: 10px 30px;
+    cursor: pointer;
+}
 .text-input {
     padding: 20px;
 }
+
 .submit-input {
+    cursor: pointer;
+    
     color: black;
     padding: 10px 25px;
     background-color: white;

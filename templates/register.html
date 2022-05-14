@@ -3,32 +3,60 @@
 
 {% block main %}
 <div class="container">
+<<<<<<< HEAD
+    <header>
+        <div class = "top">
+            <h1>ModaCheap</h1>
+        </div>
+
+    </header>
+    
+
+    <form id="login-form">
+        
+        <div class="form-header">
+            <h1>Create Account</h1>
+        </div>
+
+        <div class="box">
+        
+=======
     <h2>Registrarse</h2>
     <form id="register-form">
+>>>>>>> 7e1b53fdee9fd84db745a7ca99d5dd007ba30174
         <div class="form-field">
-            <!-- <label for="correo">Correo</label> -->
-            <input id="correo" name="correo" type="email" required placeholder="Correo" class="text-input">
+            <label for="correo" class="subtitle">Correo</label></br>
+            <input id="correo" name="correo" type="email" required class="text-input">
         </div>
         <div class="form-field">
-            <!-- <label for="clave">Clave</label> -->
-            <input id="clave" name="clave" type="password" required placeholder="Clave" class="text-input">
+            <label for="clave" class="subtitle">Clave</label></br>
+            <input id="clave" name="clave" type="password" required  class="text-input">
         </div>
         <div class="form-field">
-            <!-- <label for="nombre">Nombre</label> -->
-            <input id="nombre" name="nombre" type="text" required placeholder="Nombre" class="text-input">
+            <label for="nombre" class="subtitle">Nombre</label></br>
+            <input id="nombre" name="nombre" type="text" required class="text-input">
         </div>
         <div class="form-field">
-            <label for="celular">Celular</label>
-            <input id="celular" name="celular" type="text" required placeholder="Celular" class="text-input">
+            <label for="celular" class="subtitle">Celular</label></br>
+            <input id="celular" name="celular" type="text" required class="text-input">
         </div>
         <div class="form-field">
             <input type="submit" value="Registrarse" class="submit-input">
         </div>
+<<<<<<< HEAD
+=======
     </form>
     <div>
         ¿Ya tienes una cuenta de ModeCheap? <a href="{{url_for('usuario_login')}}">Ingresa</a>
+>>>>>>> 7e1b53fdee9fd84db745a7ca99d5dd007ba30174
     </div>
+    </form>
+    <div class="another">
+        ¿Ya tienes una cuenta de ModeCheap? <a href="{{url_for('usuario_login')}}" class = "change">Ingresa</a>
+ 
 </div>
+</div>
+
 <script>
     const registerForm = document.getElementById("register-form");
     registerForm.onsubmit = usuarioRegistrar;
