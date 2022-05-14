@@ -20,12 +20,12 @@ body {
 
     width:650px;
     margin:30px auto;
-    background:linear-gradient(to right, #bb5f5f 0%, #fafafa 50%, #914040 99%);
+    background:linear-gradient(to right, #cdcbec 0%, var(--main-background-color) 50%, #cfcdee 99%);
     border-radius: 10px;
 }
 
 .form-header  {
-    background-color: rgb(155, 0, 155);
+    background-color: blue;
     border-top-left-radius: 10px;
     border-top-right-radius: 10px;
   }
@@ -60,7 +60,14 @@ body {
     font-weight: bold;
   }
 
-
+.form-bottom{
+    background-color: blue;
+  border-bottom-left-radius: 10px;
+  border-bottom-right-radius: 10px;
+  padding:10px 40px;
+  text-align: right;
+  border-top: 2px solid black;
+}
   
 .another{
     display: flex;
