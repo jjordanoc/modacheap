@@ -72,11 +72,6 @@ def test2(self):
 
 @app.route("/usuario/registrar", methods=["GET", "POST"])
 def usuario_registrar():
-<<<<<<< HEAD
-
-=======
-    res = {}
->>>>>>> 7e1b53fdee9fd84db745a7ca99d5dd007ba30174
     if request.method == "POST":
         try:
             data = request.get_json()
