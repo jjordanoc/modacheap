@@ -3,11 +3,6 @@
 
 {% block main %}
 <div class="container">
-    
-    <header>
-        <h1>ModaCheap</h1>
-    </header>
-
     <h2>Log In</h2>
     <form id="login-form">
         <div class="form-field">
@@ -22,13 +17,10 @@
             <input type="submit" value="Log In" class="submit-input">
         </div>
     </form>
-    <div class ="another">
-        ¿No tienes una cuenta de ModaCheap? <a href="{{url_for('usuario_registrar')}}" class = "change">Regístrate</a>
+    <div>
+        ¿No tienes una cuenta de ModaCheap? <a href="{{url_for('usuario_registrar')}}">Regístrate</a>
     </div>
 </div>
-
-
-
 <script>
     const loginForm = document.getElementById("login-form");
     loginForm.onsubmit = usuarioLogin;

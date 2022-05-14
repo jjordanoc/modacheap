@@ -1,5 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
+from flask_login import UserMixin
 
 db = SQLAlchemy()
 
@@ -20,9 +21,9 @@ class Producto(db.Model):
         return f"<Producto id={self.id}>"
 
 
-class Usuario(db.Model):
+class Usuario(db.Model, UserMixin):
     __tablename__ = 'usuarios'
-    correo = db.Column(db.String(80), primary_key=True, nullable=False)
+    correo = db.Column(db.String(80), primary_key=True, unique=True)
     clave = db.Column(db.String(120), nullable=False)
     nombre = db.Column(db.String(80), nullable=False)
     celular = db.Column(db.Integer, nullable=False)
@@ -36,9 +37,12 @@ class Usuario(db.Model):
 
     def set_clave(self, clave):
         self.clave = generate_password_hash(clave)
+    
+    def get_id(self):
+        return self.correo
 
 
-class Imagen():
+class Imagen(db.Model):
     __tablename__ = "imagenes"
     id = db.Column(db.String(120), primary_key=True)
     producto_id = db.Column(db.Integer, db.ForeignKey("productos.id"), nullable=False)
