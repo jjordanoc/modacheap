@@ -15,6 +15,7 @@ app = Flask(__name__)
 app.secret_key = os.environ.get("SECRET_KEY")
 app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URI")
 app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
+app.config["UPLOAD_FOLDER"] = os.environ.get("UPLOAD_FOLDER")
 db.init_app(app)
 migrate = Migrate(app, db)
 login_manager = LoginManager()
@@ -56,9 +57,9 @@ def registrar():
     if request.method == "POST":
         try:
             data = request.json
-            username = data["username"]
-            password = data["password"]
-            user = Usuario(usuario=username)
+            correo = data["correo"]
+            clave = data["clave"]
+            user = Usuario(correo=correo)
             print(user)
             user.set_password(password)
             db.session.add(user)
@@ -81,7 +82,7 @@ def crear_producto():
     response = {}
     try:
         id = request.get_json()['id']
-        usuario = request.get_json()['usuario']
+        correo = request.get_json()['correo']
         precio = request.get_json()['precio']
         descripcion = request.get_json()['descripcion']
         talla = request.get_json()['talla']
@@ -90,7 +91,7 @@ def crear_producto():
         distrito = request.get_json()['distrito']
         productos = Producto (
             id = id,
-            usuario = usuario,
+            correo = correo,
             precio = precio,
             descripcion = descripcion,
             talla = talla,
@@ -102,7 +103,7 @@ def crear_producto():
         db.session.commit()
         response = {
             'id' : id,
-            'usuario' : usuario,
+            'correo' : correo,
             'precio' : precio,
             'descripcion' : descripcion,
             'talla' : talla,

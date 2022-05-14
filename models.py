@@ -6,7 +6,7 @@ db = SQLAlchemy()
 class Producto(db.Model):
     __tablename__ = 'productos'
     id = db.Column(db.Integer, primary_key=True)
-    usuario = db.Column(db.String(80), db.ForeignKey("usuarios.usuario"), nullable=False)
+    usuario_correo = db.Column(db.String(80), db.ForeignKey("usuarios.correo"), nullable=False)
     precio = db.Column(db.Float, nullable=False)
     nombre = db.Column(db.String(80), nullable=False)
     descripcion = db.Column(db.Text, nullable=False)
@@ -14,6 +14,7 @@ class Producto(db.Model):
     sexo = db.Column(db.String(1), nullable=False)
     categoria = db.Column(db.String(30), nullable=False)
     distrito = db.Column(db.String(80), nullable=False)
+    imagenes = db.relationship("Imagen", backref="producto", lazy=True, cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<Producto id={self.id}>"
@@ -21,17 +22,23 @@ class Producto(db.Model):
 
 class Usuario(db.Model):
     __tablename__ = 'usuarios'
-    usuario = db.Column(db.String(80), primary_key=True, nullable=False)
+    correo = db.Column(db.String(80), primary_key=True, nullable=False)
     clave = db.Column(db.String(120), nullable=False)
     nombre = db.Column(db.String(80), nullable=False)
     celular = db.Column(db.Integer, nullable=False)
-    productos = db.relationship("Producto", backref="usuarios", lazy=True)
+    productos = db.relationship("Producto", backref="usuario", lazy=True, cascade="all, delete-orphan")
 
     def __repr__(self):
-        return f'<Usuario: usuario={self.usuario}>'
+        return f'<Usuario: usuario={self.correo}>'
 
     def check_clave(self, clave):
         return check_password_hash(self.clave, clave)
 
     def set_clave(self, clave):
         self.clave = generate_password_hash(clave)
+
+
+class Image():
+    __tablename__ = "imagenes"
+    id = db.Column(db.Integer, primary_key=True)
+    producto_id = db.Column(db.Integer, db.ForeignKey("productos.id"))
