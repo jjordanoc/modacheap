@@ -30,7 +30,9 @@ login_manager.login_view = "/usuario/login"
 @login_manager.user_loader
 def load_user(correo):
     return Usuario.query.get(correo)
-
+@app.route("/producto",methods=["GET", "POST"])
+def producto():
+    return render_template("producto.html")
 @app.route("/usuario/login", methods=["GET", "POST"])
 def usuario_login():
     res = {}
@@ -84,7 +86,11 @@ def usuario_registrar():
             user.set_clave(clave)
             db.session.add(user)
             db.session.commit()
+<<<<<<< HEAD
             login_user(user.correo)
+=======
+            login_user(user, remember=True)
+>>>>>>> ba1167288ba523ed21158fdc77601e71ce40d113
             res["status"] = "success"
             return jsonify(res)
         except:
