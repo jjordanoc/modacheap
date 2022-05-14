@@ -5,7 +5,7 @@ import uuid
 from flask import Flask, redirect, request, render_template, jsonify, abort, url_for
 from models import db, Producto, Usuario, Imagen
 from flask_migrate import Migrate
-from flask_login import login_required, LoginManager, login_user
+from flask_login import login_required, LoginManager, login_user, current_user
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
 
@@ -22,7 +22,7 @@ db.init_app(app)
 migrate = Migrate(app, db)
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "/login"
+login_manager.login_view = "/usuario/login"
 
 
 # Models
@@ -30,8 +30,8 @@ login_manager.login_view = "/login"
 def load_user(user_id):
     return Usuario.query.get(user_id)
 
-@app.route("/login", methods=["GET", "POST"])
-def login_usuario():
+@app.route("/usuario/login", methods=["GET", "POST"])
+def usuario_login():
     if request.method == "POST":
         data = request.json
         correo = data["correo"]
@@ -52,16 +52,22 @@ def login_usuario():
 @app.route("/")
 @login_required
 def index():
-    return render_template("index.html")
+    return render_template("index.html", productos=Producto.query.all(), usuario=current_user)
 
-@app.route("/registrar", methods=["GET", "POST"])
-def registrar():
+@app.route("/usuario/registrar", methods=["GET", "POST"])
+def usuario_registrar():
     if request.method == "POST":
         try:
+<<<<<<< HEAD
             data = request.json()
+=======
+            data = request.get_json()
+>>>>>>> bc05945935f9c75858743c5cd24f260f906c436c
             correo = data["correo"]
             clave = data["clave"]
-            user = Usuario(correo=correo)
+            nombre = data["nombre"]
+            celular = data["celular"]
+            user = Usuario(correo=correo, nombre=nombre, celular=celular)
             print(user)
             user.set_password(clave)
             db.session.add(user)
@@ -79,7 +85,7 @@ def registrar():
 
 
 @app.route("/producto/crear" , methods=['POST'])
-def crear_producto():
+def producto_crear():
     error = False
     response = {}
     try:
@@ -131,7 +137,9 @@ def crear_producto():
         return jsonify(response)
 
 
-
+@app.errorhandler(404)
+def handle_not_found(error):
+    return redirect(url_for("usuario_login"))
 
 # Run
 if __name__ == "__main__":
