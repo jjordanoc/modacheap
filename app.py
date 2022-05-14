@@ -84,7 +84,7 @@ def usuario_registrar():
             user.set_clave(clave)
             db.session.add(user)
             db.session.commit()
-            load_user(user.correo)
+            login_user(user.correo)
             res["status"] = "success"
             return jsonify(res)
         except:
