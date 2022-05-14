@@ -12,6 +12,8 @@ Jinja2==3.1.1
 Mako==1.2.0
 MarkupSafe==2.1.1
 psycopg2-binary==2.9.3
+python-dotenv==0.20.0
 SQLAlchemy==1.4.32
+uuid==1.30
 Werkzeug==2.1.0
 zipp==3.7.0

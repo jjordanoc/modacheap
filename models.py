@@ -38,7 +38,10 @@ class Usuario(db.Model):
         self.clave = generate_password_hash(clave)
 
 
-class Image():
+class Imagen():
     __tablename__ = "imagenes"
-    id = db.Column(db.Integer, primary_key=True)
-    producto_id = db.Column(db.Integer, db.ForeignKey("productos.id"))
+    id = db.Column(db.String(120), primary_key=True)
+    producto_id = db.Column(db.Integer, db.ForeignKey("productos.id"), nullable=False)
+
+
+

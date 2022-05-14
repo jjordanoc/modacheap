@@ -1,11 +1,13 @@
 # Imports
 import sys
 import os
+import uuid
 from flask import Flask, redirect, request, render_template, jsonify, abort, url_for
-from models import db, Producto, Usuario
+from models import db, Producto, Usuario, Imagen
 from flask_migrate import Migrate
 from flask_login import login_required, LoginManager, login_user
 from dotenv import load_dotenv
+from werkzeug.utils import secure_filename
 
 
 
@@ -61,7 +63,7 @@ def registrar():
             clave = data["clave"]
             user = Usuario(correo=correo)
             print(user)
-            user.set_password(password)
+            user.set_password(clave)
             db.session.add(user)
             db.session.commit()
             load_user(user.usuario)
@@ -89,7 +91,12 @@ def crear_producto():
         sexo = request.get_json()['sexo']
         categoria = request.get_json()['categoria']
         distrito = request.get_json()['distrito']
-        productos = Producto (
+        imagenes = request.files.getlist("imagenes")
+        for imagen in imagenes:
+            img_id = uuid.uuid4()
+            imagen.save(os.path.join(app.config["UPLOAD_FOLDER"], img_id))
+            db.session.add(Imagen(id=img_id))
+        producto = Producto (
             id = id,
             correo = correo,
             precio = precio,
@@ -99,7 +106,7 @@ def crear_producto():
             categoria = categoria,
             distrito = distrito
         )
-        db.session.add(productos)
+        db.session.add(producto)
         db.session.commit()
         response = {
             'id' : id,
