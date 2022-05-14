@@ -22,28 +22,30 @@ db.init_app(app)
 migrate = Migrate(app, db)
 login_manager = LoginManager()
 login_manager.init_app(app)
-login_manager.login_view = "/login"
+login_manager.login_view = "/usuario/login"
 
 
 # Models
 @login_manager.user_loader
-def load_user(user_id):
-    return Usuario.query.get(user_id)
+def load_user(correo):
+    return Usuario.query.get(correo)
 
-@app.route("/login", methods=["GET", "POST"])
-def login_usuario():
+@app.route("/usuario/login", methods=["GET", "POST"])
+def usuario_login():
     if request.method == "POST":
-        data = request.json
-        correo = data["correo"]
-        clave = data["clave"]
-        nombre = data["nombre"]
-        celular = data["celular"]
-        usuario = load_user(correo)
-        print(usuario)
-        if not usuario or not usuario.check_clave(clave):
-            return redirect(url_for("login"))
-        login_user(usuario, remember=True)
-        return redirect(url_for("index"))   
+        try:
+            data = request.json
+            correo = data["correo"]
+            clave = data["clave"]
+            usuario = load_user(correo)
+            print(usuario)
+            if not usuario or not usuario.check_clave(clave):
+                return redirect(url_for("usuario_login"))
+            login_user(usuario, remember=True)
+            return redirect(url_for("index"))   
+        except Exception as e:
+            print(e)
+            abort(500)
 
     return render_template("login.html")
 
@@ -52,26 +54,18 @@ def login_usuario():
 @app.route("/")
 @login_required
 def index():
-    return render_template("index.html")
+    return render_template("index.html", productos=Producto.query.all(), usuario=current_user)
 
-#Test 1
-class APIunitTests(unittest.TestCase):
-    API_URL = "http://127.0.0.1:5000"
-    REGISTER_URL = "{}/registrar".format(API_URL)
-
-    def test1(self):
-        r = request.get(APIunitTests.REGISTER_URL)
-        self.assertEqual(r.len(r.json()),2)
-    
-@app.route("/registrar", methods=["GET", "POST"])
-def registrar():
-    
+@app.route("/usuario/registrar", methods=["GET", "POST"])
+def usuario_registrar():
     if request.method == "POST":
         try:
-            data = request.json
+            data = request.get_json()
             correo = data["correo"]
             clave = data["clave"]
-            user = Usuario(correo=correo)
+            nombre = data["nombre"]
+            celular = data["celular"]
+            user = Usuario(correo=correo, nombre=nombre, celular=celular)
             print(user)
             user.set_password(clave)
             db.session.add(user)
@@ -99,18 +93,19 @@ class APIunitTests2(unittest.TestCase):
 
 
 @app.route("/producto/crear" , methods=['POST'])
-def crear_producto():
+def producto_crear():
     error = False
     response = {}
     try:
-        id = request.get_json()['id']
-        correo = request.get_json()['correo']
-        precio = request.get_json()['precio']
-        descripcion = request.get_json()['descripcion']
-        talla = request.get_json()['talla']
-        sexo = request.get_json()['sexo']
-        categoria = request.get_json()['categoria']
-        distrito = request.get_json()['distrito']
+        data = request.get_json()
+        id = data['id']
+        correo = data['correo']
+        precio = data['precio']
+        descripcion = data['descripcion']
+        talla = data['talla']
+        sexo = data['sexo']
+        categoria = data['categoria']
+        distrito = data['distrito']
         imagenes = request.files.getlist("imagenes")
         for imagen in imagenes:
             img_id = uuid.uuid4()
@@ -151,7 +146,9 @@ def crear_producto():
         return jsonify(response)
 
 
-
+@app.errorhandler(404)
+def handle_not_found(error):
+    return redirect(url_for("usuario_login"))
 
 # Run
 if __name__ == "__main__":

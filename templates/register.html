@@ -7,7 +7,7 @@
         <h1>ModaCheap</h1>
     </header>
     <h2>Registrarse</h2>
-    <form id="login-form">
+    <form id="register-form">
         <div class="form-field">
             <!-- <label for="correo">Correo</label> -->
             <input id="correo" name="correo" type="email" required placeholder="Correo" class="text-input">
@@ -21,29 +21,19 @@
             <input id="nombre" name="nombre" type="text" required placeholder="Nombre" class="text-input">
         </div>
         <div class="form-field">
+            <label for="celular">Celular</label>
+            <input id="celular" name="celular" type="text" required placeholder="Celular" class="text-input">
+        </div>
+        <div class="form-field">
             <input type="submit" value="Registrarse" class="submit-input">
         </div>
     </form>
+    <div>
+        ¿Ya tienes una cuenta de ModeCheap? <a href="{{url_for('usuario_login')}}">Ingresa</a>
+    </div>
 </div>
 <script>
-    const loginForm = document.getElementById("login-form");
-    loginForm.onsubmit = function(e) {
-        e.preventDefault();
-        const correo = document.getElementById("correo");
-        const clave = document.getElementById("clave");
-        fetch("/login", {
-            method: "POST",
-            body: JSON.stringify({
-                correo: correo.value,
-                clave: clave.value
-            }),
-            headers: {
-                "Content-Type": "application/json"
-            },
-            redirect: "follow"
-        }).then(function(res) {
-            
-        });
-    }
+    const registerForm = document.getElementById("register-form");
+    registerForm.onsubmit = usuarioRegistrar;
 </script>
 {% endblock %}
