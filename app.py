@@ -58,11 +58,7 @@ def index():
 def usuario_registrar():
     if request.method == "POST":
         try:
-<<<<<<< HEAD
-            data = request.json()
-=======
             data = request.get_json()
->>>>>>> bc05945935f9c75858743c5cd24f260f906c436c
             correo = data["correo"]
             clave = data["clave"]
             nombre = data["nombre"]
