@@ -3,8 +3,12 @@
         <title>Moda Cheap</title>
         <link rel="stylesheet" href="{{url_for('static',filename='styles/main.css')}}">
         <script src="{{url_for('static',filename='scripts/main.js')}}"></script>
+        <link rel="preconnect" href="https://fonts.googleapis.com">
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@200;300;400;600&family=Montserrat:wght@500&display=swap" rel="stylesheet">
     </head>
     <body>
+        <header id="main-title">Moda Cheap</header>
         <main>
             {% block main %}
             {% endblock %}

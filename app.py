@@ -1,12 +1,13 @@
 # Imports
 from cmath import e
+import json
 import sys
 import os
 import uuid
 from flask import Flask, redirect, request, render_template, jsonify, abort, url_for
 from models import db, Producto, Usuario, Imagen
 from flask_migrate import Migrate
-from flask_login import login_required, LoginManager, login_user, current_user
+from flask_login import login_required, LoginManager, login_user, current_user, logout_user
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
 
@@ -33,6 +34,7 @@ def load_user(correo):
 
 @app.route("/usuario/login", methods=["GET", "POST"])
 def usuario_login():
+    res = {}
     if request.method == "POST":
         try:
             data = request.json
@@ -43,13 +45,18 @@ def usuario_login():
             if not usuario or not usuario.check_clave(clave):
                 return redirect(url_for("usuario_login"))
             login_user(usuario, remember=True)
-            return redirect(url_for("index"))   
+            res["status"] = "success"
+            return jsonify(res)
         except Exception as e:
             print(e)
             abort(500)
 
     return render_template("login.html")
 
+@app.route("/usuario/logout")
+def usuario_logout():
+    logout_user()
+    return redirect(url_for("usuario_login"))
 
 # Controllers
 @app.route("/")
@@ -59,6 +66,7 @@ def index():
 
 @app.route("/usuario/registrar", methods=["GET", "POST"])
 def usuario_registrar():
+    res = {}
     if request.method == "POST":
         try:
             data = request.get_json()
@@ -68,11 +76,12 @@ def usuario_registrar():
             celular = data["celular"]
             user = Usuario(correo=correo, nombre=nombre, celular=celular)
             print(user)
-            user.set_password(clave)
+            user.set_clave(clave)
             db.session.add(user)
             db.session.commit()
-            load_user(user.usuario)
-            return redirect(url_for("index"))
+            load_user(user.correo)
+            res["status"] = "success"
+            return jsonify(res)
         except:
             db.session.rollback()
             print(sys.exc_info())

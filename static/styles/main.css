@@ -1,3 +1,21 @@
+* {
+    --title-color: #061d80;
+    --main-background-color: #dbdaef;
+    --text-color: #242736;
+}
+
+body {
+    font-family: 'Josefin Sans', sans-serif;
+    color: var(--text-color);
+    background-color: var(--main-background-color);
+}
+
+#main-title {   
+    color: var(--title-color);
+    font-family: 'Montserrat', sans-serif;
+    font-size: 2.5em;
+}
+
 #login-form {
     display: flex;
     flex-direction: column;
