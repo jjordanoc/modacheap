@@ -4,6 +4,13 @@
     --text-color: #242736;
 }
 
+#vender-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
 body {
     font-family: 'Josefin Sans', sans-serif;
     color: var(--text-color);
@@ -169,6 +176,7 @@ input[name="r"]{
     margin-left: -40%;
 }
 
+<<<<<<< HEAD
 /* Para el pequeño banner */
 .banner-box{
     font-size: 20px;
@@ -283,4 +291,18 @@ input[name="r"]{
     background-color: white;
     width: 200px;
     height: 40px;
+=======
+.card-text3{
+    display: inline;
+}
+
+.card-text4{
+    text-align: right;
+    color: red;
+}
+
+.card{
+    font-family: 'Josefin Sans', sans-serif;
+
+>>>>>>> e2a6dc62d6d6942b98d79442560e60eb0308be2b
 }
