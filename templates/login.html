@@ -3,26 +3,24 @@
 
 {% block main %}
 <div class="container">
-    <form id="login-form">
-        <div class ="form-header">
-            <h1>Login</h1>
-        </div>
+    <h1>Login</h1>
+    <form id="register-form">
 
-        <div class="form-field">
+        <div class="form-group">
             <label for="correo" class="subtitle">Correo</label></br>
-            <input id="correo" name="correo" type="email" required class="text-input">
+            <input id="correo" name="correo" type="email" required class="form-control">
         </div>
-        <div class="form-field">
+        <div class="form-group">
             <label for="clave" class="subtitle">Clave</label></br>
-            <input id="clave" name="clave" type="password" required  class="text-input">
+            <input id="clave" name="clave" type="password" required  class="form-control">
         </div>
         
-        <div class="form-bottom">
-            <button type="submit" class ="submit-input">Conectarse</button>
+        <div class="form-group">
+            <input type="submit" value="Login" class ="btn btn-primary">
         </div>
     </form>
     <div class="another">
-        ¿No tienes una cuenta de ModaCheap? <a href="{{url_for('usuario_registrar')}}" class = "change">Regístrate</a>
+        ¿No tienes una cuenta de ModaCheap? <a href="{{url_for('usuario_registrar')}}" class="btn btn-outline-primary">Regístrate</a>
     </div>
 </div>
 <script>
