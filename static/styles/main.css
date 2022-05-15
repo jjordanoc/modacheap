@@ -175,3 +175,17 @@ input[name="r"]{
 #r3:checked ~.s1{
     margin-left: -40%;
 }
+
+.card-text3{
+    display: inline;
+}
+
+.card-text4{
+    text-align: right;
+    color: red;
+}
+
+.card{
+    font-family: 'Josefin Sans', sans-serif;
+
+}
