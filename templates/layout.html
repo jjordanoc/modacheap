@@ -83,6 +83,14 @@
               </div>
             </div>
           </nav>
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{category}} alert-dismissible fade show d-flex justify-content-center" role="alert">{{message}}<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button></div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+        <div class="alert alert-dismissible fade d-flex justify-content-center" role="alert" id="alert"><p id="message">Ocurrio un error.</p><button type="button" class="btn-close" onclick="ocultarAlerta();" aria-label="Close"></button></div>
         <main>
             {% block main %}
             {% endblock %}

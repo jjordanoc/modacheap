@@ -1,4 +1,5 @@
 # Imports
+from curses.ascii import HT
 import sys
 import os
 from shortuuid import ShortUUID
@@ -8,6 +9,7 @@ from flask_migrate import Migrate
 from flask_login import login_required, LoginManager, login_user, current_user, logout_user
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
+from werkzeug.exceptions import HTTPException
 from helpers import handle_error, handle_error_db
 import unittest
 
@@ -42,18 +44,22 @@ def usuario_login():
             usuario = load_user(correo)
             print(usuario)
             if not usuario or not usuario.check_clave(clave):
-                return redirect(url_for("usuario_login"))
+                raise Exception("Usuario o clave incorrectos.")
             login_user(usuario, remember=True)
             res["status"] = "success"
-            return jsonify(res)
+            res["message"] = "Ingreso con exito."
         except Exception as e:
+            res["status"] = "warning"
+            res["message"] = "Usuario o clave incorrectos."
             handle_error(e)
+        return jsonify(res)
 
     return render_template("login.html")
 
 @app.route("/usuario/logout")
 def usuario_logout():
     logout_user()
+    flash("Usted ha cerrado su sesion.", "info")
     return redirect(url_for("usuario_login"))
 
 # Controllers
@@ -80,12 +86,14 @@ def usuario_registrar():
             db.session.commit()
             login_user(user, remember=True)
             res["status"] = "success"
-            return jsonify(res)
+            res["message"] = "Usuario registrado con exito."
         except Exception as e:
+            res["status"] = "warning"
+            res["message"] = "No se pudo registrar su usuario."
             handle_error_db(e, db)
         finally:
             db.session.close()
-
+        return jsonify(res)
     return render_template("register.html")
 
 @app.route("/producto/buscar", methods=["GET"])
@@ -140,13 +148,15 @@ def producto_crear():
                 'sexo' : sexo,
                 'categoria' : categoria,
                 'distrito' : distrito,
-                "status" : "success"
+                "status" : "success",
+                "message" : "Se creo su producto con exito."
             }
         except Exception as e :
+            res["status"] = "warning"
+            res["message"] = "No se pudo crear su producto."
             handle_error_db(e, db)
         finally:
             db.session.close()
-        flash("Producto creado con exito.")
         return jsonify(res)
     return render_template("vender.html", usuario=current_user)
 
@@ -168,7 +178,10 @@ def imagen_crear():
         db.session.add(imagen)
         db.session.commit()
         res["status"] = "success"
+        res["message"] = "Se subio la imagen con exito."
     except Exception as e:
+        res["status"] = "warning"
+        res["message"] = "No se pudo subir la imagen."
         handle_error_db(e, db)
     finally:
         db.session.close()
@@ -183,13 +196,16 @@ def static_uploaded(img_id):
 def static_resources(img_id):
     return send_from_directory("static/resources", img_id)
 
-@app.errorhandler(404)
-def handle_not_found(error):
-    flash("Ocurrio un error inesperado.", category="error")
-    return redirect(url_for("usuario_login"))
+@app.errorhandler(HTTPException)
+def handle_http_error(e):
+    handle_error(e)
+    flash("Ocurrio un error inesperado.", category="danger")
+    return redirect(url_for("index"))
 
 @app.errorhandler(AssertionError)
-def handle_not_found(error):
+def handle_assertion(e):
+    handle_error(e)
+    flash("Ocurrio un error inesperado.", category="danger")
     return redirect(url_for("index"))
 
 # Run

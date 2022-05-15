@@ -1,10 +1,10 @@
-from flask import abort
+from sys import exc_info
 
 def handle_error_db(e, db):
-    print(e)
+    print("Exception:", e)
+    print("Traceback:", exc_info())
     db.session.rollback()
-    abort(500)
 
 def handle_error(e):
-    print(e)
-    abort(500)
+    print("Exception:", e)
+    print("Traceback:", exc_info())

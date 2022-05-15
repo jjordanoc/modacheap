@@ -1,3 +1,16 @@
+const mostrarAlerta = function(status, message) {
+    const alerta = document.getElementById("alert");
+    alerta.classList.add("show");
+    alerta.classList.add("alert-" + status);
+    const messageBox = document.getElementById("message");
+    messageBox.innerHTML = message;
+}
+
+const ocultarAlerta = function() {
+    const alerta = document.getElementById("alert");
+    alerta.classList.remove("show");
+}
+
 const usuarioLogin = function(e) {
     e.preventDefault();
     const correo = document.getElementById("correo");
@@ -11,15 +24,15 @@ const usuarioLogin = function(e) {
         headers: {
             "Content-Type": "application/json"
         }
-    }).then(res => res.json()).then(function(resJson) {
+    }).then(function(res) {
+        return res.json();
+    }).then(function(resJson) {
         if (resJson["status"] == "success") {
             window.location.href = "/"
         }
         else {
-            throw Error("Error de ingreso. Intente de nuevo.");
+            mostrarAlerta(resJson["status"], resJson["message"]);
         }
-    }).catch(function(e) {
-        console.log(e);
     });
 }
 
@@ -40,13 +53,15 @@ const usuarioRegistrar = function(e) {
         headers: {
             "Content-Type": "application/json"
         }
-    }).then(res => res.json()).then(function(resJson) {
+    }).then(function(res) {
+        return res.json();
+    }).then(function(resJson) {
         if (resJson["status"] == "success") {
-            console.log(resJson);
             window.location.href = "/";
         }
-    }).catch(function(e) {
-        console.log(e);
+        else {
+            mostrarAlerta(resJson["status"], resJson["message"]);
+        }
     });
 }
 
@@ -100,15 +115,13 @@ const productoCrear = function(e) {
                 }).then(res => res.json()).then(function(resJson) {
                     if (resJson["status"] == "success") {
                         window.location.href = "/";
-                        
+                    }
+                    else {
+                        mostrarAlerta(resJson["status"], resJson["message"]);
                     }
                 });
             }
         }
-    }).catch(function() {
-        
     });
-
-   
 }
 
