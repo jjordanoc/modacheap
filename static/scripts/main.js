@@ -63,8 +63,6 @@ const productoCrear = function(e) {
     const distrito = document.getElementById("distrito");
     const imagenes = document.getElementById("imagenes");
     
-    let serverResponse = {};
-
     fetch("/producto/crear", {
         method: "POST",
         body: JSON.stringify({
@@ -80,30 +78,34 @@ const productoCrear = function(e) {
         headers: {
             "Content-Type": "application/json"
         }
-    }).then(res => res.json()).then(function(resJson) {
+    }).then(function(res) {
+        return res.json();
+    }).then(function(resJson) {
         if (resJson["status"] == "success") {
             console.log(resJson);
-            serverResponse = resJson;
-            window.location.href = "/";
+            // Upload image to server
+            const files = imagenes.files;
+            for (let i = 0; i < files.length; i++) {
+                const file = files[i];
+                let formData = new FormData();
+                formData.append("file", file, file.name);
+                formData.append("producto_id", resJson["id"])
+                fetch("/imagen/crear", {
+                    method: "POST",
+                    body: formData,
+                    headers: {}
+                }).then(res => res.json()).then(function(resJson) {
+                    if (resJson["status"] == "success") {
+                        window.location.href = "/";
+                    }
+                });
+            }
         }
     }).catch(function() {
         
     });
 
-    const files = imagenes.files;
-
-    for (let i = 0; i < files.length; i++) {
-        const file = files[i];
-        let formData = new FormData();
-        formData.append("file", file, file.name);
-        formData.append("producto_id", serverResponse["id"])
-        console.log(file);
-        fetch("/imagen/crear", {
-            method: "POST",
-            body: formData,
-            headers: {}
-        }).then();
-    }
+   
 }
 
 const imagenCrear = function(e) {

@@ -1,16 +1,14 @@
 # Imports
-from cmath import e
-import json
-import re
 import sys
 import os
 from shortuuid import ShortUUID
-from flask import Flask, redirect, request, render_template, jsonify, abort, url_for
+from flask import Flask, redirect, request, render_template, jsonify, abort, url_for, send_from_directory, flash
 from models import db, Producto, Usuario, Imagen
 from flask_migrate import Migrate
 from flask_login import login_required, LoginManager, login_user, current_user, logout_user
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
+from helpers import handle_error, handle_error_db
 import unittest
 
 # Config
@@ -27,7 +25,7 @@ login_manager.init_app(app)
 login_manager.login_view = "/usuario/login"
 
 
-# Models
+# Endpoints
 @login_manager.user_loader
 def load_user(correo):
     return Usuario.query.get(correo)
@@ -38,8 +36,8 @@ def producto():
 
 @app.route("/usuario/login", methods=["GET", "POST"])
 def usuario_login():
-    res = {}
     if request.method == "POST":
+        res = {}
         try:
             data = request.json
             correo = data["correo"]
@@ -52,8 +50,7 @@ def usuario_login():
             res["status"] = "success"
             return jsonify(res)
         except Exception as e:
-            print(e)
-            abort(500)
+            handle_error(e)
 
     return render_template("login.html")
 
@@ -69,10 +66,8 @@ def index():
     return render_template("index.html", productos=Producto.query.all(), usuario=current_user)
 
 
-
 @app.route("/usuario/registrar", methods=["GET", "POST"])
 def usuario_registrar():
-    res = {}
     if request.method == "POST":
         res = {}
         try:
@@ -89,23 +84,32 @@ def usuario_registrar():
             login_user(user, remember=True)
             res["status"] = "success"
             return jsonify(res)
-        except:
-            db.session.rollback()
-            print(sys.exc_info())
-            abort(500)
+        except Exception as e:
+            handle_error_db(e, db)
         finally:
             db.session.close()
 
     return render_template("register.html")
 
+@app.route("/producto/buscar", methods=["GET"])
+@login_required
+def producto_buscar():
+    buscar = request.args.get("buscar")
+    assert buscar is not None
+    filtered_productos = Producto.query.filter(Producto.nombre.like("%{}%".format(buscar))).all()
+    if not filtered_productos:
+        filtered_productos = Producto.query.all()
+    return render_template("index.html", user=current_user, productos=filtered_productos)
+    
 
 @app.route("/producto/crear" , methods=["GET", 'POST'])
 @login_required
 def producto_crear():
     if request.method == "POST":
-        response = {}
+        res = {}
         try:
             data = request.get_json()
+            assert data is not None
             nombre = data['nombre']
             usuario_correo = data['usuario_correo']
             precio = data['precio']
@@ -114,11 +118,6 @@ def producto_crear():
             sexo = data['sexo']
             categoria = data['categoria']
             distrito = data['distrito']
-            # imagenes = request.files.getlist("imagenes")
-            #print("request files", request.files)
-            #print("data", data)
-            #print(request.form)
-            # imagenes2 = request.files.get("")
             producto = Producto (
                 nombre = nombre,
                 usuario_correo = usuario_correo,
@@ -129,14 +128,9 @@ def producto_crear():
                 categoria = categoria,
                 distrito = distrito
             )
-            # print(imagenes)
-            # for imagen in imagenes:
-            #     img_id = uuid.uuid4()
-            #     imagen.save(os.path.join(app.config["UPLOAD_FOLDER"], img_id))
-            #     db.session.add(Imagen(id=img_id, producto_id=producto.id))
             db.session.add(producto)
             db.session.commit()
-            response = {
+            res = {
                 'id' : producto.id,
                 'nombre' : nombre,
                 'usuario_correo' : usuario_correo,
@@ -145,42 +139,53 @@ def producto_crear():
                 'talla' : talla,
                 'sexo' : sexo,
                 'categoria' : categoria,
-                'distrito' : distrito
+                'distrito' : distrito,
+                "status" : "success"
             }
         except Exception as e :
-            print(e)
-            db.session.rollback()
-            abort(500)
+            handle_error_db(e, db)
         finally:
             db.session.close()
-        return jsonify(response)
+        return jsonify(res)
     return render_template("vender.html", usuario=current_user)
 
 
 @app.route("/imagen/crear", methods=["POST"])
+@login_required
 def imagen_crear():
+    res = {}
     try:
         print("reached")
-        print(request.files)
         assert "file" in request.files
         file = request.files.get("file")
         random_seed = ShortUUID().random(length=50)
         img_id = secure_filename(str(random_seed) + str(file.filename))
         file.save(os.path.join(app.config["UPLOAD_FOLDER"], img_id))
-        imagen = Imagen(id=img_id, producto_id=producto.id)
+        producto_id = request.form.get("producto_id")
+        imagen = Imagen(id=img_id, producto_id=producto_id)
         db.session.add(imagen)
         db.session.commit()
+        res["status"] = "success"
     except Exception as e:
-        print(e)
-        db.session.rollback()
-        abort(500)
+        handle_error_db(e, db)
     finally:
         db.session.close()
-    return jsonify({"res" : 200})
+    return jsonify(res)
+
+
+@app.route("/static/uploaded/<img_id>")
+@login_required
+def static_uploaded(img_id):
+    return send_from_directory("static/uploaded", img_id)
 
 @app.errorhandler(404)
 def handle_not_found(error):
+    flash("Ocurrio un error inesperado.", category="error")
     return redirect(url_for("usuario_login"))
+
+@app.errorhandler(AssertionError)
+def handle_not_found(error):
+    return redirect(url_for("index"))
 
 # Run
 if __name__ == "__main__":

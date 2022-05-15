@@ -11,34 +11,57 @@
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
     </head>
     <body>
-        <div class="banner">
-            <div class="banner-text">
-                <div class="text-wrapper">
-                    <div class="banner-box b1">textExample1</div>
-                    <div class="banner-box b2">textExample2</div>
-                    <div class="banner-box b3">textExample3</div>
-                    <div class="banner-box b4">textExample4</div>
-                    <div class="banner-box b5">textExample5</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="space"></div>
-
-        
-        <nav class="navbar navbar-expand-lg bg-light">
+        <!-- <nav class="navbar navbar-expand-lg bg-light">
             <div class="container-fluid">
-              <a class="navbar-brand" href="#" id="main-title">
+              <a class="navbar-brand" href="/" id="main-title">
                 Moda Cheap
               </a>
+              
               <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
               </button>
+<<<<<<< HEAD
               <div class="collapse navbar-collapse d-flex justify-content-end"  id="navbarNav">
                 <ul class="navbar-nav">
+=======
+              
+              <div class="d-flex collapse navbar-collapse justify-content-end" id="navbarNav">
+                <div class="d-flex collapse justify-content-end ">
+
+                </div>
+                <form class="d-flex align-items-center m-2" role="search" id="search-form" action="/producto/buscar", method="GET">
+                  <input class="form-control me-2" type="search" placeholder="Zapatos Adidas" aria-label="Search" name="buscar">
+                  <input class="btn btn-outline-primary" type="submit" value="Buscar">
+                </form>
+                <div class="nav-item me-auto">
+                  <a class="nav-link active" aria-current="page" href="{{url_for('producto_crear')}}">Vender</a>
+                </div>
+                <div class="nav-item">
+                  <a class="nav-link active" aria-current="page" href="{{url_for('usuario_logout')}}">Salir</a>
+                </div>
+              </div>
+            </div>
+          </nav> -->
+          <nav class="navbar navbar-expand-lg bg-light">
+            <div class="container-fluid">
+              <a class="navbar-brand" href="/" id="main-title">
+                Moda Cheap
+              </a>
+              <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+              </button>
+              <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <form class="d-flex m-2" role="search" action="/producto/buscar", method="GET">
+                  <input class="form-control me-2" type="search" placeholder="Zapatos Adidas" aria-label="Search" name="buscar">
+                  <input class="btn btn-outline-primary" type="submit" value="Buscar">
+                </form>
+                <ul class="navbar-nav mb-2 mb-lg-0">
+>>>>>>> aeaf71228f6fb79786eb0103df67476bae3a51d2
                   <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="{{url_for('producto_crear')}}">Vender</a>
                   </li>
+                </ul>
+                <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
                   <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="{{url_for('usuario_logout')}}">Salir</a>
                   </li>
