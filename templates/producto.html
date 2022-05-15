@@ -76,7 +76,7 @@
             <h2>{{producto.nombre}}</h2>
             <h3>S/.{{producto.precio}}</h3>
             <p>{{producto.distrito}}</p>
-            <a href="https://api.whatsapp.com/send?phone=51{{producto.usuario.celular}}">
+            <a href="https://api.whatsapp.com/send?phone=51{{producto.usuario.celular}}" target="_blank">
             <div class="whatsapp-logo">
                 <img src={{url_for('static_resources', img_id='whatsapp_logo.png')}}>Contactar con el vendedor
             </div>

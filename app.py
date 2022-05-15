@@ -58,9 +58,9 @@ def usuario_logout():
 
 # Controllers
 @app.route("/")
-@login_required
+
 def index():
-    return render_template("index.html", productos=Producto.query.all(), usuario=current_user)
+    return render_template("index.html", productos=Producto.query.all())
 
 
 @app.route("/usuario/registrar", methods=["GET", "POST"])
@@ -175,12 +175,10 @@ def imagen_crear():
 
 
 @app.route("/static/uploaded/<img_id>")
-@login_required
 def static_uploaded(img_id):
     return send_from_directory("static/uploaded", img_id)
 
 @app.route("/static/resources/<img_id>")
-@login_required
 def static_resources(img_id):
     return send_from_directory("static/resources", img_id)
 
