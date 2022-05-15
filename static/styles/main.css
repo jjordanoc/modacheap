@@ -176,7 +176,6 @@ input[name="r"]{
     margin-left: -40%;
 }
 
-<<<<<<< HEAD
 /* Para el pequeño banner */
 .banner-box{
     font-size: 20px;
@@ -274,12 +273,9 @@ input[name="r"]{
 
 .inicio{
     background-color: whitesmoke;
-    
+
 }
 
-.startBox{
-    display: inline-block;
-}
 .space{
     
     background-color: black;
@@ -291,7 +287,7 @@ input[name="r"]{
     background-color: white;
     width: 200px;
     height: 40px;
-=======
+}
 .card-text3{
     display: inline;
 }
@@ -303,6 +299,4 @@ input[name="r"]{
 
 .card{
     font-family: 'Josefin Sans', sans-serif;
-
->>>>>>> e2a6dc62d6d6942b98d79442560e60eb0308be2b
 }
