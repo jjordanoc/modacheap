@@ -182,3 +182,25 @@ input[name="r"]{
     font-family: 'Josefin Sans', sans-serif;
 
 }
+
+
+.mb-3{
+    font-family: 'Josefin Sans', sans-serif;
+    padding: 1ex;
+}
+
+#categoria{
+    width: 205px;
+}
+#talla{
+    width: 205px;
+}
+#distrito{
+    text-align: center;
+    width: 205px;
+}
+
+#sexo{
+    width: 205px;
+    text-align: center;
+}
