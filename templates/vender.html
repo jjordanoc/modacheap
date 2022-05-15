@@ -10,7 +10,9 @@
         <!-- <button id="file-select" class="btn btn-primary">Subir fotos</button> -->
         <input type="file" id="imagenes" name="imagenes" accept="image/*" required multiple>
     </div>
+    <div class="flex">
 
+    
     <div class="mb-3">
         <label for="nombre">Nombre del producto:</label>
         <input type="text" id="nombre" name="nombre" required>
@@ -27,7 +29,8 @@
         <label for="descripcion">Descripcion breve:</label>
         <input type="text" id="descripcion" name="descripcion" required>
     </div>
-    
+    </div>  
+    <div class="flex">
     <div class="mb-3">
         <label for="sexo">Genero de la prenda:</label>
         <select name="sexo" id="sexo" required class="form-select">
@@ -112,20 +115,12 @@
             <option value="VILLA MARIA DEL TRIUNFO">VILLA MARIA DEL TRIUNFO</option>
         </select>
     </div>
-    <input type="submit" value="Crear">
-</form>
-<!-- const mostrarImagenes = document.getElementById("mostrar-imagenes");
-    const imagenesInput = document.getElementById("imagenes");
-    imagenesInput.onchange = function(e) {
-        console.log(e);
-        const files = e.target.files;
-        for (let i = 0; i < files.length; i++) {
-            const file = files[i];
 
-        }
-    } -->
+    <input type="submit" value="Crear">
+</div>
+</form>
+
 <script>
-    
     const venderForm = document.getElementById("vender-form");
     venderForm.onsubmit = productoCrear;
 </script>

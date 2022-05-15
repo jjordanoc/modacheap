@@ -4,6 +4,13 @@
     --text-color: #242736;
 }
 
+#vender-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
 body {
     font-family: 'Josefin Sans', sans-serif;
     color: var(--text-color);
