@@ -86,11 +86,7 @@ def usuario_registrar():
             user.set_clave(clave)
             db.session.add(user)
             db.session.commit()
-<<<<<<< HEAD
-            login_user(user.correo)
-=======
             login_user(user, remember=True)
->>>>>>> ba1167288ba523ed21158fdc77601e71ce40d113
             res["status"] = "success"
             return jsonify(res)
         except:

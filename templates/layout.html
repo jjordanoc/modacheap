@@ -1,5 +1,5 @@
 <html>
-    <head>
+    <head>      
         <title>Moda Cheap</title>
         <link rel="stylesheet" href="{{url_for('static',filename='styles/main.css')}}">
         <script src="{{url_for('static',filename='scripts/main.js')}}"></script>
@@ -8,7 +8,40 @@
         <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@200;300;400;600&family=Montserrat:wght@500&display=swap" rel="stylesheet">
     </head>
     <body>
-        <header id="main-title">Moda Cheap</header>
+        <div class="banner">
+            <div class="banner-text">
+                <div class="text-wrapper">
+                    <div class="banner-box b1">textExample1</div>
+                    <div class="banner-box b2">textExample2</div>
+                    <div class="banner-box b3">textExample3</div>
+                    <div class="banner-box b4">textExample4</div>
+                    <div class="banner-box b5">textExample5</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="space"></div>
+
+        <div class="inicio">
+
+            <div class="startBox"> 
+                <header id="main-title">Moda Cheap</header>
+            </div>
+
+            <div class="startBox">
+                <form action="{{url_for('usuario_registrar')}}">
+                    <button type="submit" class="topButton">Regístrate</button>
+                </form>
+            </div>
+
+            <div class="startBox">
+                <form action="{{url_for('usuario_login')}}">
+                    <button type="submit" class="topButton">Login</button>
+                </form>
+            </div>
+        </div>
+
+        
         <main>
             {% block main %}
             {% endblock %}
