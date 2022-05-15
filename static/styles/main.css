@@ -23,19 +23,7 @@ body {
     font-size: 2.5em;
 }
 
-#login-form {
 
-    width:650px;
-    margin:30px auto;
-    background:linear-gradient(to right, #cdcbec 0%, var(--main-background-color) 50%, #cfcdee 99%);
-    border-radius: 10px;
-}
-
-.form-header  {
-    background-color: blue;
-    border-top-left-radius: 10px;
-    border-top-right-radius: 10px;
-  }
 
 .form-header h1 {
     font-size: 30px;
@@ -44,12 +32,7 @@ body {
     padding:20px 0;
     border-bottom:2px solid black;
   }
-
-.form-field {
-    margin: 15px;
-    text-align: center;
-    justify-content: center;
-}   
+  
 
 .top{
     background-color: var(--main-bg-color);
@@ -108,7 +91,7 @@ body {
 
 /* Para slide de producto */
 .slider{
-    width: 700px;
+    width: 500px;
     height: 400px;
     overflow: hidden;
 }
@@ -121,11 +104,10 @@ body {
 }
 
 .navigation{
-    position:absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
     display: flex;
+    position: relative;
+    top: -50px;
+    left: 160px;
 }
 
 .bar{
@@ -309,6 +291,6 @@ input[name="r"]{
 
 #button_crear{
     padding: 3%;
-    background-color: #0f209e   ;
+    background-color: #0f209e;
     width: 120px;
 }

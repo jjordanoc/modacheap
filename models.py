@@ -1,3 +1,4 @@
+from enum import unique
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
 from flask_login import UserMixin
@@ -26,7 +27,7 @@ class Usuario(db.Model, UserMixin):
     correo = db.Column(db.String(80), primary_key=True, unique=True)
     clave = db.Column(db.String(120), nullable=False)
     nombre = db.Column(db.String(80), nullable=False)
-    celular = db.Column(db.Integer, nullable=False)
+    celular = db.Column(db.Integer, nullable=False, unique=True)
     productos = db.relationship("Producto", backref="usuario", lazy=True, cascade="all, delete-orphan")
 
     def __repr__(self):
@@ -46,6 +47,9 @@ class Imagen(db.Model):
     __tablename__ = "imagenes"
     id = db.Column(db.String(120), primary_key=True)
     producto_id = db.Column(db.Integer, db.ForeignKey("productos.id"), nullable=False)
+
+    def __repr__(self):
+        return f'<Imagen: id={self.id}>'
 
 
 

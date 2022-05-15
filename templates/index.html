@@ -3,18 +3,21 @@
 
 <div class="row row-cols-1 row-cols-md-4 g-4">
   {% for producto in productos %}
-    <div class="col">
+    <a href={{url_for('producto_ver', producto_id=producto.id)}} style="text-decoration: none; color: var(--text-color);" class="col">
       <div class="card">
-        <img src={{url_for('static_uploaded', img_id=producto.imagenes[0].id)}} class="card-img-top" width="15" height="350">
-        <div class="card-body">
-          <h5 class="card-title">{{producto.nombre}}</h5>
-          <p class="card-text">{{producto.descripcion}}</p>
-          <p class="card-text1">Talla: {{producto.talla}}</p>
-          <p class="card-text3">Distrito: {{producto.distrito}}</p> 
-          <p class="card-text4"> Precio:  S./{{producto.precio}}</p>
-        </div>
+        
+        <!-- <div class="card"> -->
+          <img src={{url_for('static_uploaded', img_id=producto.imagenes[0].id)}} class="card-img-top" width="15" height="350">
+          <div class="card-body">
+            <h5 class="card-title">{{producto.nombre}}</h5>
+            <p class="card-text">{{producto.descripcion}}</p>
+            <p class="card-text1">Talla: {{producto.talla}}</p>
+            <p class="card-text3">Distrito: {{producto.distrito}}</p> 
+            <p class="card-text4"> Precio:  S./{{producto.precio}}</p>
+          </div>
+        <!-- </div> -->
       </div>
-    </div>
+    </a>
     {% endfor %}
 </div>
 

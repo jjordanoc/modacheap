@@ -53,8 +53,27 @@
                 </form>
                 <ul class="navbar-nav mb-2 mb-lg-0">
                   <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{url_for('producto_crear')}}">Vender</a>
+                    
+                    <div class="btn-group">
+                      <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">Categorías </button>
+                      <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="dropdownMenuButton2">
+                        <li><a class="dropdown-item" href="#">Abrigos</a></li>
+                        <li><a class="dropdown-item" href="#">Polos</a></li>
+                        <li><a class="dropdown-item" href="#">Pantalones</a></li>
+                        <li><a class="dropdown-item" href="#">Zapatos</a></li>
+                        <li><a class="dropdown-item" href="#">Accesorios</a></li>
+                        <li><a class="dropdown-item" href="#">Vestidos</a></li>
+                        <li><a class="dropdown-item" href="#">Blusas</a></li>
+                        <li><a class="dropdown-item" href="#">Ropa de invierno</a></li>
+                      </ul>
+                    </div>
+
                   </li>
+                </ul>
+                <ul class="navbar-nav mb-2 mb-lg-0">
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{{url_for('producto_crear')}}">Vender</a>
+                  </li>  
                 </ul>
                 <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
                   <li class="nav-item">

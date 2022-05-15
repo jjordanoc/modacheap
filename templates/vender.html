@@ -2,15 +2,63 @@
 
 
 {% block main %}
-<form id="vender-form">
-    <div class="mb-3">
-        <!-- <button id="file-select" class="btn btn-primary">Subir fotos</button> -->
-        <input type="file" id="imagenes" name="imagenes" accept="image/*" required multiple>
+<div class="d-flex flex-column align-items-center mt-4">
+<h1>Vende un producto</h1>
+<form id="vender-form flex-wrap">
+    <div class="m-3 d-flex flex-column align-items-center">
+          <div class="slider">
+            <div class="slides">
+                <input type="radio" name="r" id="r3" checked>
+                <input type="radio" name="r" id="r2" checked>
+                <input type="radio" name="r" id="r1" checked>
+                
+                <div class="slide s1">
+                    <button class="imagen_add" type="button">
+                        <img src={{url_for('static_resources', img_id='imagen_add.png')}}  id="imagen_1">
+                    </button>
+                    <div class="navigation">
+                        <label for="r1" class="bar"></label>
+                        <label for="r2" class="bar"></label>
+                        <label for="r3" class="bar"></label>
+                    </div>
+                </div>
+        
+                <div class="slide">
+                    <button class="imagen_add" type="button">
+                        <img src={{url_for('static_resources', img_id='imagen_add.png')}}  id="imagen_2">
+                    </button>
+                    
+                    <div class="navigation">
+                        <label for="r1" class="bar"></label>
+                        <label for="r2" class="bar"></label>
+                        <label for="r3" class="bar"></label>
+                    </div>
+                </div>
+        
+                <div class="slide">
+                    <button class="imagen_add" type="button">
+                        <img src={{url_for('static_resources', img_id='imagen_add.png')}}  id="imagen_3">
+                    </button>
+                    <div class="navigation">
+                        <label for="r1" class="bar"></label>
+                        <label for="r2" class="bar"></label>
+                        <label for="r3" class="bar"></label>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+        <input type="file" id="file1" name="file1" accept="image/*" required style="display: none;">
+        <input type="file" id="file2" name="file2" accept="image/*" required style="display: none;">
+        <input type="file" id="file3" name="file3" accept="image/*" required style="display: none;">
+        <p>Incluye 3 imagenes como minimo</p>
     </div>
-    <div class="flex">
+    <div class="d-flex flex-column">
+    <div class="d-flex flex-row">
+    <div class="flex m-3">
         <div class="mb-3">
             <label for="nombre" class="form-label">Nombre del producto:</label>
-            <input type="text" id="nombre" name="nombre" required class="form-control">
+            <input type="text" id="nombre" name="nombre" required class="form-control" minlength="5" maxlength="80">
         </div>
 
         <div class="mb-3">
@@ -22,11 +70,11 @@
 
         <div class="mb-3">
             <label for="descripcion" class="form-label">Descripcion breve:</label>
-            <input type="text" id="descripcion" name="descripcion" required class="form-control">
+            <textarea id="descripcion" name="descripcion" required class="form-control"></textarea>
         </div>
     </div>  
 
-    <div class="flex">
+    <div class="flex m-3">
         <div class="mb-3">
             <label for="sexo">Genero de la prenda:</label>
             <select name="sexo" id="sexo" required class="form-select">
@@ -59,7 +107,7 @@
                 <option value="Accesorios">Accesorios</option>
                 <option value="Vestidos">Vestidos</option>
                 <option value="Blusas">Blusas</option>
-                <option value="Invierno">Ropa de Invierno</option>
+                <option value="Invierno">Ropa de invierno</option>
             </select>
         </div>
     
@@ -111,11 +159,48 @@
                 <option value="VILLA MARIA DEL TRIUNFO">VILLA MARIA DEL TRIUNFO</option>
             </select>
         </div>
+<<<<<<< HEAD
         <input type="submit" value="Crear" class="btn btn-primary" id="button_crear">
+=======
+        
+    </div>
+    </div>
+    <input type="submit" value="Crear" class="btn btn-primary btn-block">
+>>>>>>> a58a64703502d291422bd41f5bf3935aafd9888d
     </div>
 </form>
-
+</div>
 <script>
+    const imagen1 = document.getElementById("imagen_1");
+    const imagen2 = document.getElementById("imagen_2");
+    const imagen3 = document.getElementById("imagen_3");
+    imagen1.onclick = function(e) {
+        e.preventDefault();
+        const fileInput = document.getElementById("file1");
+        fileInput.click();
+    }
+    imagen2.onclick = function(e) {
+        e.preventDefault();
+        const fileInput = document.getElementById("file2");
+        fileInput.click();
+    }
+    imagen3.onclick = function(e) {
+        e.preventDefault();
+        const fileInput = document.getElementById("file3");
+        fileInput.click();
+    }
+    const file1 = document.getElementById("file1");
+    const file2 = document.getElementById("file2");
+    const file3 = document.getElementById("file3");
+    file1.onchange = function(e) {
+        imagen1.src = URL.createObjectURL(e.target.files[0]);
+    }
+    file2.onchange = function(e) {
+        imagen2.src = URL.createObjectURL(e.target.files[0]);
+    }
+    file3.onchange = function(e) {
+        imagen3.src = URL.createObjectURL(e.target.files[0]);
+    }
     const venderForm = document.getElementById("vender-form");
     venderForm.onsubmit = productoCrear;
 </script>

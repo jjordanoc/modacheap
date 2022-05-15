@@ -30,9 +30,6 @@ login_manager.login_view = "/usuario/login"
 def load_user(correo):
     return Usuario.query.get(correo)
 
-@app.route("/producto",methods=["GET", "POST"])
-def producto():
-    return render_template("producto.html")
 
 @app.route("/usuario/login", methods=["GET", "POST"])
 def usuario_login():
@@ -100,7 +97,10 @@ def producto_buscar():
     if not filtered_productos:
         filtered_productos = Producto.query.all()
     return render_template("index.html", user=current_user, productos=filtered_productos)
-    
+
+@app.route("/producto/ver/<producto_id>", methods=["GET"])
+def producto_ver(producto_id):
+    return render_template("producto.html", producto=Producto.query.get(producto_id))
 
 @app.route("/producto/crear" , methods=["GET", 'POST'])
 @login_required
@@ -156,6 +156,7 @@ def imagen_crear():
     res = {}
     try:
         print("reached")
+        print(request.files)
         assert "file" in request.files
         file = request.files.get("file")
         random_seed = ShortUUID().random(length=50)
@@ -177,6 +178,11 @@ def imagen_crear():
 @login_required
 def static_uploaded(img_id):
     return send_from_directory("static/uploaded", img_id)
+
+@app.route("/static/resources/<img_id>")
+@login_required
+def static_resources(img_id):
+    return send_from_directory("static/resources", img_id)
 
 @app.errorhandler(404)
 def handle_not_found(error):
