@@ -303,7 +303,7 @@ input[name="r"]{
 .producto-campo {
     width: 250px;   
     margin: 10px;
-    border: 3px solid var(--text-color);
+    /* border: 3px solid var(--text-color); */
 }
 
 .whatsapp-logo {
