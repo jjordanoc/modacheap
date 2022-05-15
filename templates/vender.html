@@ -3,121 +3,116 @@
 
 {% block main %}
 <form id="vender-form">
-    <div id="mostrar-imagenes">
-
-    </div>
     <div class="mb-3">
         <!-- <button id="file-select" class="btn btn-primary">Subir fotos</button> -->
         <input type="file" id="imagenes" name="imagenes" accept="image/*" required multiple>
     </div>
     <div class="flex">
+        <div class="mb-3">
+            <label for="nombre" class="form-label">Nombre del producto:</label>
+            <input type="text" id="nombre" name="nombre" required class="form-control">
+        </div>
 
-    
-    <div class="mb-3">
-        <label for="nombre">Nombre del producto:</label>
-        <input type="text" id="nombre" name="nombre" required>
-    </div>
+        <div class="mb-3">
+            <label for="precio" class="form-label">Precio:</label>
+            <input type="number" min="0" max="99999" id="precio" name="precio" step="any" required class="form-control">
+        </div>
 
-    <div class="mb-3">
-        <label for="precio">Precio:</label>
-        <input type="number" min="0" max="99999" id="precio" name="precio" step="any" required>
-    </div>
+        <input type="hidden" id="usuario_correo" name="usuario_correo" value="{{usuario.correo}}">
 
-    <input type="hidden" id="usuario_correo" name="usuario_correo" value="{{usuario.correo}}">
-
-    <div class="mb-3">
-        <label for="descripcion">Descripcion breve:</label>
-        <input type="text" id="descripcion" name="descripcion" required>
-    </div>
+        <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripcion breve:</label>
+            <input type="text" id="descripcion" name="descripcion" required class="form-control">
+        </div>
     </div>  
+
     <div class="flex">
-    <div class="mb-3">
-        <label for="sexo">Genero de la prenda:</label>
-        <select name="sexo" id="sexo" required class="form-select">
-            <option value="M">Hombre</option>
-            <option value="F">Mujer</option>
-            <option value="U">Unisex</option>
-        </select>
-    </div>
+        <div class="mb-3">
+            <label for="sexo">Genero de la prenda:</label>
+            <select name="sexo" id="sexo" required class="form-select">
+                <option value="M">Hombre</option>
+                <option value="F">Mujer</option>
+                <option value="U">Unisex</option>
+            </select>
+        </div>
 
-    <div class="mb-3">
-        <label for="talla">Talla de la prenda:</label>
-        <select name="talla" id="talla" required class="form-select">
-            <option value="XXS">XXS</option>
-            <option value="XS">XS</option>
-            <option value="S">S</option>
-            <option value="M">M</option>
-            <option value="L">L</option>
-            <option value="XL">XL</option>
-            <option value="XXL">XXL</option>
-        </select>
-    </div>
+        <div class="mb-3">
+            <label for="talla">Talla de la prenda:</label>
+            <select name="talla" id="talla" required class="form-select">
+                <option value="XXS">XXS</option>
+                <option value="XS">XS</option>
+                <option value="S">S</option>
+                <option value="M">M</option>
+                <option value="L">L</option>
+                <option value="XL">XL</option>
+                <option value="XXL">XXL</option>
+            </select>
+        </div>
+        
+        <div class="mb-3">
+            <label for="categoria">Categoria de la prenda:</label>
+            <select name="categoria" id="categoria" required class="form-select">
+                <option value="Abrigos">Abrigos</option>
+                <option value="Polos">Polos</option>
+                <option value="Pantalones">Pantalones</option>
+                <option value="Zapatos">Zapatos</option>
+                <option value="Accesorios">Accesorios</option>
+                <option value="Vestidos">Vestidos</option>
+                <option value="Blusas">Blusas</option>
+                <option value="Invierno">Ropa de Invierno</option>
+            </select>
+        </div>
     
-    <div class="mb-3">
-        <label for="categoria">Categoria de la prenda:</label>
-        <select name="categoria" id="categoria" required class="form-select">
-            <option value="Abrigos">Abrigos</option>
-            <option value="Polos">Polos</option>
-            <option value="Pantalones">Pantalones</option>
-            <option value="Zapatos">Zapatos</option>
-            <option value="Accesorios">Accesorios</option>
-            <option value="Vestidos">Vestidos</option>
-            <option value="Blusas">Blusas</option>
-            <option value="Invierno">Ropa de Invierno</option>
-        </select>
+        <div class="mb-3">
+            <label for="distrito">Distrito en el que se encuentra:</label>
+            <select name="distrito" id="distrito" required class="form-select">
+                <option value="ANCON">ANCON</option>
+                <option value="ATE">ATE</option>
+                <option value="BARRANCO">BARRANCO</option>
+                <option value="BREÑA">BREÑA</option>
+                <option value="CARABAYLLO">CARABAYLLO</option>
+                <option value="CHACLACAYO">CHACLACAYO</option>
+                <option value="CHORRILLOS">CHORRILLOS</option>
+                <option value="CIENEGUILLA">CIENEGUILLA</option>
+                <option value="COMAS">COMAS</option>
+                <option value="EL AGUSTINO">EL AGUSTINO</option>
+                <option value="INDEPENDENCIA">INDEPENDENCIA</option>
+                <option value="JESUS MARIA">JESUS MARIA</option>
+                <option value="LA MOLINA">LA MOLINA</option>
+                <option value="LA VICTORIA">LA VICTORIA</option>
+                <option value="LIMA">LIMA</option>
+                <option value="LINCE">LINCE</option>
+                <option value="LOS OLIVOS">LOS OLIVOS</option>
+                <option value="LURIGANCHO">LURIGANCHO</option>
+                <option value="LURIN">LURIN</option>
+                <option value="MAGDALENA DEL MAR">MAGDALENA DEL MAR</option>
+                <option value="MIRAFLORES">MIRAFLORES</option>
+                <option value="PACHACAMAC">PACHACAMAC</option>
+                <option value="PUCUSANA">PUCUSANA</option>
+                <option value="PUEBLO LIBRE">PUEBLO LIBRE</option>
+                <option value="PUENTE PIEDRA">PUENTE PIEDRA</option>
+                <option value="PUNTA HERMOSA">PUNTA HERMOSA</option>
+                <option value="PUNTA NEGRA">PUNTA NEGRA</option>
+                <option value="RIMAC">RIMAC</option>
+                <option value="SAN BARTOLO">SAN BARTOLO</option>
+                <option value="SAN BORJA">SAN BORJA</option>
+                <option value="SAN ISIDRO">SAN ISIDRO</option>
+                <option value="SAN JUAN DE LURIGANCHO">SAN JUAN DE LURIGANCHO</option>
+                <option value="SAN JUAN DE MIRAFLORES">SAN JUAN DE MIRAFLORES</option>
+                <option value="SAN LUIS">SAN LUIS</option>
+                <option value="SAN MARTIN DE PORRES">SAN MARTIN DE PORRES</option>
+                <option value="SAN MIGUEL">SAN MIGUEL</option>
+                <option value="SANTA ANITA">SANTA ANITA</option>
+                <option value="SANTA MARIA DEL MAR">SANTA MARIA DEL MAR</option>
+                <option value="SANTA ROSA">SANTA ROSA</option>
+                <option value="SANTIAGO DE SURCO">SANTIAGO DE SURCO</option>
+                <option value="SURQUILLO">SURQUILLO</option>
+                <option value="VILLA EL SALVADOR">VILLA EL SALVADOR</option>
+                <option value="VILLA MARIA DEL TRIUNFO">VILLA MARIA DEL TRIUNFO</option>
+            </select>
+        </div>
+        <input type="submit" value="Crear" class="btn btn-primary">
     </div>
-   
-    <div class="mb-3">
-        <label for="distrito">Distrito en el que se encuentra:</label>
-        <select name="distrito" id="distrito" required class="form-select">
-            <option value="ANCON">ANCON</option>
-            <option value="ATE">ATE</option>
-            <option value="BARRANCO">BARRANCO</option>
-            <option value="BREÑA">BREÑA</option>
-            <option value="CARABAYLLO">CARABAYLLO</option>
-            <option value="CHACLACAYO">CHACLACAYO</option>
-            <option value="CHORRILLOS">CHORRILLOS</option>
-            <option value="CIENEGUILLA">CIENEGUILLA</option>
-            <option value="COMAS">COMAS</option>
-            <option value="EL AGUSTINO">EL AGUSTINO</option>
-            <option value="INDEPENDENCIA">INDEPENDENCIA</option>
-            <option value="JESUS MARIA">JESUS MARIA</option>
-            <option value="LA MOLINA">LA MOLINA</option>
-            <option value="LA VICTORIA">LA VICTORIA</option>
-            <option value="LIMA">LIMA</option>
-            <option value="LINCE">LINCE</option>
-            <option value="LOS OLIVOS">LOS OLIVOS</option>
-            <option value="LURIGANCHO">LURIGANCHO</option>
-            <option value="LURIN">LURIN</option>
-            <option value="MAGDALENA DEL MAR">MAGDALENA DEL MAR</option>
-            <option value="MIRAFLORES">MIRAFLORES</option>
-            <option value="PACHACAMAC">PACHACAMAC</option>
-            <option value="PUCUSANA">PUCUSANA</option>
-            <option value="PUEBLO LIBRE">PUEBLO LIBRE</option>
-            <option value="PUENTE PIEDRA">PUENTE PIEDRA</option>
-            <option value="PUNTA HERMOSA">PUNTA HERMOSA</option>
-            <option value="PUNTA NEGRA">PUNTA NEGRA</option>
-            <option value="RIMAC">RIMAC</option>
-            <option value="SAN BARTOLO">SAN BARTOLO</option>
-            <option value="SAN BORJA">SAN BORJA</option>
-            <option value="SAN ISIDRO">SAN ISIDRO</option>
-            <option value="SAN JUAN DE LURIGANCHO">SAN JUAN DE LURIGANCHO</option>
-            <option value="SAN JUAN DE MIRAFLORES">SAN JUAN DE MIRAFLORES</option>
-            <option value="SAN LUIS">SAN LUIS</option>
-            <option value="SAN MARTIN DE PORRES">SAN MARTIN DE PORRES</option>
-            <option value="SAN MIGUEL">SAN MIGUEL</option>
-            <option value="SANTA ANITA">SANTA ANITA</option>
-            <option value="SANTA MARIA DEL MAR">SANTA MARIA DEL MAR</option>
-            <option value="SANTA ROSA">SANTA ROSA</option>
-            <option value="SANTIAGO DE SURCO">SANTIAGO DE SURCO</option>
-            <option value="SURQUILLO">SURQUILLO</option>
-            <option value="VILLA EL SALVADOR">VILLA EL SALVADOR</option>
-            <option value="VILLA MARIA DEL TRIUNFO">VILLA MARIA DEL TRIUNFO</option>
-        </select>
-    </div>
-
-    <input type="submit" value="Crear">
-</div>
 </form>
 
 <script>
