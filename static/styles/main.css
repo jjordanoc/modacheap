@@ -301,3 +301,23 @@ input[name="r"]{
     font-family: 'Josefin Sans', sans-serif;
 
 }
+
+.flex {
+    font-family: 'Josefin Sans', sans-serif;
+    padding: 5%;
+}
+
+#button_crear{
+    padding: 3%;
+    background-color: #0f209e   ;
+    width: 120px;
+}
+
+.p-2{
+    transition: box-shadow 0.3s ease;
+    
+}
+
+.p-21{
+    color: #004F97;
+}
