@@ -61,7 +61,6 @@ const productoCrear = function(e) {
     const sexo = document.getElementById("sexo");
     const categoria = document.getElementById("categoria");
     const distrito = document.getElementById("distrito");
-    const imagenes = document.getElementById("imagenes");
     
     fetch("/producto/crear", {
         method: "POST",
@@ -84,9 +83,13 @@ const productoCrear = function(e) {
         if (resJson["status"] == "success") {
             console.log(resJson);
             // Upload image to server
-            const files = imagenes.files;
+            const file1 = document.getElementById("file1");
+            const file2 = document.getElementById("file2");
+            const file3 = document.getElementById("file3");
+            const files = [file1, file2, file3];
             for (let i = 0; i < files.length; i++) {
-                const file = files[i];
+                const file = files[i].files[0];
+                console.log(file);
                 let formData = new FormData();
                 formData.append("file", file, file.name);
                 formData.append("producto_id", resJson["id"])
@@ -108,6 +111,3 @@ const productoCrear = function(e) {
    
 }
 
-const imagenCrear = function(e) {
-    
-}

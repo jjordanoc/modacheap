@@ -108,7 +108,7 @@ body {
 
 /* Para slide de producto */
 .slider{
-    width: 700px;
+    width: 500px;
     height: 400px;
     overflow: hidden;
 }
@@ -121,11 +121,10 @@ body {
 }
 
 .navigation{
-    position:absolute;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
     display: flex;
+    position: relative;
+    top: -50px;
+    left: 160px;
 }
 
 .bar{
@@ -300,4 +299,38 @@ input[name="r"]{
 .card{
     font-family: 'Josefin Sans', sans-serif;
 
+}
+
+.imagen_add {
+    padding: 0;
+    border: none;
+    height: 100%;
+    width: 100%;
+}
+
+.test-div {
+    background-color: red; 
+    width: 300px;
+}
+
+.producto-campo h2 {
+    color: var(--title-color);
+}
+
+.producto-campo {
+    width: 250px;   
+    margin: 10px;
+    border: 3px solid var(--text-color);
+}
+
+.whatsapp-logo {
+    height: 50px;
+    background-color: #53ce60;
+    text-decoration: none !important;
+    color: black;
+}
+
+.whatsapp-logo img {
+    width: 50px;
+    height: 50px;
 }
