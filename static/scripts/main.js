@@ -42,10 +42,8 @@ const usuarioRegistrar = function(e) {
         }
     }).then(res => res.json()).then(function(resJson) {
         if (resJson["status"] == "success") {
-            window.location.href = "/"
-        }
-        else {
-            throw Error("Error de ingreso. Intente de nuevo.");
+            console.log(resJson);
+            window.location.href = "/";
         }
     }).catch(function(e) {
         console.log(e);
@@ -54,6 +52,7 @@ const usuarioRegistrar = function(e) {
 
 const productoCrear = function(e) {
     e.preventDefault();
+
     const usuario_correo = document.getElementById("usuario_correo");
     const precio = document.getElementById("precio");
     const nombre = document.getElementById("nombre");
@@ -62,16 +61,10 @@ const productoCrear = function(e) {
     const sexo = document.getElementById("sexo");
     const categoria = document.getElementById("categoria");
     const distrito = document.getElementById("distrito");
-
     const imagenes = document.getElementById("imagenes");
+    
+    let serverResponse = {};
 
-    var formdata = new FormData();
-    for (let i = 0; i < imagenes.files.length; i++) {
-        formdata.append("files", imagenes.files[i], `${i}`);
-    }
-    
-    console.log(formdata.values(), imagenes.files);
-    
     fetch("/producto/crear", {
         method: "POST",
         body: JSON.stringify({
@@ -82,17 +75,37 @@ const productoCrear = function(e) {
             talla: talla.value,
             sexo: sexo.value,
             categoria: categoria.value,
-            distrito: distrito.value,
-            imagenes: imagenes.files
+            distrito: distrito.value
         }),
         headers: {
             "Content-Type": "application/json"
         }
     }).then(res => res.json()).then(function(resJson) {
         if (resJson["status"] == "success") {
-            window.location.href = "/"
+            console.log(resJson);
+            serverResponse = resJson;
+            window.location.href = "/";
         }
     }).catch(function() {
         
     });
+
+    const files = imagenes.files;
+
+    for (let i = 0; i < files.length; i++) {
+        const file = files[i];
+        let formData = new FormData();
+        formData.append("file", file, file.name);
+        formData.append("producto_id", serverResponse["id"])
+        console.log(file);
+        fetch("/imagen/crear", {
+            method: "POST",
+            body: formData,
+            headers: {}
+        }).then();
+    }
+}
+
+const imagenCrear = function(e) {
+    
 }

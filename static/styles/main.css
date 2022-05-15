@@ -4,6 +4,13 @@
     --text-color: #242736;
 }
 
+#vender-form {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
 body {
     font-family: 'Josefin Sans', sans-serif;
     color: var(--text-color);
@@ -169,6 +176,122 @@ input[name="r"]{
     margin-left: -40%;
 }
 
+<<<<<<< HEAD
+/* Para el pequeño banner */
+.banner-box{
+    font-size: 20px;
+    font-weight: bold;
+    opacity: 0;
+    position: absolute;
+    width: 100%;
+    text-align: center;
+}
+
+
+.banner-text{
+    background-color: black;
+    color:white;
+}
+
+.b1{
+    animation: ani1 15s infinite;
+}
+.b2{
+    animation: ani2 15s infinite;
+}
+.b3{
+    animation: ani3 15s infinite;
+}
+.b4{
+    animation: ani4 15s infinite;
+}
+.b5{
+    animation: ani5 15s infinite;
+}
+
+@keyframes ani1{
+    0%{
+        opacity: 0;
+    }
+    10%{
+        opacity: 1;
+    }
+    20%{
+        opacity: 0;
+    }
+}
+
+@keyframes ani2{
+    20%{
+        opacity: 0;
+    }
+    30%{
+        opacity: 1;
+    }
+    40%{
+        opacity: 0;
+    }
+}
+
+@keyframes ani3{
+    40%{
+        opacity: 0;
+    }
+    50%{
+        opacity: 1;
+    }
+    60%{
+        opacity: 0;
+    }
+}
+
+@keyframes ani4{
+    60%{
+        opacity: 0;
+    }
+    70%{
+        opacity: 1;
+    }
+    80%{
+        opacity: 0;
+    }
+}
+
+@keyframes ani5{
+    80%{
+        opacity: 0;
+    }
+    90%{
+        opacity: 1;
+    }
+    100%{
+        opacity: 0;
+    }
+}
+
+/* Top page */
+
+
+.inicio{
+    background-color: whitesmoke;
+    
+}
+
+.startBox{
+    display: inline-block;
+}
+.space{
+    
+    background-color: black;
+    height: 20px;
+}
+
+.topButton{
+    border-color: red;
+    background-color: white;
+    width: 200px;
+    height: 40px;
+=======
 .card-text3{
     display: inline;
 }
@@ -181,6 +304,7 @@ input[name="r"]{
 .card{
     font-family: 'Josefin Sans', sans-serif;
 
+<<<<<<< HEAD
 }
 
 
@@ -203,4 +327,7 @@ input[name="r"]{
 #sexo{
     width: 205px;
     text-align: center;
+=======
+>>>>>>> e2a6dc62d6d6942b98d79442560e60eb0308be2b
+>>>>>>> ba9f1f0fcdc2203818e53880a0c47675beec4229
 }

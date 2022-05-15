@@ -4,7 +4,7 @@ import json
 import re
 import sys
 import os
-import uuid
+from shortuuid import ShortUUID
 from flask import Flask, redirect, request, render_template, jsonify, abort, url_for
 from models import db, Producto, Usuario, Imagen
 from flask_migrate import Migrate
@@ -114,10 +114,11 @@ def producto_crear():
             sexo = data['sexo']
             categoria = data['categoria']
             distrito = data['distrito']
-            imagenes = request.files.getlist("imagenes")
-            print("request files", request.files)
-            print(data)
-            imagenes2 = request.files.get("")
+            # imagenes = request.files.getlist("imagenes")
+            #print("request files", request.files)
+            #print("data", data)
+            #print(request.form)
+            # imagenes2 = request.files.get("")
             producto = Producto (
                 nombre = nombre,
                 usuario_correo = usuario_correo,
@@ -128,11 +129,11 @@ def producto_crear():
                 categoria = categoria,
                 distrito = distrito
             )
-            print(imagenes)
-            for imagen in imagenes:
-                img_id = uuid.uuid4()
-                imagen.save(os.path.join(app.config["UPLOAD_FOLDER"], img_id))
-                db.session.add(Imagen(id=img_id, producto_id=producto.id))
+            # print(imagenes)
+            # for imagen in imagenes:
+            #     img_id = uuid.uuid4()
+            #     imagen.save(os.path.join(app.config["UPLOAD_FOLDER"], img_id))
+            #     db.session.add(Imagen(id=img_id, producto_id=producto.id))
             db.session.add(producto)
             db.session.commit()
             response = {
@@ -154,6 +155,28 @@ def producto_crear():
             db.session.close()
         return jsonify(response)
     return render_template("vender.html", usuario=current_user)
+
+
+@app.route("/imagen/crear", methods=["POST"])
+def imagen_crear():
+    try:
+        print("reached")
+        print(request.files)
+        assert "file" in request.files
+        file = request.files.get("file")
+        random_seed = ShortUUID().random(length=50)
+        img_id = secure_filename(str(random_seed) + str(file.filename))
+        file.save(os.path.join(app.config["UPLOAD_FOLDER"], img_id))
+        imagen = Imagen(id=img_id, producto_id=producto.id)
+        db.session.add(imagen)
+        db.session.commit()
+    except Exception as e:
+        print(e)
+        db.session.rollback()
+        abort(500)
+    finally:
+        db.session.close()
+    return jsonify({"res" : 200})
 
 @app.errorhandler(404)
 def handle_not_found(error):
