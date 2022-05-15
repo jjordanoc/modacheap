@@ -146,6 +146,7 @@ def producto_crear():
             handle_error_db(e, db)
         finally:
             db.session.close()
+        flash("Producto creado con exito.")
         return jsonify(res)
     return render_template("vender.html", usuario=current_user)
 

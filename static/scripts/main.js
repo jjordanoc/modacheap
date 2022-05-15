@@ -100,6 +100,7 @@ const productoCrear = function(e) {
                 }).then(res => res.json()).then(function(resJson) {
                     if (resJson["status"] == "success") {
                         window.location.href = "/";
+                        
                     }
                 });
             }
