@@ -283,16 +283,15 @@ input[name="r"]{
     font-family: 'Josefin Sans', sans-serif;
 }
 
-.imagen_add {
-    padding: 0;
-    border: none;
-    height: 100%;
-    width: 100%;
+.flex {
+    font-family: 'Josefin Sans', sans-serif;
+    padding: 5%;
 }
 
-.test-div {
-    background-color: red; 
-    width: 300px;
+#button_crear{
+    padding: 3%;
+    background-color: #0f209e;
+    width: 120px;
 }
 
 .producto-campo h2 {
@@ -349,30 +348,19 @@ a {
     user-select: none;
 }
 
-.dropdown{
+footer{
+    color: white;
+    background-color: #222;
+    padding: 3rem;
 }
 
-
-.row:after {
-  content: "";
-  display: table;
-  clear: both;
+footer a{
+    color: white;
+    margin: 0;
+    text-decoration: none;
+    float: right;
 }
 
-.column {
-  float: left;
-  padding: 10px;
-  height: 300px;
-}
-
-.left {
-  width: 25%;
-}
-
-.right {
-  width: 75%;
-}
-
-.form-check {
-
+footer a:hover{
+    color: cornflowerblue;
 }

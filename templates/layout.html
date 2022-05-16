@@ -28,7 +28,8 @@
                 <ul class="navbar-nav mb-2 mb-lg-0">
                   <li class="nav-item">
                     
-                    <div class="btn-group">
+                    <div class="bSet-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+                    tn-group">
                       <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">Categorías </button>
                       <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="dropdownMenuButton2">
                         <li><a class="dropdown-item" href={{url_for('producto_categoria', nombre_categoria='Abrigos')}}>Abrigos</a></li>
@@ -71,6 +72,11 @@
                 {% endif %}
               </div>
             </div>
+            <div>
+              
+            </div>
+
+
           </nav>
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
@@ -84,6 +90,13 @@
             {% block main %}
             {% endblock %}
         </main>
+        <footer>
+          <div class="d-flex justify-content-around">
+            <a >Ir al inicio </a>
+            <a>Moda Cheap</a>
+            <a>Copyright 2022</a>
+          </div>
+        </footer>
         <!-- Bootstrap Bundle with Popper -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
     </body>
