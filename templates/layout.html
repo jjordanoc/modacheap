@@ -3,6 +3,7 @@
         <title>Moda Cheap</title>
         <link rel="stylesheet" href="{{url_for('static',filename='styles/main.css')}}">
         <script src="{{url_for('static',filename='scripts/main.js')}}"></script>
+        <link rel="icon" type="image/png" href={{url_for('static_resources', img_id='favicon.png')}}>
         <!-- Fonts -->
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -48,10 +49,13 @@
                   {% if usuario.is_authenticated %}
                   <li class="nav-item">
                     <p class="nav-link active" aria-current="page">{{usuario.nombre}}</p>
-                    <li class="nav-item">
-                      <a class="nav-link active" aria-current="page" href="{{url_for('usuario_logout')}}">Salir</a>
-                    </li>
                   </li> 
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{{url_for('producto_crear')}}">Vender</a>
+                  </li>
+                  <li class="nav-item">
+                    <a class="nav-link active" aria-current="page" href="{{url_for('usuario_logout')}}">Salir</a>
+                  </li>
                   {% else %}
                   <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="{{url_for('producto_crear')}}">Vender</a>

@@ -42,7 +42,6 @@ def usuario_login():
             correo = data["correo"]
             clave = data["clave"]
             usuario = load_user(correo)
-            print(usuario)
             if not usuario or not usuario.check_clave(clave):
                 raise Exception("Usuario o clave incorrectos.")
             login_user(usuario, remember=True)
@@ -79,7 +78,6 @@ def usuario_registrar():
             nombre = data["nombre"]
             celular = data["celular"]
             user = Usuario(correo=correo, nombre=nombre, celular=celular)
-            print(user)
             user.set_clave(clave)
             db.session.add(user)
             db.session.commit()
@@ -107,14 +105,14 @@ def producto_buscar():
 
 @app.route("/producto/ver/<producto_id>", methods=["GET"])
 def producto_ver(producto_id):
-    return render_template("producto.html", producto=Producto.query.get(producto_id))
+    return render_template("producto.html", producto=Producto.query.get(producto_id), usuario=current_user)
 
 @app.route("/producto/categoria/<nombre_categoria>")
 def producto_categoria(nombre_categoria):
     filtered_productos = Producto.query.filter(Producto.categoria == nombre_categoria).all()
     if not filtered_productos:
         filtered_productos = Producto.query.all()
-    return render_template("index.html", productos=filtered_productos)
+    return render_template("index.html", productos=filtered_productos, usuario=current_user)
 
 @app.route("/producto/crear" , methods=["GET", 'POST'])
 @login_required
@@ -172,8 +170,6 @@ def producto_crear():
 def imagen_crear():
     res = {}
     try:
-        print("reached")
-        print(request.files)
         assert "file" in request.files
         file = request.files.get("file")
         random_seed = ShortUUID().random(length=50)
