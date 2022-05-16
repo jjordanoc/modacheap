@@ -210,6 +210,10 @@ def handle_assertion(e):
     flash("Ocurrio un error inesperado.", category="danger")
     return redirect(url_for("index"))
 
+@app.route("/prueba", methods=["GET"])
+def prueba():
+    return render_template("prueba.html", productos=Producto.query.all(), usuario=current_user)
+
 # Run
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

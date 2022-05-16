@@ -1,4 +1,5 @@
 venv
 modelo_relacional.txt
+/templates/prueba.html
 .env
 __pycache__
