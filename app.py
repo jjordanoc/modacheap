@@ -8,6 +8,7 @@ from flask_migrate import Migrate
 from flask_login import login_required, LoginManager, login_user, current_user, logout_user
 from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
+from werkzeug.exceptions import HTTPException
 from helpers import handle_error, handle_error_db
 import unittest
 
@@ -42,25 +43,28 @@ def usuario_login():
             usuario = load_user(correo)
             print(usuario)
             if not usuario or not usuario.check_clave(clave):
-                return redirect(url_for("usuario_login"))
+                raise Exception("Usuario o clave incorrectos.")
             login_user(usuario, remember=True)
             res["status"] = "success"
-            return jsonify(res)
+            res["message"] = "Ingreso con exito."
         except Exception as e:
+            res["status"] = "warning"
+            res["message"] = "Usuario o clave incorrectos."
             handle_error(e)
+        return jsonify(res)
 
     return render_template("login.html")
 
 @app.route("/usuario/logout")
 def usuario_logout():
     logout_user()
+    flash("Usted ha cerrado su sesion.", "info")
     return redirect(url_for("usuario_login"))
 
 # Controllers
 @app.route("/")
-@login_required
 def index():
-    return render_template("index.html", productos=Producto.query.all(), usuario=current_user)
+    return render_template("index.html", productos=Producto.query.all())
 
 
 @app.route("/usuario/registrar", methods=["GET", "POST"])
@@ -80,27 +84,35 @@ def usuario_registrar():
             db.session.commit()
             login_user(user, remember=True)
             res["status"] = "success"
-            return jsonify(res)
+            res["message"] = "Usuario registrado con exito."
         except Exception as e:
+            res["status"] = "warning"
+            res["message"] = "No se pudo registrar su usuario."
             handle_error_db(e, db)
         finally:
             db.session.close()
-
+        return jsonify(res)
     return render_template("register.html")
 
 @app.route("/producto/buscar", methods=["GET"])
-@login_required
 def producto_buscar():
     buscar = request.args.get("buscar")
     assert buscar is not None
     filtered_productos = Producto.query.filter(Producto.nombre.like("%{}%".format(buscar))).all()
     if not filtered_productos:
         filtered_productos = Producto.query.all()
-    return render_template("index.html", user=current_user, productos=filtered_productos)
+    return render_template("index.html", productos=filtered_productos)
 
 @app.route("/producto/ver/<producto_id>", methods=["GET"])
 def producto_ver(producto_id):
     return render_template("producto.html", producto=Producto.query.get(producto_id))
+
+@app.route("/producto/categoria/<nombre_categoria>")
+def producto_categoria(nombre_categoria):
+    filtered_productos = Producto.query.filter(Producto.categoria == nombre_categoria).all()
+    if not filtered_productos:
+        filtered_productos = Producto.query.all()
+    return render_template("index.html", productos=filtered_productos)
 
 @app.route("/producto/crear" , methods=["GET", 'POST'])
 @login_required
@@ -140,9 +152,12 @@ def producto_crear():
                 'sexo' : sexo,
                 'categoria' : categoria,
                 'distrito' : distrito,
-                "status" : "success"
+                "status" : "success",
+                "message" : "Se creo su producto con exito."
             }
         except Exception as e :
+            res["status"] = "warning"
+            res["message"] = "No se pudo crear su producto."
             handle_error_db(e, db)
         finally:
             db.session.close()
@@ -167,7 +182,10 @@ def imagen_crear():
         db.session.add(imagen)
         db.session.commit()
         res["status"] = "success"
+        res["message"] = "Se subio la imagen con exito."
     except Exception as e:
+        res["status"] = "warning"
+        res["message"] = "No se pudo subir la imagen."
         handle_error_db(e, db)
     finally:
         db.session.close()
@@ -175,22 +193,23 @@ def imagen_crear():
 
 
 @app.route("/static/uploaded/<img_id>")
-@login_required
 def static_uploaded(img_id):
     return send_from_directory("static/uploaded", img_id)
 
 @app.route("/static/resources/<img_id>")
-@login_required
 def static_resources(img_id):
     return send_from_directory("static/resources", img_id)
 
-@app.errorhandler(404)
-def handle_not_found(error):
-    flash("Ocurrio un error inesperado.", category="error")
-    return redirect(url_for("usuario_login"))
+@app.errorhandler(HTTPException)
+def handle_http_error(e):
+    handle_error(e)
+    flash("Ocurrio un error inesperado.", category="danger")
+    return redirect(url_for("index"))
 
 @app.errorhandler(AssertionError)
-def handle_not_found(error):
+def handle_assertion(e):
+    handle_error(e)
+    flash("Ocurrio un error inesperado.", category="danger")
     return redirect(url_for("index"))
 
 # Run

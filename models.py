@@ -24,7 +24,7 @@ class Producto(db.Model):
 
 class Usuario(db.Model, UserMixin):
     __tablename__ = 'usuarios'
-    correo = db.Column(db.String(80), primary_key=True, unique=True)
+    correo = db.Column(db.String(80), primary_key=True, unique=True, nullable=False)
     clave = db.Column(db.String(120), nullable=False)
     nombre = db.Column(db.String(80), nullable=False)
     celular = db.Column(db.Integer, nullable=False, unique=True)
