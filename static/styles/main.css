@@ -293,8 +293,6 @@ input[name="r"]{
     background-color: #0f209e;
     width: 120px;
 }
-<<<<<<< HEAD
-=======
 
 .producto-campo h2 {
     color: var(--title-color);
@@ -346,4 +344,20 @@ a {
     user-select: none;
     pointer-events: none;
 }
->>>>>>> 185132f1904d92cedc267b2c54ad3c9874a7f583
+
+footer{
+    color: white;   
+    background-color: #222;
+    padding: 3rem;
+}
+
+footer a{
+    color: white;
+    margin: 0;
+    text-decoration: none;
+    float: right;
+}
+
+footer a:hover{
+    color: cornflowerblue;
+}
