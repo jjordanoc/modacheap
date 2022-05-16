@@ -1,8 +1,8 @@
 # Imports
-import sys
 import os
+import pytest
 from shortuuid import ShortUUID
-from flask import Flask, redirect, request, render_template, jsonify, abort, url_for, send_from_directory, flash
+from flask import Flask, redirect, request, render_template, jsonify, url_for, send_from_directory, flash
 from models import db, Producto, Usuario, Imagen
 from flask_migrate import Migrate
 from flask_login import login_required, LoginManager, login_user, current_user, logout_user
@@ -10,7 +10,7 @@ from dotenv import load_dotenv
 from werkzeug.utils import secure_filename
 from werkzeug.exceptions import HTTPException
 from helpers import handle_error, handle_error_db
-import unittest
+
 
 # Config
 load_dotenv()
@@ -98,7 +98,7 @@ def producto_buscar():
     buscar = request.args.get("buscar")
     assert buscar is not None
     buscar = buscar.lower()
-    filtered_productos = Producto.query.filter(Producto.nombre.like("%{}%".format(buscar))).all()
+    filtered_productos = Producto.query.filter(Producto.nombre.contains(buscar)).all()
     if not filtered_productos:
         filtered_productos = Producto.query.all()
     return render_template("index.html", productos=filtered_productos, usuario=current_user)
@@ -210,9 +210,6 @@ def handle_assertion(e):
     flash("Ocurrio un error inesperado.", category="danger")
     return redirect(url_for("index"))
 
-@app.route("/prueba", methods=["GET"])
-def prueba():
-    return render_template("prueba.html", productos=Producto.query.all(), usuario=current_user)
 
 # Run
 if __name__ == "__main__":

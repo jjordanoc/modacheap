@@ -3,3 +3,5 @@ modelo_relacional.txt
 /templates/prueba.html
 .env
 __pycache__
+static/uploaded
+.pytest_cache
