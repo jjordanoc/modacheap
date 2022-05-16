@@ -119,7 +119,7 @@ body {
     transition:0.4s;
 }
 
-.bar:hover{
+.bar:hover {
     background: white;
 }
 
@@ -281,7 +281,6 @@ input[name="r"]{
 
 .card{
     font-family: 'Josefin Sans', sans-serif;
-
 }
 
 .imagen_add {
@@ -306,10 +305,16 @@ input[name="r"]{
     /* border: 3px solid var(--text-color); */
 }
 
+a {
+    text-decoration: none;
+}
+
 .whatsapp-logo {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
     height: 50px;
     background-color: #53ce60;
-    text-decoration: none !important;
     color: black;
 }
 
@@ -318,10 +323,22 @@ input[name="r"]{
     height: 50px;
 }
 
+.whatsapp-logo p {
+    margin: 0;
+    text-decoration: none;
+}
+
 .hidden {
     display: none;
 }
 
+.imagen-bg {
+    background-color: black;
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
 
 #message, #alert {
     margin: 0;

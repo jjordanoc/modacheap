@@ -1,5 +1,4 @@
 # Imports
-from curses.ascii import HT
 import sys
 import os
 from shortuuid import ShortUUID
@@ -64,7 +63,6 @@ def usuario_logout():
 
 # Controllers
 @app.route("/")
-
 def index():
     return render_template("index.html", productos=Producto.query.all())
 
@@ -97,18 +95,24 @@ def usuario_registrar():
     return render_template("register.html")
 
 @app.route("/producto/buscar", methods=["GET"])
-@login_required
 def producto_buscar():
     buscar = request.args.get("buscar")
     assert buscar is not None
     filtered_productos = Producto.query.filter(Producto.nombre.like("%{}%".format(buscar))).all()
     if not filtered_productos:
         filtered_productos = Producto.query.all()
-    return render_template("index.html", user=current_user, productos=filtered_productos)
+    return render_template("index.html", productos=filtered_productos)
 
 @app.route("/producto/ver/<producto_id>", methods=["GET"])
 def producto_ver(producto_id):
     return render_template("producto.html", producto=Producto.query.get(producto_id))
+
+@app.route("/producto/categoria/<nombre_categoria>")
+def producto_categoria(nombre_categoria):
+    filtered_productos = Producto.query.filter(Producto.categoria == nombre_categoria).all()
+    if not filtered_productos:
+        filtered_productos = Producto.query.all()
+    return render_template("index.html", productos=filtered_productos)
 
 @app.route("/producto/crear" , methods=["GET", 'POST'])
 @login_required
