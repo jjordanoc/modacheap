@@ -24,7 +24,8 @@ migrate = Migrate(app, db)
 login_manager = LoginManager()
 login_manager.init_app(app)
 login_manager.login_view = "/usuario/login"
-
+login_manager.login_message = "Debe ingresar para acceder a esta pagina."
+login_manager.login_message_category = "warning"
 
 # Endpoints
 @login_manager.user_loader
@@ -64,7 +65,7 @@ def usuario_logout():
 # Controllers
 @app.route("/")
 def index():
-    return render_template("index.html", productos=Producto.query.all())
+    return render_template("index.html", productos=Producto.query.all(), usuario=current_user)
 
 
 @app.route("/usuario/registrar", methods=["GET", "POST"])
@@ -98,10 +99,11 @@ def usuario_registrar():
 def producto_buscar():
     buscar = request.args.get("buscar")
     assert buscar is not None
+    buscar = buscar.lower()
     filtered_productos = Producto.query.filter(Producto.nombre.like("%{}%".format(buscar))).all()
     if not filtered_productos:
         filtered_productos = Producto.query.all()
-    return render_template("index.html", productos=filtered_productos)
+    return render_template("index.html", productos=filtered_productos, usuario=current_user)
 
 @app.route("/producto/ver/<producto_id>", methods=["GET"])
 def producto_ver(producto_id):

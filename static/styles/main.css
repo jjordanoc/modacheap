@@ -343,5 +343,8 @@ a {
 #message, #alert {
     margin: 0;
     user-select: none;
-    pointer-events: none;
+}
+
+.nav-link {
+    user-select: none;
 }
