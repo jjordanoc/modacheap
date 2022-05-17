@@ -1,5 +1,6 @@
 # Imports
 import os
+from jinja2 import UndefinedError
 from shortuuid import ShortUUID
 from flask import Flask, redirect, request, render_template, jsonify, url_for, send_from_directory, flash
 from flask_wtf import FlaskForm
@@ -355,6 +356,12 @@ def handle_http_error(e):
 
 @app.errorhandler(AssertionError)
 def handle_assertion(e):
+    handle_error(e)
+    flash("Ocurrio un error inesperado.", category="danger")
+    return redirect(url_for("index"))
+
+@app.errorhandler(UndefinedError)
+def handle_undefined(e):
     handle_error(e)
     flash("Ocurrio un error inesperado.", category="danger")
     return redirect(url_for("index"))

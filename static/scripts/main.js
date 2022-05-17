@@ -114,13 +114,15 @@ const productoCrear = function (e) {
                     headers: {}
                 }).then(res => res.json()).then(function (resJson) {
                     if (resJson["status"] == "success") {
-                        window.location.href = "/";
+                        mostrarAlerta(resJson["status"], resJson["message"]);
                     }
                     else {
                         mostrarAlerta(resJson["status"], resJson["message"]);
                     }
                 });
             }
+            window.location.href = "/";
+            mostrarAlerta(resJson["status"], resJson["message"]);
         }
     });
 }
