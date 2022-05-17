@@ -107,7 +107,13 @@
           <div class="card-body">
             <h5 class="card-title">{{producto.nombre}}</h5>
             <p class="card-text1">Talla: {{producto.talla}} <br>
-              Género: {{producto.sexo}} <br>
+              {% if producto.sexo == "M" %}
+              Género: Hombre <br>
+              {% elif producto.sexo == "F" %}
+              Género: Mujer <br>
+              {% else %}
+              Género: Unisex <br>
+              {% endif %}
               Distrito: {{producto.distrito}} </p>
             <p class="card-text4">Precio: S./{{producto.precio}}</p>
           </div>
