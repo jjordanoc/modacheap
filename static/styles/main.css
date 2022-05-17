@@ -59,6 +59,10 @@ body {
     font-size: 3em;
 }
 
+.producto-imagen {
+    width: 40%;
+}
+
 .form-header h1 {
     font-size: 30px;
     text-align:center;
@@ -333,12 +337,15 @@ input[name="r"]{
 }
 
 .producto-campo {
-    width: 250px;   
+    width: 350px;   
     margin: 10px;
-    /* border: 3px solid var(--text-color); */
+    padding: 20px;
+    border: 3px solid var(--text-color);
+    box-shadow: 10px 5px 5px black;
+    box-sizing: content-box;
 }
 
-a {
+a:link {
     text-decoration: none;
 }
 
@@ -358,7 +365,6 @@ a {
 
 .whatsapp-logo p {
     margin: 0;
-    text-decoration: none;
 }
 
 .hidden {

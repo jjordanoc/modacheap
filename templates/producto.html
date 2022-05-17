@@ -30,9 +30,9 @@
 
 </div> -->
 {% if producto %}
-<div class="d-flex flex-row justify-content-center">
+<div class="d-flex flex-row justify-content-center mt-4">
     <!-- <div class="test-div"></div> -->
-    <div class="m-3 d-flex flex-column w-50">
+    <div class="m-3 d-flex flex-column producto-imagen">
         <div class="imagen-bg">
         <div class="slider">
           <div class="slides">
@@ -58,15 +58,13 @@
     </div>
     
     </div>
-    <div class="d-flex flex-column">
+    <div class="d-flex flex-column mt-4">
             <h3>Descripcion</h3>
             <p>{{producto.descripcion}}</p>
     </div>
     <div>
         <h3 class="border-bottom">Comentarios</h3>
-    
             <div class="d-flex flex-column mb-3">
-        
             {% for comentario in comentarios %}
                 <div class="mt-2"><strong>{{comentario.usuario.nombre}}</strong>  ha publicado el siguiente comentario:</div>
                     <div class="d-flex border border-secondary mb-3 rounded-2">
@@ -74,7 +72,6 @@
                         <div class="p-2 text-end">{{comentario.fecha_creacion.strftime('%a, %d %b %Y %H:%M:%S')}}</div>
                     </div>
             {% endfor %}
-        
             </div>
     </div>
 
@@ -106,18 +103,23 @@
 
     <div class="d-flex flex-column">
         <div class="producto-campo">
+            
             <h2>{{producto.nombre}}</h2>
+            <h3>Talla: {{producto.talla}}</h3>
             <h3>S/.{{producto.precio}}</h3>
+            
             <p>{{producto.distrito}}</p>
-            <a href="https://api.whatsapp.com/send?phone=51{{producto.usuario.celular}}" target="_blank">
-            <div class="whatsapp-logo">
-                <img src={{url_for('static_resources', img_id='whatsapp_logo.png')}}><p>Contactar con el vendedor</p>
-            </div>
-            </a>
+            
         </div>
         
         <div class="producto-campo">
-            <h3></h3>
+            <h3>Contacto del vendedor</h3>
+            <p>{{producto.usuario.nombre}}</p>
+            <a href="https://api.whatsapp.com/send?phone=51{{producto.usuario.celular}}" target="_blank">
+                <div class="whatsapp-logo">
+                    <img src={{url_for('static_resources', img_id='whatsapp_logo.png')}}><p>Contactar con el vendedor</p>
+                </div>
+            </a>
         </div>
         
     </div>
