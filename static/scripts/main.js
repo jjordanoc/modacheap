@@ -125,3 +125,35 @@ const productoCrear = function(e) {
     });
 }
 
+const usuarioComentar = function(e) {
+    e.preventDefault();
+
+    const usuario_correo = document.getElementById("usuario_correo");
+    const producto_id = document.getElementById("producto_id");
+    const contenido = document.getElementById("contenido");
+    let today = new Date();
+
+    fetch("/usuario/comentar", {
+        method: "POST",
+        body: JSON.stringify({
+            usuario_correo: usuario_correo.value,
+            producto_id: producto_id.value,
+            contenido: contenido.value,
+            fecha_creacion: today
+
+        }),
+        headers: {
+            "Content-Type": "application/json"
+        }
+    }).then(function(res) {
+
+        return res.json();
+    }).then(function(resJson) {
+        if (resJson["status"] == "success") {
+            window.location.href = "/";
+        }
+        else {
+            mostrarAlerta(resJson["status"], resJson["message"]);
+        }
+    });
+}

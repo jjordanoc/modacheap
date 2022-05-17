@@ -3,7 +3,7 @@ import sys
 import os
 from shortuuid import ShortUUID
 from flask import Flask, redirect, request, render_template, jsonify, abort, url_for, send_from_directory, flash
-from models import db, Producto, Usuario, Imagen
+from models import db, Producto, Usuario, Imagen, Comentario
 from flask_migrate import Migrate
 from flask_login import login_required, LoginManager, login_user, current_user, logout_user
 from dotenv import load_dotenv
@@ -105,7 +105,7 @@ def producto_buscar():
 
 @app.route("/producto/ver/<producto_id>", methods=["GET"])
 def producto_ver(producto_id):
-    return render_template("producto.html", producto=Producto.query.get(producto_id), usuario=current_user)
+    return render_template("producto.html", producto=Producto.query.get(producto_id), usuario=current_user, comentarios = Comentario.query.filter_by(producto_id=producto_id).all())
 
 @app.route("/producto/categoria/<nombre_categoria>")
 def producto_categoria(nombre_categoria):
@@ -164,6 +164,38 @@ def producto_crear():
         return jsonify(res)
     return render_template("vender.html", usuario=current_user)
 
+@app.route("/usuario/comentar", methods=["GET", "POST"])
+@login_required
+def usuario_comentario():
+    res = {}
+    if request.method == "POST":
+        try:
+            data = request.get_json()
+            producto_id = data['producto_id']
+            usuario_correo = data['usuario_correo']
+            contenido = data['contenido']
+            fecha_creacion = data['fecha_creacion']
+            comentario = Comentario (
+                producto_id = producto_id,
+                usuario_correo = usuario_correo,
+                contenido = contenido,
+                fecha_creacion = fecha_creacion,
+            )
+            db.session.add(comentario)
+            db.session.commit()
+            res = {
+                'id' : comentario.id,
+                'producto_id' : producto_id,
+                'nombre' : comentario.usuario.nombre,
+                'contenido' : contenido,
+                'fecha_creacion' : fecha_creacion
+            }
+        except Exception as e:
+            handle_error_db(e, db)
+        finally:
+            db.session.close()
+        return jsonify(res)
+    return render_template("/producto/ver/<producto_id>", usuario = current_user)
 
 @app.route("/imagen/crear", methods=["POST"])
 @login_required

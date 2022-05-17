@@ -17,6 +17,7 @@ class Producto(db.Model):
     categoria = db.Column(db.String(30), nullable=False)
     distrito = db.Column(db.String(80), nullable=False)
     imagenes = db.relationship("Imagen", backref="producto", lazy=True, cascade="all, delete-orphan")
+    comentarios = db.relationship("Comentario", backref="producto", lazy=True, cascade="all, delete-orphan")
 
     def __repr__(self):
         return f"<Producto id={self.id}>"
@@ -29,6 +30,7 @@ class Usuario(db.Model, UserMixin):
     nombre = db.Column(db.String(80), nullable=False)
     celular = db.Column(db.Integer, nullable=False, unique=True)
     productos = db.relationship("Producto", backref="usuario", lazy=True, cascade="all, delete-orphan")
+    comentarios = db.relationship("Comentario", backref="usuario", lazy=True, cascade="all, delete-orphan")
 
     def __repr__(self):
         return f'<Usuario: usuario={self.correo}>'
@@ -53,3 +55,13 @@ class Imagen(db.Model):
 
 
 
+class Comentario(db.Model):
+    __tablename__ = 'comentarios'
+    id = db.Column(db.Integer, primary_key=True)
+    producto_id = db.Column(db.Integer, db.ForeignKey("productos.id"), nullable=False)
+    usuario_correo = db.Column(db.String(80), db.ForeignKey("usuarios.correo"), nullable=False)
+    contenido = db.Column(db.String(255), nullable=False)
+    fecha_creacion = db.Column(db.DateTime(), nullable=False)
+
+    def __repr__(self):
+        return f"<Comentario id={self.id}>"
