@@ -25,13 +25,15 @@
                   <input class="form-control me-2" type="search" placeholder="Zapatos Adidas" aria-label="Search" name="buscar">
                   <input class="btn btn-outline-primary" type="submit" value="Buscar">
                 </form>
-                <ul class="navbar-nav mb-2 mb-lg-0">
+                <ul class="navbar-nav mb-3 mb-lg-0">
                   <li class="nav-item">
-                    
                     <div class="bSet-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
                     tn-group">
-                      <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">Categorías </button>
-                      <ul class="dropdown-menu dropdown-menu-lg-end" aria-labelledby="dropdownMenuButton2">
+                        <div class="dropdown-center">
+                      <button type="button" class="btn btn-primary dropdown-toggle" data-bs-toggle="dropdown" data-bs-display="static" aria-expanded="false">
+                          &nbsp &nbsp &nbsp <strong>Categorías</strong> &nbsp &nbsp &nbsp
+                      </button>
+                      <ul class="dropdown-menu dropdown-menu-lg-center" aria-labelledby="dropdownMenuButton2">
                         <li><a class="dropdown-item" href={{url_for('producto_categoria', nombre_categoria='Abrigos')}}>Abrigos</a></li>
                         <li><a class="dropdown-item" href={{url_for('producto_categoria', nombre_categoria='Polos')}}>Polos</a></li>
                         <li><a class="dropdown-item" href={{url_for('producto_categoria', nombre_categoria='Pantalones')}}>Pantalones</a></li>
@@ -42,7 +44,47 @@
                         <li><a class="dropdown-item" href={{url_for('producto_categoria', nombre_categoria='Invierno')}}>Ropa de invierno</a></li>
                       </ul>
                     </div>
-
+                        </div>
+                  </li>
+                     &nbsp;
+                  <li class="nav-item">
+                    <div class="bSet-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+                    tn-group">
+                       <div class="dropdown-center">
+                          <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                            &nbsp &nbsp &nbsp &nbsp &nbsp Tipo &nbsp &nbsp &nbsp &nbsp &nbsp
+                          </button>
+                          <ul class="dropdown-menu",aria-labelledby="dropdownMenuButton1">
+                              <li><h6 class="dropdown-header">Seleccione la talla</h6></li>
+                              <li><hr class="dropdown-divider"></li>
+                              <li><a class="dropdown-item" type="button" href={{url_for('producto_talla', nombre_talla="XXS")}}>XXS</a></li>
+                              <li><a class="dropdown-item" type="button" href={{url_for('producto_talla', nombre_talla="XS")}}>XS</a></li>
+                              <li><a class="dropdown-item" type="button" href={{url_for('producto_talla', nombre_talla="S")}}>S</a></li>
+                              <li><a class="dropdown-item" type="button" href={{url_for('producto_talla', nombre_talla="M")}}>M</a></li>
+                              <li><a class="dropdown-item" type="button" href={{url_for('producto_talla', nombre_talla="L")}}>L</a></li>
+                              <li><a class="dropdown-item" type="button" href={{url_for('producto_talla', nombre_talla="XL")}}>XL</a></li>
+                              <li><a class="dropdown-item" type="button" href={{url_for('producto_talla', nombre_talla="XXL")}}>XXL</a></li>
+                          </ul>
+                        </div>
+                    </div>
+                  </li>
+                    &nbsp;
+                  <li class="nav-item">
+                    <div class="bSet-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope Process
+                    tn-group">
+                       <div class="dropdown-center">
+                          <button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton2" data-bs-toggle="dropdown" aria-expanded="false">
+                            &nbsp &nbsp &nbsp &nbsp Género &nbsp &nbsp &nbsp &nbsp
+                          </button>
+                          <ul class="dropdown-menu dropdown-menu-start",aria-labelledby="dropdownMenuButton2">
+                              <li><h6 class="dropdown-header">Seleccione el género</h6></li>
+                              <li><hr class="dropdown-divider"></li>
+                              <li><a class="dropdown-item" type="button" href={{url_for('producto_genero', nombre_genero="M")}}>Hombre</a></li>
+                              <li><a class="dropdown-item" type="button" href={{url_for('producto_genero', nombre_genero="F")}}>Mujer</a></li>
+                              <li><a class="dropdown-item" type="button" href={{url_for('producto_genero', nombre_genero="U")}}>Unisex</a></li>
+                          </ul>
+                        </div>
+                    </div>
                   </li>
                 </ul>
                 {% if usuario %}
