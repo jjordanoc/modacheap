@@ -109,28 +109,21 @@ def producto_ver(producto_id):
 def producto_categoria(nombre_categoria):
     filtered_productos = Producto.query.filter(Producto.categoria == nombre_categoria).all()
     if not filtered_productos:
-        filtered_productos = Producto.query.all()
+        return render_template("index.html", usuario=current_user)
     return render_template("index.html", productos=filtered_productos, usuario=current_user)
 
 @app.route("/producto/talla/<nombre_talla>")
 def producto_talla(nombre_talla):
     filtered_productos = Producto.query.filter(Producto.talla == nombre_talla).all()
     if not filtered_productos:
-        filtered_productos = Producto.query.all()
+        return render_template("index.html", usuario=current_user)
     return render_template("index.html", productos=filtered_productos, usuario=current_user)
 
 @app.route("/producto/genero/<nombre_genero>")
 def producto_genero(nombre_genero):
     filtered_productos = Producto.query.filter(Producto.sexo == nombre_genero).all()
     if not filtered_productos:
-        filtered_productos = Producto.query.all()
-    return render_template("index.html", productos=filtered_productos, usuario=current_user)
-
-@app.route("/producto/distrito/<nombre_distrito>")
-def producto_distrito(nombre_distrito):
-    filtered_productos = Producto.query.filter(Producto.distrito == nombre_distrito).all()
-    if not filtered_productos:
-        filtered_productos = Producto.query.all()
+        return render_template("index.html", usuario=current_user)
     return render_template("index.html", productos=filtered_productos, usuario=current_user)
 
 @app.route("/producto/crear" , methods=["GET", 'POST'])
