@@ -6,8 +6,8 @@
 </div>
 <div src={{url_for('static_resources', img_id='banner.JPG' )}} id="main-banner"
   class="d-flex flex-column align-items-center justify-content-center">
-  <div class="d-flex flex-column align-items-center justify-content-center">
-    <p id="search-description">Encuentra una prenda a tu medida</p>
+  <div class="fst-italic d-flex flex-column align-items-center justify-content-center">
+      <p id="search-description">Encuentra una prenda <strong>a tu medida</strong></p>
     <form class="d-flex m-2" role="search" action="/producto/buscar" , method="GET">
       <div class="input-group">
         <input class="form-control me-2" type="search" placeholder="Zapatos Adidas" aria-label="Search" name="buscar">
@@ -17,10 +17,10 @@
     <div class="d-flex flex-row justify-content-center">
       <div class="dropdown-center m-4">
         <button class="btn btn-danger dropdown-toggle" type="button" id="menu-categoria" data-bs-toggle="dropdown" aria-expanded="false">
-          &nbsp &nbsp &nbsp &nbsp Categorias &nbsp &nbsp &nbsp &nbsp
+          &nbsp &nbsp &nbsp &nbsp Categorías &nbsp &nbsp &nbsp &nbsp
         </button>
         <ul class="dropdown-menu",aria-labelledby="menu-categoria">
-            <li><h6 class="dropdown-header">Categoria de la prenda</h6></li>
+            <li><h6 class="dropdown-header">Seleccione la categoría</h6></li>
             <li><hr class="dropdown-divider"></li>
             <li><a class="dropdown-item" href={{url_for('producto_categoria', nombre_categoria='Abrigos' )}}>Abrigos</a>
             </li>

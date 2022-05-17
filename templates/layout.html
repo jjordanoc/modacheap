@@ -91,24 +91,24 @@
                 {% if usuario %}
                 <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
                   {% if usuario.is_authenticated %}
-                  <li class="nav-item m-3">
-                    <p class="nav-link active" aria-current="page">Bienvenido {{usuario.nombre}}!</p>
+                  <li class="fs-3 nav-item m-3">
+                      <p class="nav-link active" aria-current="page">¡Bienvenido <strong>{{usuario.nombre}}</strong>!</p>
                   </li> 
                   <li class="nav-item m-3">
-                    <a class="btn btn-dark" aria-current="page" href="{{url_for('producto_crear')}}">Vender</a>
+                    <a class="btn btn-dark btn-lg" aria-current="page" href="{{url_for('producto_crear')}}">Vender</a>
                   </li>
                   <li class="nav-item m-3">
-                    <a class="btn btn-dark" aria-current="page" href="{{url_for('usuario_logout')}}">Salir</a>
+                    <a class="btn btn-dark btn-lg" aria-current="page" href="{{url_for('usuario_logout')}}">Salir</a>
                   </li>
                   {% else %}
                   <li class="nav-item m-3">
-                    <a class="btn btn-dark" aria-current="page" href="{{url_for('producto_crear')}}">Vender</a>
+                    <a class="btn btn-dark btn-lg" aria-current="page" href="{{url_for('producto_crear')}}">Vender</a>
                   </li>
                   <li class="nav-item m-3">
-                    <a class="btn btn-dark" aria-current="page" href="{{url_for('usuario_login')}}">Iniciar Sesion</a>
+                    <a class="btn btn-dark btn-lg" aria-current="page" href="{{url_for('usuario_login')}}">Iniciar Sesion</a>
                   </li>
                   <li class="nav-item m-3">
-                    <a class="btn btn-dark" aria-current="page" href="{{url_for('usuario_registrar')}}">Registrarse</a>
+                    <a class="btn btn-dark btn-lg" aria-current="page" href="{{url_for('usuario_registrar')}}">Registrarse</a>
                   </li>
                   {% endif %}
                 </ul>

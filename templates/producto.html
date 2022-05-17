@@ -76,15 +76,15 @@
 
     <div class="d-flex flex-column">
         <div class="producto-campo">
-            
+
             <h2>{{producto.nombre}}</h2>
             <h3>Talla: {{producto.talla}}</h3>
             <h3>S/.{{producto.precio}}</h3>
-            
+
             <p>{{producto.distrito}}</p>
-            
+
         </div>
-        
+
         <div class="producto-campo">
             <h3>Contacto del vendedor</h3>
             <p>{{producto.usuario.nombre}}</p>
@@ -94,7 +94,16 @@
                 </div>
             </a>
         </div>
-        
+
+        {% if usuario.correo == producto.usuario.correo %}
+        <div class="producto-campo">
+            <div class="d-grid gap-2">
+              <a class="btn btn-warning" href={{url_for('editar_producto', producto_id=producto.id)}}>Editar producto</a>
+                <a class="btn btn-danger" href={{url_for('borrar_producto', producto_id=producto.id)}}>Eliminar producto</a>
+            </div>
+        </div>
+        {% endif %}
+
     </div>
      
 </div>
