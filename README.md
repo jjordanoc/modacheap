@@ -52,7 +52,7 @@ Se debe crear un archivo `.env` en el directorio raiz del proyecto que establezc
 
 + `/usuario/logout`: Solo se accede mediante `GET`. Cierra la sesion del usuario y retorna una redireccion a la pagina de iniciar sesion.
 
-+ `/`: La pagina principal de la aplicacion. Retorna el template `index.html`, ademas de el usuario actual y todos los productos disponibles en la aplicacion.
++ `/`: Es la pagina principal de la aplicacion. Retorna el template `index.html`, sin el usuario ademas con todos los productos disponibles en la aplicacion
 
 + `/usuario/registrar`: Se puede acceder mediante `GET` o `POST`. Cuando el servidor recibe una solicitud `GET`, retorna la pagina `register.html`. En cambio, cuando se recibe un `POST`, se utiliza para registrar al usuario en la aplicacion. Si todo sale bien, almacena la sesion del usuario y retorna un estado exitoso. Cuando ocurre algun error en el registro, retorna un estado fallido y un mensaje.
 
@@ -62,7 +62,21 @@ Se debe crear un archivo `.env` en el directorio raiz del proyecto que establezc
 
 + `/producto/categoria/`:  Se puede acceder mediante `GET`. Retorna un template con los productos de una categoria en especifico.
 
++ `/producto/talla/`: Se puede acceder mediante `GET`. Retorna un template con los productos de una talla en especifico
+
++ `/producto/genero/`: Se puede acceder mediante `GET`. Retorna un template con los productos de un genero en especifico
+
++ `/producto/ordernar/<>/ <>`: Se puede acceder mediante `GET`. Tiene 2 parametros, un criterio para filtrar los elementos, y el otro que atributo del producto (precio,nombre). Retorna en template con los productos con el criterio y el orden indicado
+
 + `/producto/crear`: Se puede acceder mediante `GET` o `POST`. Cuando el servidor recibe una solicitud `GET`, retorna la pagina `vender.html`. En cambio, cuando se recibe un `POST`, se utiliza para registrar un nuevo producto en la aplicacion. Se retorna al cliente una respuesta que tiene el nuevo producto creado con todos sus atributos, asi como un estado y un mensaje. Esta informacion sera utilizada posteriormente para crear las imagenes asociadas a cada producto.
+
++ `/producto/borrar/`: Se puede acceder mediante `GET` o `POST`  y el metodo `DELETE`. Se elimina el porducto de la base de datos, para esto, se debe estar logeado, y que el producto sea creado por el mismo usuario
+
++ `/producto/editar/`:  Se puede acceder mediante `GET` o `POST`. Se puede modificar la informacion del producto. Se envia una solicitud al servidor y te retorna a la pagina `editar.html`. La informacion nueva y recopilada, sera la nueva informacion del producto
+
++ `/usuario/comentar`: Se puede acceder mediante `GET` o `POST`. Se puede añadir comentarios. Se mandara una peticion al servidor para modificar la vista de la pagina `producto.html` y agregar el comentario
+
++ `/comentario/eliminar/`: Se puede acceder mediante `GET` y por le metodo `DELETE`, para eliminar el comentario del usuario, verificando si esta logeado y si el comentario es suyo
 
 + `/imagen/crear`: Se puede acceder mediante `POST`. Permite crear las imagenes asociadas a cada uno de los post y almacenarlas directamente en el servidor en la carpeta `static/uploaded`. Retorna una respuesta al cliente que contiene el estado de la solicitud y un mensaje.
 
