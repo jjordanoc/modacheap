@@ -3,7 +3,7 @@ import os
 import pytest
 from shortuuid import ShortUUID
 from flask import Flask, redirect, request, render_template, jsonify, url_for, send_from_directory, flash
-from models import db, Producto, Usuario, Imagen
+from models import db, Producto, Usuario, Imagen, Comentario
 from flask_migrate import Migrate
 from flask_login import login_required, LoginManager, login_user, current_user, logout_user
 from dotenv import load_dotenv
@@ -31,7 +31,6 @@ login_manager.login_message_category = "warning"
 @login_manager.user_loader
 def load_user(correo):
     return Usuario.query.get(correo)
-
 
 @app.route("/usuario/login", methods=["GET", "POST"])
 def usuario_login():
@@ -64,8 +63,11 @@ def usuario_logout():
 # Controllers
 @app.route("/")
 def index():
-    return render_template("layout_main.html", productos=Producto.query.all(), usuario=current_user)
+    return render_template("index.html", productos=Producto.query.all(), usuario=current_user)
 
+@app.route("/landing")
+def landing():
+    return render_template("layout_main.html", productos=Producto.query.all(), usuario=current_user)
 
 @app.route("/usuario/registrar", methods=["GET", "POST"])
 def usuario_registrar():
@@ -105,14 +107,27 @@ def producto_buscar():
 
 @app.route("/producto/ver/<producto_id>", methods=["GET"])
 def producto_ver(producto_id):
-    producto = Producto.query.get(producto_id)
-    return render_template("producto.html", producto=producto, usuario=current_user)
+    return render_template("producto.html", producto=Producto.query.get(producto_id), usuario=current_user, comentarios = Comentario.query.filter_by(producto_id=producto_id).all())
 
 @app.route("/producto/categoria/<nombre_categoria>")
 def producto_categoria(nombre_categoria):
     filtered_productos = Producto.query.filter(Producto.categoria == nombre_categoria).all()
     if not filtered_productos:
-        filtered_productos = Producto.query.all()
+        return render_template("index.html", usuario=current_user)
+    return render_template("index.html", productos=filtered_productos, usuario=current_user)
+
+@app.route("/producto/talla/<nombre_talla>")
+def producto_talla(nombre_talla):
+    filtered_productos = Producto.query.filter(Producto.talla == nombre_talla).all()
+    if not filtered_productos:
+        return render_template("index.html", usuario=current_user)
+    return render_template("index.html", productos=filtered_productos, usuario=current_user)
+
+@app.route("/producto/genero/<nombre_genero>")
+def producto_genero(nombre_genero):
+    filtered_productos = Producto.query.filter(Producto.sexo == nombre_genero).all()
+    if not filtered_productos:
+        return render_template("index.html", usuario=current_user)
     return render_template("index.html", productos=filtered_productos, usuario=current_user)
 
 @app.route("/producto/crear" , methods=["GET", 'POST'])
@@ -165,6 +180,38 @@ def producto_crear():
         return jsonify(res)
     return render_template("vender.html", usuario=current_user)
 
+@app.route("/usuario/comentar", methods=["GET", "POST"])
+@login_required
+def usuario_comentario():
+    res = {}
+    if request.method == "POST":
+        try:
+            data = request.get_json()
+            producto_id = data['producto_id']
+            usuario_correo = data['usuario_correo']
+            contenido = data['contenido']
+            fecha_creacion = data['fecha_creacion']
+            comentario = Comentario (
+                producto_id = producto_id,
+                usuario_correo = usuario_correo,
+                contenido = contenido,
+                fecha_creacion = fecha_creacion,
+            )
+            db.session.add(comentario)
+            db.session.commit()
+            res = {
+                'id' : comentario.id,
+                'producto_id' : producto_id,
+                'nombre' : comentario.usuario.nombre,
+                'contenido' : contenido,
+                'fecha_creacion' : fecha_creacion
+            }
+        except Exception as e:
+            handle_error_db(e, db)
+        finally:
+            db.session.close()
+        return jsonify(res)
+    return render_template("/producto/ver/<producto_id>", usuario = current_user)
 
 @app.route("/imagen/crear", methods=["POST"])
 @login_required
