@@ -1,7 +1,20 @@
 * {
-    --title-color: #061d80;
+    --title-color: #d40b0b;
     --main-background-color: #dbdaef;
     --text-color: #242736;
+}
+
+#main-navbar {
+    background-color: transparent;
+}
+
+#main-background {
+    width: 100%;
+    height: 100vh;
+    background: url("https://www.contreebute.com/hs-fs/hubfs/photo-1512436991641-6745cdb1723f.jpeg?width=800&name=photo-1512436991641-6745cdb1723f.jpeg") no-repeat center fixed;
+    background-size: cover;
+    background-blend-mode: multiply;
+    background-color: rgb(120, 120, 120);
 }
 
 #vender-form {
@@ -15,15 +28,19 @@ body {
     font-family: 'Josefin Sans', sans-serif;
     color: var(--text-color);
     background-color: var(--main-background-color);
+    margin: 0;
 }
 
 #main-title {   
     color: var(--title-color);
-    font-family: 'Montserrat', sans-serif;
-    font-size: 2.5em;
+    font-family: 'Caveat', cursive;
+    font-size: 8em;
 }
 
-
+#main-description {
+    color: white;
+    font-size: 2em;
+}
 
 .form-header h1 {
     font-size: 30px;
@@ -328,7 +345,14 @@ a {
 }
 
 .hidden {
-    display: none;
+    display: none !important;
+}
+
+.imagen_add {
+    border: none;
+    margin: 0;
+    padding: 0;
+    height: 100%;
 }
 
 .imagen-bg {
@@ -364,3 +388,4 @@ footer a{
 footer a:hover{
     color: cornflowerblue;
 }
+

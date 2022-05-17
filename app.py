@@ -64,7 +64,7 @@ def usuario_logout():
 # Controllers
 @app.route("/")
 def index():
-    return render_template("index.html", productos=Producto.query.all(), usuario=current_user)
+    return render_template("layout_main.html", productos=Producto.query.all(), usuario=current_user)
 
 
 @app.route("/usuario/registrar", methods=["GET", "POST"])
@@ -105,7 +105,8 @@ def producto_buscar():
 
 @app.route("/producto/ver/<producto_id>", methods=["GET"])
 def producto_ver(producto_id):
-    return render_template("producto.html", producto=Producto.query.get(producto_id), usuario=current_user)
+    producto = Producto.query.get(producto_id)
+    return render_template("producto.html", producto=producto, usuario=current_user)
 
 @app.route("/producto/categoria/<nombre_categoria>")
 def producto_categoria(nombre_categoria):
