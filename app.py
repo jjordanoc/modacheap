@@ -103,7 +103,7 @@ def producto_buscar():
 
 @app.route("/producto/ver/<producto_id>", methods=["GET"])
 def producto_ver(producto_id):
-    return render_template("producto.html", producto=Producto.query.get(producto_id), usuario=current_user, comentarios = Comentario.query.filter_by(producto_id=producto_id).all())
+    return render_template("producto.html", producto=Producto.query.get(producto_id), usuario=current_user, comentarios = Comentario.query.filter_by(producto_id=producto_id).order_by(Comentario.id.desc()).all())
 
 @app.route("/producto/categoria/<nombre_categoria>")
 def producto_categoria(nombre_categoria):
@@ -207,14 +207,45 @@ def usuario_comentario():
                 'producto_id' : producto_id,
                 'nombre' : comentario.usuario.nombre,
                 'contenido' : contenido,
-                'fecha_creacion' : fecha_creacion
+                'fecha_creacion' :fecha_creacion,
+                "status" : "success",
+                "message" : "Se agregó su comentario con exito."
             }
         except Exception as e:
+            res["status"] = "warning"
+            res["message"] = "No se registró su comentario. Comentario de más de 255 caracteres."
             handle_error_db(e, db)
         finally:
             db.session.close()
         return jsonify(res)
-    return render_template("/producto/ver/<producto_id>", usuario = current_user)
+    return render_template("/producto/ver", usuario = current_user)
+
+
+@app.route("/comentario/eliminar/<comentario_id>", methods=["DELETE"])
+@login_required
+def eliminar_comentario(comentario_id):
+    response = {}
+    name = current_user.nombre
+    comentario_eliminar = Comentario.query.get(comentario_id)
+    if name == comentario_eliminar.usuario.nombre:
+        try:
+            
+            db.session.delete(comentario_eliminar)
+            db.session.commit()
+            response['success'] = True
+
+        except Exception as e:
+            response['success'] = False
+            flash("Hubo un error al eliminar el comentario")
+            handle_error_db(e, db)
+        finally:
+            db.session.close()
+            return jsonify(response)
+    else:
+
+        return jsonify(response)
+    
+
 
 @app.route("/imagen/crear", methods=["POST"])
 @login_required

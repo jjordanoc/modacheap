@@ -150,7 +150,21 @@ const usuarioComentar = function(e) {
         return res.json();
     }).then(function(resJson) {
         if (resJson["status"] == "success") {
-            window.location.href = "/";
+            const comments = document.getElementById("comentarios");
+            const div = document.createElement("div");
+            div.innerHTML = `<div class="d-flex mb-1 mt-2 rounded-2 justify-content-between">
+            <div class="mt-2"><strong>${resJson["nombre"]}</strong>  ha publicado el siguiente comentario:</div>
+            <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                <input type="eliminar" class="btn btn-outline-danger" value="Eliminar">
+            </div>
+            </div>
+                <div class="d-flex border border-secondary mb-3 rounded-2">
+                    <div class="d-flex flex-fill text-break align-self-center px-2">${contenido}</div>
+                    <div class="p-2 text-end">${today}</div>
+                </div>
+            `;
+            comments.appendChild(div);
+            window.location.reload();
         }
         else {
             mostrarAlerta(resJson["status"], resJson["message"]);

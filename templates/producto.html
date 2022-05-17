@@ -62,22 +62,6 @@
             <p>{{producto.descripcion}}</p>
     </div>
     <div>
-        <h3 class="border-bottom">Comentarios</h3>
-    
-            <div class="d-flex flex-column mb-3">
-        
-            {% for comentario in comentarios %}
-                <div class="mt-2"><strong>{{comentario.usuario.nombre}}</strong>  ha publicado el siguiente comentario:</div>
-                    <div class="d-flex border border-secondary mb-3 rounded-2">
-                        <div class="d-flex flex-fill text-break align-self-center px-2">{{comentario.contenido}}</div>
-                        <div class="p-2 text-end">{{comentario.fecha_creacion.strftime('%a, %d %b %Y %H:%M:%S')}}</div>
-                    </div>
-            {% endfor %}
-        
-            </div>
-    </div>
-
-    <div>
         <h4 class="border-bottom">Publique su comentario</h4>
         <form id="comentario-form">
             <input type="hidden" id="usuario_correo" name="usuario_correo" value="{{usuario.correo}}">
@@ -99,6 +83,30 @@
             
         </form>
     </div>
+    <div>
+        <h3 class="border-bottom">Comentarios</h3>
+    
+            <div class="d-flex flex-column mb-3">
+        <div id="comentarios">
+            {% for comentario in comentarios %}
+            <div>
+            <div class="d-flex mb-1 mt-2 rounded-2 justify-content-between">
+                <div class="mt-2"><strong>{{comentario.usuario.nombre}}</strong>  ha publicado el siguiente comentario:</div>
+                <div class="btn-group btn-group-sm" role="group" aria-label="Basic example">
+                    <button class="btn btn-outline-danger btn-sm delete-button" data-id="{{comentario.id}}">Eliminar</button>
+                </div>
+            </div>
+                    <div class="d-flex border border-secondary mb-3 rounded-2">
+                        <div class="d-flex flex-fill text-break align-self-center px-2">{{comentario.contenido}}</div>
+                        <div class="p-2 text-end">{{comentario.fecha_creacion.strftime('%a, %d %b %Y %I:%M:%S %p')}}</div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+            </div>
+    </div>
+
+    
 
 
     </div>
@@ -130,24 +138,29 @@
 <script>
     const comentarioForm = document.getElementById("comentario-form");
     comentarioForm.onsubmit = usuarioComentar;
+
+    const items = document.querySelectorAll('.delete-button');
+    for(let i = 0; i < items.length; i++){
+        const item = items[i];
+        item.onclick = function(e) {
+            console.log("e: ", e);
+            const comentario_id = e.target.dataset['id'];
+            fetch("/comentario/eliminar/" + comentario_id, {
+                method: 'DELETE'
+            }).then(function(response){
+                return response.json();
+            }).then(function(jsonResponse){
+                if (jsonResponse['success']) {
+                    const item = e.target.parentElement.parentElement.parentElement;
+                    item.remove();
+                } else {
+                    document.getElementById('error').className = '';
+                }
+            })
+        }
+    }
+    
 </script>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
