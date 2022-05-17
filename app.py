@@ -139,9 +139,9 @@ def ordenar_criterio(criterio, orden):
             cambio = Producto.query.order_by(Producto.precio.desc()).all()
     else:
         if orden == 'desc':
-            cambio = Producto.query.order_by(Producto.nombre).all()
+            cambio = Producto.query.order_by(Producto.nombre.desc()).all()
         else: 
-            cambio = Producto.query.order_by(Producto.nombre.desc()).all()        
+            cambio = Producto.query.order_by(Producto.nombre).all()        
     return render_template("index.html", productos=cambio, usuario=current_user)
 
 @app.route("/producto/crear" , methods=["GET", 'POST'])
