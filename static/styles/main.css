@@ -29,6 +29,8 @@
     margin-bottom: 40px;
 }
 
+
+
 #vender-form {
     display: flex;
     flex-direction: row;
@@ -46,7 +48,7 @@ body {
 #main-title {   
     color: var(--title-color);
     font-family: var(--title-font);
-    font-size: 8em;
+    font-size: 6em;
 }
 
 #main-description {
@@ -344,6 +346,8 @@ input[name="r"]{
     box-shadow: 10px 5px 5px black;
     box-sizing: content-box;
 }
+
+
 
 a:link {
     text-decoration: none;
