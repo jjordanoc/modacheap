@@ -1,4 +1,4 @@
-const mostrarAlerta = function(status, message) {
+const mostrarAlerta = function (status, message) {
     const alerta = document.getElementById("alert");
     alerta.classList.add("show");
     alerta.classList.add("alert-" + status);
@@ -6,12 +6,12 @@ const mostrarAlerta = function(status, message) {
     messageBox.innerHTML = message;
 }
 
-const ocultarAlerta = function() {
+const ocultarAlerta = function () {
     const alerta = document.getElementById("alert");
     alerta.classList.remove("show");
 }
 
-const usuarioLogin = function(e) {
+const usuarioLogin = function (e) {
     e.preventDefault();
     const correo = document.getElementById("correo");
     const clave = document.getElementById("clave");
@@ -24,9 +24,9 @@ const usuarioLogin = function(e) {
         headers: {
             "Content-Type": "application/json"
         }
-    }).then(function(res) {
+    }).then(function (res) {
         return res.json();
-    }).then(function(resJson) {
+    }).then(function (resJson) {
         if (resJson["status"] == "success") {
             window.location.href = "/"
         }
@@ -36,7 +36,7 @@ const usuarioLogin = function(e) {
     });
 }
 
-const usuarioRegistrar = function(e) {
+const usuarioRegistrar = function (e) {
     e.preventDefault();
     const correo = document.getElementById("correo");
     const clave = document.getElementById("clave");
@@ -53,9 +53,9 @@ const usuarioRegistrar = function(e) {
         headers: {
             "Content-Type": "application/json"
         }
-    }).then(function(res) {
+    }).then(function (res) {
         return res.json();
-    }).then(function(resJson) {
+    }).then(function (resJson) {
         if (resJson["status"] == "success") {
             window.location.href = "/";
         }
@@ -65,7 +65,7 @@ const usuarioRegistrar = function(e) {
     });
 }
 
-const productoCrear = function(e) {
+const productoCrear = function (e) {
     e.preventDefault();
 
     const usuario_correo = document.getElementById("usuario_correo");
@@ -76,7 +76,7 @@ const productoCrear = function(e) {
     const sexo = document.getElementById("sexo");
     const categoria = document.getElementById("categoria");
     const distrito = document.getElementById("distrito");
-    
+
     fetch("/producto/crear", {
         method: "POST",
         body: JSON.stringify({
@@ -92,9 +92,9 @@ const productoCrear = function(e) {
         headers: {
             "Content-Type": "application/json"
         }
-    }).then(function(res) {
+    }).then(function (res) {
         return res.json();
-    }).then(function(resJson) {
+    }).then(function (resJson) {
         if (resJson["status"] == "success") {
             console.log(resJson);
             // Upload image to server
@@ -112,7 +112,7 @@ const productoCrear = function(e) {
                     method: "POST",
                     body: formData,
                     headers: {}
-                }).then(res => res.json()).then(function(resJson) {
+                }).then(res => res.json()).then(function (resJson) {
                     if (resJson["status"] == "success") {
                         window.location.href = "/";
                     }
@@ -125,7 +125,7 @@ const productoCrear = function(e) {
     });
 }
 
-const usuarioComentar = function(e) {
+const usuarioComentar = function (e) {
     e.preventDefault();
 
     const usuario_correo = document.getElementById("usuario_correo");
@@ -145,10 +145,10 @@ const usuarioComentar = function(e) {
         headers: {
             "Content-Type": "application/json"
         }
-    }).then(function(res) {
+    }).then(function (res) {
 
         return res.json();
-    }).then(function(resJson) {
+    }).then(function (resJson) {
         if (resJson["status"] == "success") {
             const comments = document.getElementById("comentarios");
             const div = document.createElement("div");
@@ -173,19 +173,19 @@ const usuarioComentar = function(e) {
 }
 
 const comentarioEliminar = function(e) {
-            console.log("e: ", e);
-            const comentario_id = e.target.dataset['id'];
-            fetch("/comentario/eliminar/" + comentario_id, {
-                method: 'DELETE'
-            }).then(function(response){
-                return response.json();
-            }).then(function(jsonResponse){
-                if (jsonResponse['success']) {
-                    const item = e.target.parentElement.parentElement.parentElement;
-                    item.remove();
-                    window.location.reload();
-                } else {
-                    mostrarAlerta("warning", "No se pudo eliminar el comentario.");
-                }
-            })
+    console.log("e: ", e);
+    const comentario_id = e.target.dataset['id'];
+    fetch("/comentario/eliminar/" + comentario_id, {
+        method: 'DELETE'
+    }).then(function (response) {
+        return response.json();
+    }).then(function (jsonResponse) {
+        if (jsonResponse['success']) {
+            const item = e.target.parentElement.parentElement.parentElement;
+            item.remove();
+            window.location.reload();
+        } else {
+            mostrarAlerta("warning", "No se pudo eliminar el comentario.");
         }
+    })
+}
