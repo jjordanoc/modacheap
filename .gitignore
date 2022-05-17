@@ -5,4 +5,4 @@ modelo_relacional.txt
 __pycache__
 /static/uploaded
 .pytest_cache
-.vscode
+.vscode/*
