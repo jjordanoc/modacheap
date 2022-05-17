@@ -30,7 +30,7 @@
                                 </button>
                             </div>
                         </div>
-                        <div class="navigation">
+                        <div class="d-flex navigation">
                             <label for="r1" class="bar"></label>
                             <label for="r2" class="bar"></label>
                             <label for="r3" class="bar"></label>
@@ -41,13 +41,13 @@
                 <input type="file" id="file1" name="file1" accept="image/*" required style="display: none;">
                     <input type="file" id="file2" name="file2" accept="image/*" required style="display: none;">
                     <input type="file" id="file3" name="file3" accept="image/*" required style="display: none;">
-                    <p>Incluye 3 imagenes como minimo</p>
+                    <p>Incluye 3 imágenes del producto.</p>
 
                 <div class="d-flex flex-column mt-4">
-                    <h3>Descripcion</h3>
+                    <h3>Descripción</h3>
 
                     <div class="form-group mb-3 me-auto p-2 flex-fill">
-                        <label for="descripcion" class="subtitle">Descripcion breve:</label>
+                        <label for="descripcion" class="form-label">Incluye una descripción breve:</label>
                         <textarea id="descripcion" name="descripcion" required class="form-control border-primary"
                             cols="50"></textarea>
                     </div>
@@ -84,7 +84,7 @@
                     </div>
 
                     <div class="from-group mb-3">
-                        <label for="sexo">Genero de la prenda:</label>
+                        <label for="sexo">Género de la prenda:</label>
                         <select name="sexo" id="sexo" required class="form-select">
                             <option value="M">Hombre</option>
                             <option value="F">Mujer</option>
@@ -93,7 +93,7 @@
                     </div>
 
                     <div class="form-group mb-3">
-                        <label for="categoria">Categoria de la prenda:</label>
+                        <label for="categoria">Categoría de la prenda:</label>
                         <select name="categoria" id="categoria" required class="form-select">
                             <option value="Abrigos">Abrigos</option>
                             <option value="Polos">Polos</option>
@@ -154,6 +154,7 @@
                             <option value="VILLA MARIA DEL TRIUNFO">VILLA MARIA DEL TRIUNFO</option>
                         </select>
                     </div>
+                    <input type="hidden" value={{usuario.correo}} id='usuario_correo'>
                     <input type="submit" value="Crear" class="btn btn-danger w-100">
                 </div>
             </div>

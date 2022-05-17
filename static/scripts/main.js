@@ -171,3 +171,21 @@ const usuarioComentar = function(e) {
         }
     });
 }
+
+const comentarioEliminar = function(e) {
+            console.log("e: ", e);
+            const comentario_id = e.target.dataset['id'];
+            fetch("/comentario/eliminar/" + comentario_id, {
+                method: 'DELETE'
+            }).then(function(response){
+                return response.json();
+            }).then(function(jsonResponse){
+                if (jsonResponse['success']) {
+                    const item = e.target.parentElement.parentElement.parentElement;
+                    item.remove();
+                    window.location.reload();
+                } else {
+                    mostrarAlerta("warning", "No se pudo eliminar el comentario.");
+                }
+            })
+        }

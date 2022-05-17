@@ -5,8 +5,8 @@ import pytest
 from shortuuid import ShortUUID
 from flask import Flask, redirect, request, render_template, jsonify, abort, url_for, send_from_directory, flash
 from flask_wtf import FlaskForm
-from wtforms import StringField, SubmitField, TextAreaField, IntegerField
-from wtforms.validators import DataRequired
+from wtforms import StringField, SubmitField, TextAreaField, IntegerField, FloatField
+from wtforms.validators import DataRequired, Length
 from models import db, Producto, Usuario, Imagen, Comentario
 from flask_migrate import Migrate
 from flask_login import login_required, LoginManager, login_user, current_user, logout_user
@@ -65,11 +65,11 @@ def usuario_logout():
     return redirect(url_for("usuario_login"))
 
 # Controllers
-@app.route("/")
+@app.route("/index")
 def index():
     return render_template("index.html", productos=Producto.query.all(), usuario=current_user)
 
-@app.route("/landing")
+@app.route("/")
 def landing():
     return render_template("layout_main.html", productos=Producto.query.all(), usuario=current_user)
 
@@ -218,7 +218,7 @@ def borrar_producto(producto_id):
 
 class ProductoForm(FlaskForm):
     nombre = StringField("Nombre", validators=[DataRequired()])
-    precio = StringField("Precio", validators=[DataRequired()])
+    precio = FloatField("Precio", validators=[DataRequired()])
     categoria = StringField("Categoría", validators=[DataRequired()])
     talla = StringField("Talla", validators=[DataRequired()])
     sexo = StringField("Género", validators=[DataRequired()])

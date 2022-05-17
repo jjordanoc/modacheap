@@ -153,14 +153,14 @@ body {
 .bar{
     width: 50px;
     height:10px;
-    border: 2px solid white;
+    border: 1px solid var(--title-color);
     margin: 6px;
     cursor: pointer;
     transition:0.4s;
 }
 
 .bar:hover {
-    background: white;
+    background: var(--title-color);
 }
 
 input[name="r"]{
