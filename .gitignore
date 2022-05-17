@@ -3,6 +3,6 @@ modelo_relacional.txt
 /templates/prueba.html
 .env
 __pycache__
-/static/uploaded
+/static/uploaded/*
 .pytest_cache
-.vscode/*
+/.vscode
