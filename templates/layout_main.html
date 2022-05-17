@@ -83,17 +83,18 @@
             <a class="navbar-brand" href="/" id="main-title">
               Moda Cheap
             </a>
-            <p id="main-description" class="mb-4">Compra y vende prendas en desuso sin comisiones</p>
+            <p id="main-description" class="mb-4 fst-italic">Compra y vende prendas en desuso <strong>sin comisiones</strong></p>
             <div class="d-flex flex-row justify-content-center">
-              <a class="btn btn-danger m-3" aria-current="page" href="{{url_for('producto_crear')}}">Comprar</a>
-              <a class="btn btn-danger m-3" aria-current="page" href="{{url_for('producto_crear')}}">Vender</a>
+              <a class="btn btn-danger m-3 btn-lg" aria-current="page" href="{{url_for('producto_crear')}}">Comprar</a>
+              <a class="btn btn-danger m-3 btn-lg" aria-current="page" href="{{url_for('producto_crear')}}">Vender</a>
             </div>
             
           </div>
         </div>
-        <div class="d-flex flex-column align-items-center m-5">
-          <p>Productos</p>
-        <div class="container">
+        <div class="d-flex flex-column align-items-center m-5 mb-3">
+          <p>Tenemos lo siguiente</p>
+          <div class="fw-lighter">Para acceder a visualizar la página, haga <strong>log in</strong></div>
+        <div class="container mt-5">
           <!-- Productos -->
           <div class="row">
             <!-- Producto -->
