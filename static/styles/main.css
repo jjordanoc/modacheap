@@ -2,6 +2,8 @@
     --title-color: #d40b0b;
     --main-background-color: #dbdaef;
     --text-color: #242736;
+    --title-font: 'Caveat', cursive;
+    --text-font: 'Josefin Sans', sans-serif;
 }
 
 #main-navbar {
@@ -17,6 +19,16 @@
     background-color: rgb(120, 120, 120);
 }
 
+#main-banner {
+    background: url("https://www.contreebute.com/hs-fs/hubfs/photo-1512436991641-6745cdb1723f.jpeg?width=800&name=photo-1512436991641-6745cdb1723f.jpeg") no-repeat center fixed;
+    background-size: cover;
+    background-blend-mode: multiply;
+    background-color: rgb(120, 120, 120);
+    padding: 0;
+    height: 400px;
+    margin-bottom: 40px;
+}
+
 #vender-form {
     display: flex;
     flex-direction: row;
@@ -25,7 +37,7 @@
 }
 
 body {
-    font-family: 'Josefin Sans', sans-serif;
+    font-family: var(--text-font);
     color: var(--text-color);
     background-color: var(--main-background-color);
     margin: 0;
@@ -33,13 +45,18 @@ body {
 
 #main-title {   
     color: var(--title-color);
-    font-family: 'Caveat', cursive;
+    font-family: var(--title-font);
     font-size: 8em;
 }
 
 #main-description {
     color: white;
     font-size: 2em;
+}
+
+#search-description {
+    color: white;
+    font-size: 3em;
 }
 
 .form-header h1 {
