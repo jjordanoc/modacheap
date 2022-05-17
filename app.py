@@ -130,6 +130,20 @@ def producto_genero(nombre_genero):
         return render_template("index.html", usuario=current_user)
     return render_template("index.html", productos=filtered_productos, usuario=current_user)
 
+@app.route("/producto/ordernar/<criterio>/<orden>")
+def ordenar_criterio(criterio, orden):
+    if criterio == 'precio':
+        if orden == 'desc':
+            cambio = Producto.query.order_by(Producto.precio).all()
+        else: 
+            cambio = Producto.query.order_by(Producto.precio.desc()).all()
+    else:
+        if orden == 'desc':
+            cambio = Producto.query.order_by(Producto.nombre.desc()).all()
+        else: 
+            cambio = Producto.query.order_by(Producto.nombre).all()        
+    return render_template("index.html", productos=cambio, usuario=current_user)
+
 @app.route("/producto/crear" , methods=["GET", 'POST'])
 @login_required
 def producto_crear():

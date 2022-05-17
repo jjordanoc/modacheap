@@ -399,6 +399,7 @@ footer{
     color: white;
     background-color: #222;
     padding: 3rem;
+    clear: both;
 }
 
 footer a{
