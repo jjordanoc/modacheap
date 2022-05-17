@@ -32,7 +32,6 @@ login_manager.login_message_category = "warning"
 def load_user(correo):
     return Usuario.query.get(correo)
 
-
 @app.route("/usuario/login", methods=["GET", "POST"])
 def usuario_login():
     if request.method == "POST":
@@ -65,7 +64,6 @@ def usuario_logout():
 @app.route("/")
 def index():
     return render_template("index.html", productos=Producto.query.all(), usuario=current_user)
-
 
 @app.route("/usuario/registrar", methods=["GET", "POST"])
 def usuario_registrar():
@@ -110,6 +108,27 @@ def producto_ver(producto_id):
 @app.route("/producto/categoria/<nombre_categoria>")
 def producto_categoria(nombre_categoria):
     filtered_productos = Producto.query.filter(Producto.categoria == nombre_categoria).all()
+    if not filtered_productos:
+        filtered_productos = Producto.query.all()
+    return render_template("index.html", productos=filtered_productos, usuario=current_user)
+
+@app.route("/producto/talla/<nombre_talla>")
+def producto_talla(nombre_talla):
+    filtered_productos = Producto.query.filter(Producto.talla == nombre_talla).all()
+    if not filtered_productos:
+        filtered_productos = Producto.query.all()
+    return render_template("index.html", productos=filtered_productos, usuario=current_user)
+
+@app.route("/producto/genero/<nombre_genero>")
+def producto_genero(nombre_genero):
+    filtered_productos = Producto.query.filter(Producto.sexo == nombre_genero).all()
+    if not filtered_productos:
+        filtered_productos = Producto.query.all()
+    return render_template("index.html", productos=filtered_productos, usuario=current_user)
+
+@app.route("/producto/distrito/<nombre_distrito>")
+def producto_distrito(nombre_distrito):
+    filtered_productos = Producto.query.filter(Producto.distrito == nombre_distrito).all()
     if not filtered_productos:
         filtered_productos = Producto.query.all()
     return render_template("index.html", productos=filtered_productos, usuario=current_user)
@@ -241,11 +260,6 @@ def handle_assertion(e):
     handle_error(e)
     flash("Ocurrio un error inesperado.", category="danger")
     return redirect(url_for("index"))
-
-@app.route("/prueba", methods=["GET"])
-def prueba():
-    return render_template("prueba.html", productos=Producto.query.all(), usuario=current_user)
-
 # Run
 if __name__ == "__main__":
     app.run(debug=True, port=5000)
