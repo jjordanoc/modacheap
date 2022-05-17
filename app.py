@@ -1,8 +1,12 @@
 # Imports
 import sys
 import os
+import pytest
 from shortuuid import ShortUUID
 from flask import Flask, redirect, request, render_template, jsonify, abort, url_for, send_from_directory, flash
+from flask_wtf import FlaskForm
+from wtforms import StringField, SubmitField, TextAreaField, IntegerField
+from wtforms.validators import DataRequired
 from models import db, Producto, Usuario, Imagen, Comentario
 from flask_migrate import Migrate
 from flask_login import login_required, LoginManager, login_user, current_user, logout_user
@@ -65,6 +69,10 @@ def usuario_logout():
 def index():
     return render_template("index.html", productos=Producto.query.all(), usuario=current_user)
 
+@app.route("/landing")
+def landing():
+    return render_template("layout_main.html", productos=Producto.query.all(), usuario=current_user)
+
 @app.route("/usuario/registrar", methods=["GET", "POST"])
 def usuario_registrar():
     if request.method == "POST":
@@ -96,7 +104,7 @@ def producto_buscar():
     buscar = request.args.get("buscar")
     assert buscar is not None
     buscar = buscar.lower()
-    filtered_productos = Producto.query.filter(Producto.nombre.like("%{}%".format(buscar))).all()
+    filtered_productos = Producto.query.filter(Producto.nombre.contains(buscar)).all()
     if not filtered_productos:
         filtered_productos = Producto.query.all()
     return render_template("index.html", productos=filtered_productos, usuario=current_user)
@@ -109,29 +117,36 @@ def producto_ver(producto_id):
 def producto_categoria(nombre_categoria):
     filtered_productos = Producto.query.filter(Producto.categoria == nombre_categoria).all()
     if not filtered_productos:
-        filtered_productos = Producto.query.all()
+        return render_template("index.html", usuario=current_user)
     return render_template("index.html", productos=filtered_productos, usuario=current_user)
 
 @app.route("/producto/talla/<nombre_talla>")
 def producto_talla(nombre_talla):
     filtered_productos = Producto.query.filter(Producto.talla == nombre_talla).all()
     if not filtered_productos:
-        filtered_productos = Producto.query.all()
+        return render_template("index.html", usuario=current_user)
     return render_template("index.html", productos=filtered_productos, usuario=current_user)
 
 @app.route("/producto/genero/<nombre_genero>")
 def producto_genero(nombre_genero):
     filtered_productos = Producto.query.filter(Producto.sexo == nombre_genero).all()
     if not filtered_productos:
-        filtered_productos = Producto.query.all()
+        return render_template("index.html", usuario=current_user)
     return render_template("index.html", productos=filtered_productos, usuario=current_user)
 
-@app.route("/producto/distrito/<nombre_distrito>")
-def producto_distrito(nombre_distrito):
-    filtered_productos = Producto.query.filter(Producto.distrito == nombre_distrito).all()
-    if not filtered_productos:
-        filtered_productos = Producto.query.all()
-    return render_template("index.html", productos=filtered_productos, usuario=current_user)
+@app.route("/producto/ordernar/<criterio>/<orden>")
+def ordenar_criterio(criterio, orden):
+    if criterio == 'precio':
+        if orden == 'desc':
+            cambio = Producto.query.order_by(Producto.precio).all()
+        else:
+            cambio = Producto.query.order_by(Producto.precio.desc()).all()
+    else:
+        if orden == 'desc':
+            cambio = Producto.query.order_by(Producto.nombre.desc()).all()
+        else:
+            cambio = Producto.query.order_by(Producto.nombre).all()
+    return render_template("index.html", productos=cambio, usuario=current_user)
 
 @app.route("/producto/crear" , methods=["GET", 'POST'])
 @login_required
@@ -182,6 +197,65 @@ def producto_crear():
             db.session.close()
         return jsonify(res)
     return render_template("vender.html", usuario=current_user)
+
+@app.route("/producto/borrar/<producto_id>" , methods=["GET", 'POST'])
+@login_required
+def borrar_producto(producto_id):
+    try:
+        producto = Producto.query.get(producto_id)
+        for imagen in producto.imagenes:
+            db.session.delete(imagen)
+        db.session.delete(producto)
+        db.session.commit()
+    except Exception as e:
+        flash("Hubo un error al intentar borrar su producto.", "warning")
+        handle_error_db(e, db)
+        return redirect(url_for("producto_ver", producto_id=producto.id))
+    finally:
+        db.session.close()
+    flash("Se borró el producto.", "success")
+    return redirect(url_for("index"))
+
+class ProductoForm(FlaskForm):
+    nombre = StringField("Nombre", validators=[DataRequired()])
+    precio = StringField("Precio", validators=[DataRequired()])
+    categoria = StringField("Categoría", validators=[DataRequired()])
+    talla = StringField("Talla", validators=[DataRequired()])
+    sexo = StringField("Género", validators=[DataRequired()])
+    descripcion = TextAreaField("Descripción", validators=[DataRequired()])
+    submit = SubmitField("Guardar cambios")
+
+@app.route("/producto/editar/<producto_id>" , methods=["GET", 'POST'])
+@login_required
+def editar_producto(producto_id):
+    try:
+        producto = Producto.query.get(producto_id)
+        form = ProductoForm()
+        if form.validate_on_submit():
+            producto.nombre = form.nombre.data
+            producto.precio = form.precio.data
+            producto.categoria = form.categoria.data
+            producto.talla = form.talla.data
+            producto.sexo = form.sexo.data
+            producto.descripcion = form.descripcion.data
+            db.session.add(producto)
+            db.session.commit()
+            flash("El producto ha sido editado con éxito.", "success")
+            return redirect(url_for("producto_ver", producto_id=producto.id))
+        form.nombre.data = producto.nombre
+        form.precio.data = producto.precio
+        form.categoria.data = producto.categoria
+        form.talla.data = producto.talla
+        form.sexo.data = producto.sexo
+        form.descripcion.data = producto.descripcion
+        return render_template("editar.html", form=form)
+    except Exception as e:
+        flash("Hubo un error al intentar editar su producto.", "warning")
+        handle_error_db(e, db)
+        return redirect(url_for("producto_ver", producto_id=producto.id))
+    finally:
+        db.session.close()
+
 
 @app.route("/usuario/comentar", methods=["GET", "POST"])
 @login_required
@@ -291,6 +365,8 @@ def handle_assertion(e):
     handle_error(e)
     flash("Ocurrio un error inesperado.", category="danger")
     return redirect(url_for("index"))
+
+
 # Run
 if __name__ == "__main__":
     app.run(debug=True, port=5000)

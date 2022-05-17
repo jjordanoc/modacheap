@@ -2,36 +2,10 @@
 
 
 {% block main %}
-<!-- <div class="slider mid">
-    <div class="slides">
-        <input type="radio" name="r" id="r1" checked>
-        <input type="radio" name="r" id="r2" checked>
-        <input type="radio" name="r" id="r3" checked>
-        
-        <div class="slide s1">
-            <img src={{url_for('static_uploaded', img_id=producto.imagenes[0].id)}} alt="chaqueta"/>
-        </div>
 
-        <div class="slide">
-            <img src={{url_for('static_uploaded', img_id=producto.imagenes[1].id)}} alt="chaqueta"/>
-        </div>
-
-        <div class="slide">
-            <img src={{url_for('static_uploaded', img_id=producto.imagenes[2].id)}} alt="chaqueta"/>
-        </div>
-
-
-        <div class="navigation">
-            <label for="r1" class="bar"></label>
-            <label for="r2" class="bar"></label>
-            <label for="r3" class="bar"></label>
-        </div>
-    </div>
-
-</div> -->
-<div class="d-flex flex-row justify-content-center">
-    <!-- <div class="test-div"></div> -->
-    <div class="m-3 d-flex flex-column w-50">
+{% if producto %}
+<div class="d-flex flex-row justify-content-center mt-4">
+    <div class="m-3 d-flex flex-column producto-imagen">
         <div class="imagen-bg">
         <div class="slider">
           <div class="slides">
@@ -57,10 +31,12 @@
     </div>
     
     </div>
-    <div class="d-flex flex-column">
+    <div class="d-flex flex-column mt-4">
             <h3>Descripcion</h3>
             <p>{{producto.descripcion}}</p>
     </div>
+
+
     <div>
         <h4 class="border-bottom">Publique su comentario</h4>
         <form id="comentario-form">
@@ -113,23 +89,38 @@
 
     <div class="d-flex flex-column">
         <div class="producto-campo">
+
             <h2>{{producto.nombre}}</h2>
+            <h3>Talla: {{producto.talla}}</h3>
             <h3>S/.{{producto.precio}}</h3>
+
             <p>{{producto.distrito}}</p>
+
+        </div>
+
+        <div class="producto-campo">
+            <h3>Contacto del vendedor</h3>
+            <p>{{producto.usuario.nombre}}</p>
             <a href="https://api.whatsapp.com/send?phone=51{{producto.usuario.celular}}" target="_blank">
-            <div class="whatsapp-logo">
-                <img src={{url_for('static_resources', img_id='whatsapp_logo.png')}}><p>Contactar con el vendedor</p>
-            </div>
+                <div class="whatsapp-logo">
+                    <img src={{url_for('static_resources', img_id='whatsapp_logo.png')}}><p>Contactar con el vendedor</p>
+                </div>
             </a>
         </div>
-        
+
+        {% if usuario.correo == producto.usuario.correo %}
         <div class="producto-campo">
-            <h3></h3>
+            <div class="d-grid gap-2">
+              <a class="btn btn-warning" href={{url_for('editar_producto', producto_id=producto.id)}}>Editar producto</a>
+                <a class="btn btn-danger" href={{url_for('borrar_producto', producto_id=producto.id)}}>Eliminar producto</a>
+            </div>
         </div>
-        
+        {% endif %}
+
     </div>
      
 </div>
+{% endif %}
 
 
 
@@ -159,7 +150,7 @@
             })
         }
     }
-    
+
 </script>
 
 

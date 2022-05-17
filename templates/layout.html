@@ -8,11 +8,12 @@
         <link rel="preconnect" href="https://fonts.googleapis.com">
         <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
         <link href="https://fonts.googleapis.com/css2?family=Josefin+Sans:wght@200;300;400;600&family=Montserrat:wght@500&display=swap" rel="stylesheet">
+        <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;500;600;700&display=swap" rel="stylesheet">
         <!-- Bootstrap -->
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
-    </head>
+      </head>
     <body>
-          <nav class="navbar navbar-expand-lg bg-light">
+          <nav class="navbar navbar-expand-lg bg-light" id="main-navbar">
             <div class="container-fluid">
               <a class="navbar-brand" href="/" id="main-title">
                 Moda Cheap
@@ -21,7 +22,7 @@
                 <span class="navbar-toggler-icon"></span>
               </button>
               <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                <form class="d-flex m-2" role="search" action="/producto/buscar", method="GET">
+                <!-- <form class="d-flex m-2" role="search" action="/producto/buscar", method="GET">
                   <input class="form-control me-2" type="search" placeholder="Zapatos Adidas" aria-label="Search" name="buscar">
                   <input class="btn btn-outline-primary" type="submit" value="Buscar">
                 </form>
@@ -86,39 +87,34 @@
                         </div>
                     </div>
                   </li>
-                </ul>
+                </ul> -->
                 {% if usuario %}
                 <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
                   {% if usuario.is_authenticated %}
-                  <li class="nav-item">
-                    <p class="nav-link active" aria-current="page">{{usuario.nombre}}</p>
+                  <li class="fs-3 nav-item m-3">
+                      <p class="nav-link active" aria-current="page">¡Bienvenido <strong>{{usuario.nombre}}</strong>!</p>
                   </li> 
-                  <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{url_for('producto_crear')}}">Vender</a>
+                  <li class="nav-item m-3">
+                    <a class="btn btn-dark btn-lg" aria-current="page" href="{{url_for('producto_crear')}}">Vender</a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{url_for('usuario_logout')}}">Salir</a>
+                  <li class="nav-item m-3">
+                    <a class="btn btn-dark btn-lg" aria-current="page" href="{{url_for('usuario_logout')}}">Salir</a>
                   </li>
                   {% else %}
-                  <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{url_for('producto_crear')}}">Vender</a>
+                  <li class="nav-item m-3">
+                    <a class="btn btn-dark btn-lg" aria-current="page" href="{{url_for('producto_crear')}}">Vender</a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{url_for('usuario_login')}}">Iniciar Sesion</a>
+                  <li class="nav-item m-3">
+                    <a class="btn btn-dark btn-lg" aria-current="page" href="{{url_for('usuario_login')}}">Iniciar Sesion</a>
                   </li>
-                  <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{{url_for('usuario_registrar')}}">Registrarse</a>
+                  <li class="nav-item m-3">
+                    <a class="btn btn-dark btn-lg" aria-current="page" href="{{url_for('usuario_registrar')}}">Registrarse</a>
                   </li>
                   {% endif %}
                 </ul>
                 {% endif %}
               </div>
             </div>
-            <div>
-              
-            </div>
-
-
           </nav>
         {% with messages = get_flashed_messages(with_categories=true) %}
           {% if messages %}
@@ -127,18 +123,11 @@
             {% endfor %}
           {% endif %}
         {% endwith %}
-        <div class="alert alert-dismissible fade d-flex justify-content-center" role="alert" id="alert"><p id="message">Ocurrio un error.</p><button type="button" class="btn-close" onclick="ocultarAlerta();" aria-label="Close"></button></div>
+        <!-- <div class="alert alert-dismissible fade d-flex justify-content-center" role="alert" id="alert"><p id="message">Ocurrio un error.</p><button type="button" class="btn-close" onclick="ocultarAlerta();" aria-label="Close"></button></div> -->
         <main>
             {% block main %}
             {% endblock %}
         </main>
-        <footer>
-          <div class="d-flex justify-content-around">
-            <a >Ir al inicio </a>
-            <a>Moda Cheap</a>
-            <a>Copyright 2022</a>
-          </div>
-        </footer>
         <!-- Bootstrap Bundle with Popper -->
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
     </body>
