@@ -20,9 +20,9 @@ Plataforma web en donde se realiza compra y venta de vestimenta de segunda mano 
 + Realizar una exposición web de productos de ropa de segunda mano.
 + Permitir una comunicación entre el vendedor y comprador utilizando el API de WhatsApp.
 
-**Misión:**  Ser el principal portal web de compra-venta de ropa de segunda mano en Lima.
+**Misión:** Lo bueno, bonito y barato al alcance de un click.
 
-**Visión:** Lo bueno, bonito y barato al alcance de un click.
+**Visión:**  Ser el principal portal web de compra-venta de ropa de segunda mano en Lima.
 
 ## Información  acerca de las librerías/frameworks/plugins utilizadas en Front-end, Back-end y Base de datos.
 
