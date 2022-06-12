@@ -1,8 +1,22 @@
 from flask import jsonify
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
+import os   
+from flask_migrate import Migrate
+
 
 db = SQLAlchemy()
+
+def setup_db(app):
+    db.app = app
+    db.init_app(app)
+    migrate = Migrate(app, db)
+
+def setup_db_test(app):
+    db.app = app
+    db.init_app(app)
+    db.create_all()
+    
 
 class Product(db.Model):
     __tablename__ = 'products'
@@ -22,7 +36,7 @@ class Product(db.Model):
         return f"<Product id={self.id}>"
     
     def JSONSerialize(self):
-        return jsonify({
+        return {
             "id": self.id,
             "user_id" : self.user_id,
             "price" : self.price,
@@ -32,8 +46,8 @@ class Product(db.Model):
             "sex" : self.sex,
             "category" : self.category,
             "city" : self.city
-        })
-
+        }
+    
     def create(self):
         try:
             db.session.add(self)
@@ -61,6 +75,8 @@ class Product(db.Model):
             db.session.close()
 
 
+
+
 class User(db.Model):
     __tablename__ = 'users'
     id = db.Column(db.Integer, primary_key=True)
@@ -84,14 +100,42 @@ class User(db.Model):
         return self.id
     
     def JSONSerialize(self):
-        return jsonify({
+        return {
             "id": self.id,
             "email" : self.email,
             "password" : self.password,
             "name" : self.name,
             "phone" : self.phone
-        })
-
+        }
+    
+    def create(self):
+        try:
+            db.session.add(self)
+            db.session.commit()
+            return self.id
+        except:
+            db.session.rollback()
+        finally:
+            db.session.close()
+    
+    def update(self):
+        try:
+            db.session.commit()
+            return self.id
+        except:
+            db.session.rollback()
+        finally:
+            db.session.close()
+    
+    def delete(self):
+        try:
+            db.session.delete(self)
+            db.session.commit()
+            return self.id
+        except:
+            db.session.rollback()
+        finally:
+            db.session.close()
 
 class Image(db.Model):
     __tablename__ = "images"
@@ -102,11 +146,35 @@ class Image(db.Model):
         return f'<Image: id={self.id}>'
 
     def JSONSerialize(self):
-        return jsonify({
+        return {
             "id": self.id,
             "product_id": self.product_id
-        })
-
+        }
+    def create(self):
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except:
+            db.session.rollback()
+        finally:
+            db.session.close()
+    
+    def update(self):
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+        finally:
+            db.session.close()
+    
+    def delete(self):
+        try:
+            db.session.delete(self)
+            db.session.commit()
+        except:
+            db.session.rollback()
+        finally:
+            db.session.close()
 
 
 class Comment(db.Model):
@@ -121,10 +189,36 @@ class Comment(db.Model):
         return f"<Comment id={self.id}>"
     
     def JSONSerialize(self):
-        return jsonify({
+        return {
             "id": self.id,
             "product_id" : self.id,
             "user_id" : self.user_id,
             "content" : self.content,
             "creation_date" : self.creation_date
-        })
+        }
+    
+    def create(self):
+        try:
+            db.session.add(self)
+            db.session.commit()
+        except:
+            db.session.rollback()
+        finally:
+            db.session.close()
+    
+    def update(self):
+        try:
+            db.session.commit()
+        except:
+            db.session.rollback()
+        finally:
+            db.session.close()
+    
+    def delete(self):
+        try:
+            db.session.delete(self)
+            db.session.commit()
+        except:
+            db.session.rollback()
+        finally:
+            db.session.close()

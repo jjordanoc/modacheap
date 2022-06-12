@@ -1,26 +1,47 @@
 import json
-from math import prod
 import os
 from flask import Flask, abort, jsonify, request
 from flask_cors import CORS
-from models import db, Product
-from flask_migrate import Migrate
+from models import Product, User, setup_db
 
 def create_app():
     app = Flask(__name__)
     app.secret_key = os.environ.get("SECRET_KEY")
+    app.config["UPLOAD_FOLDER"] = os.environ.get("UPLOAD_FOLDER")
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URI")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    app.config["UPLOAD_FOLDER"] = os.environ.get("UPLOAD_FOLDER")
-    db.init_app(app)
-    migrate = Migrate(app, db)
     CORS(app, origins=['http://localhost:3000'], max_age=10)
+    setup_db(app)
     
     @app.after_request
     def after_request(response):
         response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorizations, true")
         response.headers.add("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS")
         return response
+    
+    @app.route("/register", methods=["POST"])
+    def register_user():
+        body = request.get_json()
+        print(body)
+        email = body.get("email", None)
+        password = body.get("password", None)
+        name = body.get("name", None)
+        phone = body.get("phone", None)
+        if not email or not password or not name or not phone or User.query.filter(User.email == email).one_or_none():
+            abort(404)
+        user = User(email=email, name=name, phone=phone)
+        user.set_password(password)
+        user_id = user.create()
+
+        return jsonify({
+            "success" : True,
+            "user_id" : user_id
+        })
+
+    
+
+    
+    
     
     @app.route("/products", methods=["GET"])
     def get_products():

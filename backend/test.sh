@@ -4,4 +4,4 @@ export UPLOAD_FOLDER=static/uploaded/
 export DATABASE_URI=postgresql://jjoc:1234@localhost:5432/modacheap_v2_test
 export FLASK_APP=server
 export FLASK_ENV=development
-python -m unittest
+python3 -m unittest "tests/test_app.py"
