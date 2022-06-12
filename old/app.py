@@ -6,7 +6,7 @@ from flask import Flask, redirect, request, render_template, jsonify, url_for, s
 from flask_wtf import FlaskForm
 from wtforms import StringField, SubmitField, TextAreaField, FloatField
 from wtforms.validators import DataRequired
-from models import db, Producto, Usuario, Imagen, Comentario
+from backend.models import db, Producto, Usuario, Imagen, Comentario
 from flask_migrate import Migrate
 from flask_login import login_required, LoginManager, login_user, current_user, logout_user
 from dotenv import load_dotenv
