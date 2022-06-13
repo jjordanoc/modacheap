@@ -22,13 +22,12 @@ def create_app():
     @app.route("/register", methods=["POST"])
     def register_user():
         body = request.get_json()
-        print(body)
         email = body.get("email", None)
         password = body.get("password", None)
         name = body.get("name", None)
         phone = body.get("phone", None)
-        if not email or not password or not name or not phone or User.query.filter(User.email == email).one_or_none():
-            abort(404)
+        if not email or not password or not name or not phone or User.query.filter(User.email == email).one_or_none() or User.query.filter(User.phone == phone).one_or_none():
+            abort(422)
         user = User(email=email, name=name, phone=phone)
         user.set_password(password)
         user_id = user.create()
@@ -37,10 +36,23 @@ def create_app():
             "success" : True,
             "user_id" : user_id
         })
-
     
+    @app.route("/login", methods=["POST"])
+    def login_user():
+        body = request.get_json()
+        email = body.get("email", None)
+        password = body.get("password", None)
+        if not email or not password:
+            abort(422)
+        user = User.query.filter(User.email == email).one_or_none()
+        if not user or not user.check_password(password):
+            abort(401)
+        # login logic (oauth or another kind of login)
 
-    
+        return jsonify({
+            "success" : True,
+            "user_id" : user.id
+        })
     
     
     @app.route("/products", methods=["GET"])
@@ -140,5 +152,13 @@ def create_app():
             "status": 422,
             "message": "unprocessable entity"
         }), 422
+    
+    @app.errorhandler(401)
+    def unauthorized(error):
+        return jsonify({
+            "success": False,
+            "status": 401,
+            "message": "unauthorized"
+        }), 401
     
     return app
