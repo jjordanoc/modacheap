@@ -52,6 +52,7 @@ class Product(db.Model):
         try:
             db.session.add(self)
             db.session.commit()
+            return self.id
         except:
             db.session.rollback()
         finally:
@@ -60,6 +61,7 @@ class Product(db.Model):
     def update(self):
         try:
             db.session.commit()
+            return self.id
         except:
             db.session.rollback()
         finally:
@@ -69,6 +71,7 @@ class Product(db.Model):
         try:
             db.session.delete(self)
             db.session.commit()
+            return self.id
         except:
             db.session.rollback()
         finally:
@@ -154,6 +157,7 @@ class Image(db.Model):
         try:
             db.session.add(self)
             db.session.commit()
+            return self.id
         except:
             db.session.rollback()
         finally:
@@ -162,6 +166,7 @@ class Image(db.Model):
     def update(self):
         try:
             db.session.commit()
+            return self.id
         except:
             db.session.rollback()
         finally:
@@ -171,6 +176,7 @@ class Image(db.Model):
         try:
             db.session.delete(self)
             db.session.commit()
+            return self.id
         except:
             db.session.rollback()
         finally:
@@ -201,6 +207,7 @@ class Comment(db.Model):
         try:
             db.session.add(self)
             db.session.commit()
+            return self.id
         except:
             db.session.rollback()
         finally:
@@ -209,6 +216,7 @@ class Comment(db.Model):
     def update(self):
         try:
             db.session.commit()
+            return self.id
         except:
             db.session.rollback()
         finally:
@@ -218,6 +226,7 @@ class Comment(db.Model):
         try:
             db.session.delete(self)
             db.session.commit()
+            return self.id
         except:
             db.session.rollback()
         finally:

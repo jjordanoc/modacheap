@@ -54,7 +54,6 @@ def create_app():
             "user_id" : user.id
         })
     
-    
     @app.route("/products", methods=["GET"])
     def get_products():
         products = Product.query.all()
@@ -79,12 +78,11 @@ def create_app():
             abort(404)
 
         product = Product(user_id=user_id, price=price, name=name, description=description, size=size, sex=sex, category=category, city=city)
-
-        product.create()
+        product_id = product.create()
 
         return jsonify({
             "success" : True,
-            "product" : product.JSONSerialize()
+            "product_id" : product_id
         })
     
     @app.route("/products/<product_id>", methods=["DELETE"])

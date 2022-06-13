@@ -13,7 +13,8 @@ class TestApp(unittest.TestCase):
         self.test_user = User.query.get(user_data.get("user_id"))
     
     def test_user_create_success(self):
-        res = self.client.post("/register", json={"email" : "test2@test.com", "password" : "testpass123", "name" : "Test Com", "phone" : "955108212"})
+        json = {"email" : "test2@test.com", "password" : "testpass123", "name" : "Test Com", "phone" : "955108212"}
+        res = self.client.post("/register", json=json)
         data = res.get_json()
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data.get("success"))
@@ -27,18 +28,77 @@ class TestApp(unittest.TestCase):
         self.assertFalse(data.get("user_id"))
 
     def test_user_login_success(self):
-        res = self.client.post("/login", json={"email" : self.test_user.email, "password" : "testpass123"})
+        json = {"email" : self.test_user.email, "password" : "testpass123"}
+        res = self.client.post("/login", json=json)
         data = res.get_json()
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data.get("success"))
         self.assertTrue(data.get("user_id"))
     
     def test_user_login_failure(self):
-        res = self.client.post("/login", json={})
+        json = {}
+        res = self.client.post("/login", json=json)
         data = res.get_json()
         self.assertEqual(res.status_code, 422)
         self.assertFalse(data.get("success"))
         self.assertFalse(data.get("user_id"))
+    
+    def test_user_login_failure2(self):
+        json = {"email" : self.test_user.email, "password" : "nottestpass1234"}
+        res = self.client.post("/login", json=json)
+        data = res.get_json()
+        self.assertEqual(res.status_code, 401)
+        self.assertFalse(data.get("success"))
+        self.assertFalse(data.get("user_id"))
+    
+    def test_product_get_success_default(self):
+        res = self.client.get("/products")
+        data = res.get_json()
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data.get("success"))
+        products = data.get("products")
+        if len(products) > 0:
+            self.assertTrue(products)
+            self.assertEqual(len(products), data.get("count"))
+            self.assertGreater(len(products), 0)
+        else:
+            self.assertFalse(products)
+            self.assertEqual(len(products), data.get("count"))
+            self.assertEqual(len(products), 0)
+    
+    def test_product_create_success(self):
+        json = {
+            "user_id" : self.test_user.id,
+            "price" : 100,
+            "name" : "Test Product",
+            "description" : "This is a long description. Read it carefully.",
+            "size" : "M",
+            "sex" : "M",
+            "category" : "Polos",
+            "city" : "SANTIAGO DE SURCO"
+        }
+        res = self.client.post("/products", json=json)
+        data = res.get_json()
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data.get("success"))
+        self.assertTrue(data.get("product_id"))
+    
+    def test_product_create_failure(self):
+        json = {
+            "user_id" : "",
+            "price" : 100,
+            "name" : "Test Product",
+            "description" : "This is a long description. Read it carefully.",
+            "size" : "M",
+            "sex" : "M",
+            "category" : "Polos",
+            "city" : "SANTIAGO DE SURCO"
+        }
+        res = self.client.post("/products", json=json)
+        data = res.get_json()
+        self.assertEqual(res.status_code, 404)
+        self.assertFalse(data.get("success"))
+        self.assertFalse(data.get("product_id"))
 
     def tearDown(self) -> None:
         for product in Product.query.all():
