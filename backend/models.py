@@ -1,4 +1,4 @@
-from flask import jsonify
+from flask import abort
 from flask_sqlalchemy import SQLAlchemy
 from werkzeug.security import check_password_hash, generate_password_hash
 import os   
@@ -118,6 +118,7 @@ class User(db.Model):
             return self.id
         except:
             db.session.rollback()
+            abort(500)
         finally:
             db.session.close()
     

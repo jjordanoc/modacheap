@@ -34,7 +34,8 @@ def create_app():
 
         return jsonify({
             "success" : True,
-            "user_id" : user_id
+            "user_id" : user_id,
+            "user" : user.JSONSerialize()
         })
     
     @app.route("/login", methods=["POST"])

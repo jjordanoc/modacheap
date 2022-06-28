@@ -19,6 +19,7 @@ class TestApp(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data.get("success"))
         self.assertTrue(data.get("user_id"))
+        self.assertTrue(data.get("user"))
     
     def test_user_create_failure(self):
         res = self.client.post("/register", json={})
@@ -26,6 +27,7 @@ class TestApp(unittest.TestCase):
         self.assertEqual(res.status_code, 422)
         self.assertFalse(data.get("success"))
         self.assertFalse(data.get("user_id"))
+        self.assertFalse(data.get("user"))
 
     def test_user_login_success(self):
         json = {"email" : self.test_user.email, "password" : "testpass123"}
