@@ -12,6 +12,7 @@ class TestApp(unittest.TestCase):
         user_data = res_user.get_json()
         self.test_user = User.query.get(user_data.get("user_id"))
     
+    # ------------- REGISTER ------------- 
     def test_user_create_success(self):
         json = {"email" : "test2@test.com", "password" : "testpass123", "name" : "Test Com", "phone" : "955108212"}
         res = self.client.post("/register", json=json)
@@ -28,6 +29,8 @@ class TestApp(unittest.TestCase):
         self.assertFalse(data.get("success"))
         self.assertFalse(data.get("user_id"))
         self.assertFalse(data.get("user"))
+
+    # ------------- LOGIN -------------
 
     def test_user_login_success(self):
         json = {"email" : self.test_user.email, "password" : "testpass123"}
@@ -53,6 +56,8 @@ class TestApp(unittest.TestCase):
         self.assertFalse(data.get("success"))
         self.assertFalse(data.get("user_id"))
     
+    # ------------- PRODUCTS -------------
+
     def test_product_get_success_default(self):
         res = self.client.get("/products")
         data = res.get_json()
@@ -101,6 +106,8 @@ class TestApp(unittest.TestCase):
         self.assertEqual(res.status_code, 404)
         self.assertFalse(data.get("success"))
         self.assertFalse(data.get("product_id"))
+
+
 
     def tearDown(self) -> None:
         for product in Product.query.all():
