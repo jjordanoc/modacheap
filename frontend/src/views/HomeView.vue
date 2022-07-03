@@ -106,9 +106,9 @@
 
   <div class="row w-100">
     <div class="col-2"></div>
-    <div class="col-8" ,style="background-color:#;">
+    <div class="col-8" style="background-color: #">
       <div class="d-flex justify-content-between">
-        <strong>{{ productos }} producto(s) disponibles</strong>
+        <strong>{{ productsData.count }} producto(s) disponibles</strong>
         <!-- Ordenar por -->
         <div class="dropdown">
           <button
@@ -131,9 +131,14 @@
       <br />
       <!-- Productos -->
       <!-- {% if productos %} -->
-      <div class="row row-cols-1 row-cols-md-3 g-3">
+      <div
+        class="row row-cols-1 row-cols-md-3 g-3"
+        v-if="productsData.products"
+      >
         <!-- {% for producto in productos %} -->
         <a
+          v-for="product in productsData.products"
+          :key="product.id"
           href="/"
           style="text-decoration: none; color: var(--text-color)"
           class="col"
@@ -141,7 +146,7 @@
           <div class="card">
             <img src="" class="card-img-top" width="15" height="280" />
             <div class="card-body">
-              <h5 class="card-title">{{ producto.nombre }}</h5>
+              <h5 class="card-title">{{ product.name }}</h5>
               <p class="card-text1">
                 <!-- Talla: {{ producto.talla }} <br />
                 {% if producto.sexo == "M" %} Género: Hombre <br />
@@ -149,14 +154,14 @@
                 {% else %} Género: Unisex <br />
                 {% endif %} Distrito: {{ producto.distrito }} -->
               </p>
-              <p class="card-text4">Precio: S./{{ producto.precio }}</p>
+              <p class="card-text4">Precio: S./{{ product.price }}</p>
             </div>
           </div>
         </a>
         <!-- {% endfor %} -->
       </div>
       <!-- {% else %} -->
-      <p class="fs-3">
+      <p class="fs-3" v-else>
         No se encontraron resultados. ¡Te animamos a vender productos de este
         tipo! <br />
       </p>
@@ -171,6 +176,14 @@
 
 export default {
   name: "HomeView",
+  data() {
+    return {
+      productsData: {
+        count: 0,
+        products: [],
+      },
+    };
+  },
   methods: {
     getProducts() {
       fetch("http://127.0.0.1:5000/products", {
@@ -178,6 +191,7 @@ export default {
       })
         .then((res) => res.json())
         .then((resJson) => {
+          this.productsData = resJson;
           console.log(resJson);
         });
     },
