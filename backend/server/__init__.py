@@ -3,6 +3,8 @@ import os
 from flask import Flask, abort, jsonify, request
 from flask_cors import CORS
 from models import Product, User, setup_db
+from dotenv import load_dotenv
+load_dotenv()
 
 def create_app():
     app = Flask(__name__)
@@ -10,7 +12,7 @@ def create_app():
     app.config["UPLOAD_FOLDER"] = os.environ.get("UPLOAD_FOLDER")
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URI")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    CORS(app, origins=['http://localhost:3000'], max_age=10)
+    CORS(app, origins=['http://localhost:8080'], max_age=10)
     setup_db(app)
     
     @app.after_request
@@ -28,6 +30,7 @@ def create_app():
         password = body.get("password", None)
         name = body.get("name", None)
         phone = body.get("phone", None)
+
         if not email or not password or not name or not phone or User.query.filter(User.email == email).one_or_none() or User.query.filter(User.phone == phone).one_or_none():
             abort(422)
         user = User(email=email, name=name, phone=phone)
@@ -37,7 +40,6 @@ def create_app():
         return jsonify({
             "success" : True,
             "user_id" : user_id,
-            "user" : user.JSONSerialize()
         })
     
     # ------------- LOGIN -------------
@@ -56,7 +58,8 @@ def create_app():
 
         return jsonify({
             "success" : True,
-            "user_id" : user.id
+            "user_id" : user.id,
+            "user" : user.JSONSerialize()
         })
     
     # ------------- PRODUCTS -------------
@@ -95,6 +98,10 @@ def create_app():
     @app.route("/products/<product_id>", methods=["DELETE"])
     def delete_product(product_id):
         product = Product.query.filter(Product.id == product_id).one_or_none()
+
+        if product is None:
+            abort(404)
+
         product.delete()
         return jsonify({
             "success" : True,
@@ -134,6 +141,55 @@ def create_app():
                 abort(404)
             else:
                 abort(500)
+    
+    @app.route("/users/<user_id>",methods=["DELETE"])
+    def delete_user(user_id):
+        user = User.query.filter(User.id == user_id).one_or_none()
+
+        if user is None:
+            abort(404)
+
+        user.delete()
+        return jsonify({
+            "success": True,
+            "product_id" : user_id
+        })
+        
+
+    @app.route("/users/<user_id>",methods=["PATCH"])
+    def update_user(user_id):
+        user = User.query.filter(User.id == user_id).one_or_none()
+
+        if user is None:
+            abort(404)
+        
+        body = request.get_json()
+        if "email" in body:
+            user.email = body.get("email")
+        if "password" in body:
+            user.password = body.get("password")
+        if "name" in body:
+            user.name = body.get("name")
+        if "phone" in body:
+            user.phone = body.get("phone")
+        if "products" in body:
+            user.products = body.get("products")
+        if "comments" in body:
+            user.comments = body.get("comments")
+        user.update()
+        return jsonify({
+            "success" : True,
+            "user_id" : user_id
+        })
+
+
+    @app.errorhandler(400)
+    def bad_request(error):
+        return jsonify({
+            "success": False,
+            "status": 400,
+            "message": "bad request"
+        }), 400
 
     @app.errorhandler(404)
     def not_found(error):

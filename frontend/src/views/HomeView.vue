@@ -29,7 +29,11 @@
         </div>
       </form>
       <div class="d-flex flex-row justify-content-center">
-        <div class="dropdown-center m-4">
+        <div
+          class="dropdown-center m-4"
+          v-for="filter in ['category', 'size', 'sex']"
+          :key="filter"
+        >
           <button
             class="btn btn-danger dropdown-toggle"
             type="button"
@@ -37,26 +41,17 @@
             data-bs-toggle="dropdown"
             aria-expanded="false"
           ></button>
-          <!-- <ul class="dropdown-menu",aria-labelledby="menu-categoria">
-            <li><h6 class="dropdown-header">Seleccione la categoría</h6></li>
-            <li><hr class="dropdown-divider"></li>
-            <li><a class="dropdown-item" href={{url_for('producto_categoria', nombre_categoria='Abrigos' )}}>Abrigos</a>
+          <ul class="dropdown-menu" aria-labelledby="menu-categoria">
+            <li>
+              <h6 class="dropdown-header">Seleccione {{ filter }}</h6>
             </li>
-            <li><a class="dropdown-item" href={{url_for('producto_categoria', nombre_categoria='Polos' )}}>Polos</a>
+            <li><hr class="dropdown-divider" /></li>
+            <li v-for="data in filterData[filter]" :key="data">
+              <button class="dropdown-item" @click="filterBy(filter, data)">
+                {{ data }}
+              </button>
             </li>
-            <li><a class="dropdown-item" href={{url_for('producto_categoria', nombre_categoria='Pantalones'
-                )}}>Pantalones</a></li>
-            <li><a class="dropdown-item" href={{url_for('producto_categoria', nombre_categoria='Zapatos' )}}>Zapatos</a>
-            </li>
-            <li><a class="dropdown-item" href={{url_for('producto_categoria', nombre_categoria='Accesorios'
-                )}}>Accesorios</a></li>
-            <li><a class="dropdown-item" href={{url_for('producto_categoria', nombre_categoria='Vestidos' )}}>Vestidos</a>
-            </li>
-            <li><a class="dropdown-item" href={{url_for('producto_categoria', nombre_categoria='Blusas' )}}>Blusas</a>
-            </li>
-            <li><a class="dropdown-item" href={{url_for('producto_categoria', nombre_categoria='Invierno' )}}>Ropa de
-                invierno</a></li>
-        </ul> -->
+          </ul>
         </div>
 
         <div class="dropdown-center m-4">
@@ -182,6 +177,20 @@ export default {
         count: 0,
         products: [],
       },
+      filterData: {
+        category: [
+          "Abrigos",
+          "Polos",
+          "Pantalones",
+          "Zapatos",
+          "Accesorios",
+          "Vestidos",
+          "Blusas",
+          "Invierno",
+        ],
+        size: ["XXS"],
+        sex: ["F", "M", "U"],
+      },
     };
   },
   methods: {
@@ -194,6 +203,11 @@ export default {
           this.productsData = resJson;
           console.log(resJson);
         });
+    },
+    filterBy(attribute, category) {
+      this.productsData.products.filter(
+        (product) => product[attribute] == category
+      );
     },
   },
   mounted() {
