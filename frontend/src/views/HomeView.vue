@@ -56,7 +56,7 @@
             </li>
             <li><a class="dropdown-item" href={{url_for('producto_categoria', nombre_categoria='Invierno' )}}>Ropa de
                 invierno</a></li>
-        </ul> -->
+            </ul> -->
         </div>
 
         <div class="dropdown-center m-4">
@@ -120,12 +120,12 @@
           >
             <strong>Ordenar por</strong>
           </button>
-          <!-- <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-          <li><a class="dropdown-item" href="{{url_for('ordenar_criterio' , criterio='precio', orden='desc')}}">Menor Precio</a></li>
-          <li><a class="dropdown-item" href="{{url_for('ordenar_criterio' , criterio='precio', orden='asc')}}">Mayor Precio</a></li>
-          <li><a class="dropdown-item" href="{{url_for('ordenar_criterio' , criterio='nombre', orden='asc')}}">Alfabeto (Ascendente)</a></li>
-          <li><a class="dropdown-item" href="{{url_for('ordenar_criterio' , criterio='nombre', orden='desc')}}">Alfabeto (Descendente)</a></li>
-        </ul> -->
+          <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+            <li><a class="dropdown-item" href="{{url_for('ordenar_criterio' , criterio='precio', orden='desc')}}">Menor Precio</a></li>
+            <li><a class="dropdown-item" href="{{url_for('ordenar_criterio' , criterio='precio', orden='asc')}}">Mayor Precio</a></li>
+            <li><a class="dropdown-item" href="{{url_for('ordenar_criterio' , criterio='nombre', orden='asc')}}">Alfabeto (Ascendente)</a></li>
+            <li><a class="dropdown-item" href="{{url_for('ordenar_criterio' , criterio='nombre', orden='desc')}}">Alfabeto (Descendente)</a></li>
+          </ul>
         </div>
       </div>
       <br />

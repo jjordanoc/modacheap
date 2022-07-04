@@ -60,7 +60,7 @@
               />
             </div>
           </div>
-        
+        </div>
       </form>
 
       <div class="d-flex mt-3 align-items-center">
