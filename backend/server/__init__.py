@@ -10,7 +10,7 @@ def create_app():
     app.config["UPLOAD_FOLDER"] = os.environ.get("UPLOAD_FOLDER")
     app.config["SQLALCHEMY_DATABASE_URI"] = os.environ.get("DATABASE_URI")
     app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
-    CORS(app, origins=['http://localhost:3000'], max_age=10)
+    CORS(app, origins=['http://localhost:8080'], max_age=10)
     setup_db(app)
     
     @app.after_request
@@ -26,6 +26,7 @@ def create_app():
         password = body.get("password", None)
         name = body.get("name", None)
         phone = body.get("phone", None)
+
         if not email or not password or not name or not phone or User.query.filter(User.email == email).one_or_none() or User.query.filter(User.phone == phone).one_or_none():
             abort(422)
         user = User(email=email, name=name, phone=phone)
@@ -35,7 +36,6 @@ def create_app():
         return jsonify({
             "success" : True,
             "user_id" : user_id,
-            "user" : user.JSONSerialize()
         })
     
     @app.route("/login", methods=["POST"])
@@ -52,7 +52,8 @@ def create_app():
 
         return jsonify({
             "success" : True,
-            "user_id" : user.id
+            "user_id" : user.id,
+            "user" : user.JSONSerialize()
         })
     
     @app.route("/products", methods=["GET"])
@@ -119,6 +120,15 @@ def create_app():
             "product_id" : product_id
         })
 
+
+    @app.errorhandler(400)
+    def bad_request(error):
+        return jsonify({
+            "success": False,
+            "status": 400,
+            "message": "bad request"
+        }), 400
+    
     @app.errorhandler(404)
     def not_found(error):
         return jsonify({
