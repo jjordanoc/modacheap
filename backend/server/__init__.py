@@ -19,6 +19,8 @@ def create_app():
         response.headers.add("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS")
         return response
     
+    # ------------- REGISTER -------------
+
     @app.route("/register", methods=["POST"])
     def register_user():
         body = request.get_json()
@@ -38,6 +40,8 @@ def create_app():
             "user" : user.JSONSerialize()
         })
     
+    # ------------- LOGIN -------------
+
     @app.route("/login", methods=["POST"])
     def login_user():
         body = request.get_json()
@@ -55,6 +59,8 @@ def create_app():
             "user_id" : user.id
         })
     
+    # ------------- PRODUCTS -------------
+
     @app.route("/products", methods=["GET"])
     def get_products():
         products = Product.query.all()
@@ -97,27 +103,37 @@ def create_app():
     
     @app.route("/products/<product_id>", methods=["PATCH"])
     def update_product(product_id):
-        product = Product.query.filter(Product.id == product_id).one_or_none()
-        body = request.get_json()
-        if "price" in body:
-            product.price = body.get("price")
-        if "name" in body:
-            product.name = body.get("name")
-        if "description" in body:
-            product.description = body.get("description")
-        if "size" in body:
-            product.size = body.get("size")
-        if "sex" in body:
-            product.sex = body.get("sex")
-        if "category" in body:
-            product.category = body.get("category")
-        if "city" in body:
-            product.city = body.get("city")
-        product.update()
-        return jsonify({
-            "success" : True,
-            "product_id" : product_id
-        })
+        error_404 = False
+        try:
+            product = Product.query.filter(Product.id == product_id).one_or_none()
+            if product is None:
+                error_404 = True
+                abort(404)
+            body = request.get_json()
+            if "price" in body:
+                product.price = body.get("price")
+            if "name" in body:
+                product.name = body.get("name")
+            if "description" in body:
+                product.description = body.get("description")
+            if "size" in body:
+                product.size = body.get("size")
+            if "sex" in body:
+                product.sex = body.get("sex")
+            if "category" in body:
+                product.category = body.get("category")
+            if "city" in body:
+                product.city = body.get("city")
+            product.update()
+            return jsonify({
+                "success" : True,
+                "product_id" : product_id
+            })
+        except Exception as e:
+            if error_404:
+                abort(404)
+            else:
+                abort(500)
 
     @app.errorhandler(404)
     def not_found(error):
