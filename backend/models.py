@@ -154,6 +154,7 @@ class Image(db.Model):
             "id": self.id,
             "product_id": self.product_id
         }
+        
     def create(self):
         try:
             db.session.add(self)

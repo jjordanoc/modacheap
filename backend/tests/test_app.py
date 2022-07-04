@@ -1,7 +1,7 @@
 import unittest
 from server import create_app
 import json
-from models import Product, User, setup_db_test
+from models import Product, User, Image, setup_db_test
 
 class TestApp(unittest.TestCase):
     def setUp(self) -> None:
@@ -31,7 +31,8 @@ class TestApp(unittest.TestCase):
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data.get("success"))
         self.assertTrue(data.get("user_id"))
-        
+
+    
     def test_user_create_failure(self):
         res = self.client.post("/register", json={})
         data = res.get_json()
@@ -134,7 +135,7 @@ class TestApp(unittest.TestCase):
         data = res.get_json()
 
         self.assertEqual(res.status_code, 404)
-        self.assertEqual(data['message'], 'resource not found')
+        self.assertEqual(data['message'], 'El producto no se ha encontrado.')
         self.assertEqual(data['success'], False)
 
     def test_update_product_success(self):
@@ -155,13 +156,31 @@ class TestApp(unittest.TestCase):
 
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
-        self.assertEqual(data['message'], 'resource not found')
+        self.assertEqual(data['message'], 'El producto no se ha encontrado.')
 
+    # ------------- IMAGES -------------
+
+    def test_image_get_success_default(self):
+        res = self.client.get("/images")
+        data = res.get_json()
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data.get("success"))
+        images = data.get("images")
+        if len(images) > 0:
+            self.assertTrue(images)
+            self.assertEqual(len(images), data.get("count"))
+            self.assertGreater(len(images), 0)
+        else:
+            self.assertFalse(images)
+            self.assertEqual(len(images), data.get("count"))
+            self.assertEqual(len(images), 0)
 
     def tearDown(self) -> None:
         for product in Product.query.all():
             product.delete()
         for user in User.query.all():
             user.delete()
+        for image in Image.query.all():
+            image.delete()
         pass
         

@@ -2,7 +2,8 @@ import json
 import os
 from flask import Flask, abort, jsonify, request
 from flask_cors import CORS
-from models import Product, User, setup_db
+from sqlalchemy import desc
+from models import Product, User, Image, setup_db
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -31,8 +32,27 @@ def create_app():
         name = body.get("name", None)
         phone = body.get("phone", None)
 
-        if not email or not password or not name or not phone or User.query.filter(User.email == email).one_or_none() or User.query.filter(User.phone == phone).one_or_none():
-            abort(422)
+        if not email:
+            abort(422, description = "No se ha provicionado un correo electrónico.")
+
+        if not password:
+            abort(422, description = "No se ha provicionado una contraseña.")
+
+        if not name:
+            abort(422, description = "No se ha provicionado un nombre.")
+
+        if not phone:
+            abort(422, description = "No se ha provicionado un número telefónico.")
+
+        if len(phone) >= 10:
+            abort(422, description = "Se ha provicionado un número telefónico inválido.")
+
+        if User.query.filter(User.email == email).one_or_none() is not None:
+            abort(422, description ="El correo electrónico ya está en uso.")
+
+        if User.query.filter(User.phone == phone).one_or_none() is not None:
+            abort(422, description="El número telefónico ya está en uso.")  
+
         user = User(email=email, name=name, phone=phone)
         user.set_password(password)
         user_id = user.create()
@@ -49,11 +69,17 @@ def create_app():
         body = request.get_json()
         email = body.get("email", None)
         password = body.get("password", None)
-        if not email or not password:
-            abort(422)
+
+        if not email:
+            abort(422, description = "No se ha provicionado un correo electrónico.")
+
+        if not password:
+            abort(422, description = "No se ha provicionado una contraseña.")
+
         user = User.query.filter(User.email == email).one_or_none()
+
         if not user or not user.check_password(password):
-            abort(401)
+            abort(401, description = "Lo sentimos, las credenciales que está usando son inválidas.")
         # login logic (oauth or another kind of login)
 
         return jsonify({
@@ -84,9 +110,31 @@ def create_app():
         sex = body.get("sex", None)
         category = body.get("category", None)
         city = body.get("city", None)
-        if not user_id or not price or not name or not description or not size or not sex or not category or not city:
-            abort(404)
 
+        if not user_id:
+            abort(404, description="No se ha encontrado el identificador del usuario.")
+
+        if not price:
+            abort(422, description="No se ha provicionado un precio al producto.")
+
+        if not name:
+            abort(422, description="No se ha provicionado un nombre al producto.")
+
+        if not description:
+            abort(422, description="No se ha provicionado una descripción al producto.")
+
+        if not size:
+            abort(422, description="No se ha provicionado una talla al producto.")
+        
+        if not sex:
+            abort(422, description="No se ha provicionado un género al producto.")
+
+        if not category:
+            abort(422, description="No se ha provicionado una categoría al producto.")
+
+        if not city:
+            abort(422, description="No se ha provicionado una ciudad al producto.")
+        
         product = Product(user_id=user_id, price=price, name=name, description=description, size=size, sex=sex, category=category, city=city)
         product_id = product.create()
 
@@ -100,7 +148,7 @@ def create_app():
         product = Product.query.filter(Product.id == product_id).one_or_none()
 
         if product is None:
-            abort(404)
+            abort(404, description = "El producto no se ha encontrado.")
 
         product.delete()
         return jsonify({
@@ -110,44 +158,38 @@ def create_app():
     
     @app.route("/products/<product_id>", methods=["PATCH"])
     def update_product(product_id):
-        error_404 = False
-        try:
-            product = Product.query.filter(Product.id == product_id).one_or_none()
-            if product is None:
-                error_404 = True
-                abort(404)
-            body = request.get_json()
-            if "price" in body:
-                product.price = body.get("price")
-            if "name" in body:
-                product.name = body.get("name")
-            if "description" in body:
-                product.description = body.get("description")
-            if "size" in body:
-                product.size = body.get("size")
-            if "sex" in body:
-                product.sex = body.get("sex")
-            if "category" in body:
-                product.category = body.get("category")
-            if "city" in body:
-                product.city = body.get("city")
-            product.update()
-            return jsonify({
-                "success" : True,
-                "product_id" : product_id
-            })
-        except Exception as e:
-            if error_404:
-                abort(404)
-            else:
-                abort(500)
-    
+        product = Product.query.filter(Product.id == product_id).one_or_none()
+
+        if product is None:
+            abort(404, description = "El producto no se ha encontrado.")
+
+        body = request.get_json()
+        if "price" in body:
+            product.price = body.get("price")
+        if "name" in body:
+            product.name = body.get("name")
+        if "description" in body:
+            product.description = body.get("description")
+        if "size" in body:
+            product.size = body.get("size")
+        if "sex" in body:
+            product.sex = body.get("sex")
+        if "category" in body:
+            product.category = body.get("category")
+        if "city" in body:
+            product.city = body.get("city")
+        product.update()
+        return jsonify({
+            "success" : True,
+            "product_id" : product_id
+        })
+
     @app.route("/users/<user_id>",methods=["DELETE"])
     def delete_user(user_id):
         user = User.query.filter(User.id == user_id).one_or_none()
 
         if user is None:
-            abort(404)
+            abort(404, description = "El usuario no se ha encontrado.")
 
         user.delete()
         return jsonify({
@@ -187,36 +229,95 @@ def create_app():
             else:
                 abort(500)
 
+    # ------------- IMAGES -------------
+
+    @app.route("/images", methods=["GET"])
+    def get_images():
+        images = Image.query.all()
+        return jsonify({
+            "success" : True,
+            "images" : [image.JSONSerialize() for image in images],
+            "count" : len(images)
+        })
+    
+    @app.route("/images", methods=["POST"])
+    def create_image():
+        body = request.get_json()
+        product_id = body.get("product_id", None)
+
+        if not product_id:
+            abort(404, description = "No se ha encontrado el identificador del producto.")
+
+        image = Image(product_id=product_id)
+        image_id = image.create()
+
+        return jsonify({
+            "success" : True,
+            "image_id" : image_id
+        })
+    
+    @app.route("/images/<image_id>", methods=["DELETE"])
+    def delete_image(image_id):
+        image = Image.query.filter(Image.id == image_id).one_or_none()
+
+        if image is None:
+            abort(404, description = "La imagen no se ha encontrado.")
+
+        image.delete()
+        return jsonify({
+            "success" : True,
+            "product_id" : image_id
+        })
+    
+    @app.route("/images/<image_id>", methods=["PATCH"])
+    def update_image(image_id):
+        image = Image.query.filter(Image.id == image_id).one_or_none()
+
+        if image is None:
+            abort(404, description = "La imagen no se ha encontrado.")
+
+        body = request.get_json()
+        if "product_id" in body:
+            image.product_id = body.get("product_id")
+        
+        image.update()
+
+        return jsonify({
+            "success" : True,
+            "product_id" : image_id
+        })
+
+    # ------------- ERROR HANDLRES -------------
 
     @app.errorhandler(400)
     def bad_request(error):
         return jsonify({
             "success": False,
-            "status": 400,
+            "status": error.code,
             "message": "bad request"
         }), 400
+    
+    @app.errorhandler(401)
+    def unauthorized(error):
+        return jsonify({
+            "success": False,
+            "status": error.code,
+            "message": error.description
+        }), 401
 
     @app.errorhandler(404)
     def not_found(error):
         return jsonify({
             "success": False,
-            "status": 404,
-            "message": "resource not found"
+            "status": error.code,
+            "message": error.description
         }), 404
-
-    @app.errorhandler(500)
-    def server_error(error):
-        return jsonify({
-            "success": False,
-            "status": 500,
-            "message": "internal server error"
-        }), 500
     
     @app.errorhandler(405)
     def method_not_allowed(error):
         return jsonify({
             "success": False,
-            "status": 405,
+            "status": error.code,
             "message": "method not allowed"
         }), 405
     
@@ -225,16 +326,16 @@ def create_app():
     def unprocessable_entity(error):
         return jsonify({
             "success": False,
-            "status": 422,
-            "message": "unprocessable entity"
+            "status": error.code,
+            "message": error.description
         }), 422
     
-    @app.errorhandler(401)
-    def unauthorized(error):
+    @app.errorhandler(500)
+    def server_error(error):
         return jsonify({
             "success": False,
-            "status": 401,
-            "message": "unauthorized"
-        }), 401
-    
+            "status": error.code,
+            "message": "internal server error"
+        }), 500
+
     return app
