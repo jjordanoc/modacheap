@@ -2,6 +2,7 @@ import json
 import os
 from flask import Flask, abort, jsonify, request
 from flask_cors import CORS
+from sqlalchemy import desc
 from models import Product, User, setup_db
 from dotenv import load_dotenv
 load_dotenv()
@@ -21,6 +22,8 @@ def create_app():
         response.headers.add("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS")
         return response
     
+    # ------------- REGISTER -------------
+
     @app.route("/register", methods=["POST"])
     def register_user():
         body = request.get_json()
@@ -29,8 +32,27 @@ def create_app():
         name = body.get("name", None)
         phone = body.get("phone", None)
 
-        if not email or not password or not name or not phone or User.query.filter(User.email == email).one_or_none() or User.query.filter(User.phone == phone).one_or_none():
-            abort(422)
+        if not email:
+            abort(422, description = "No se ha provicionado un correo electrónico.")
+
+        if not password:
+            abort(422, description = "No se ha provicionado una contraseña.")
+
+        if not name:
+            abort(422, description = "No se ha provicionado un nombre.")
+
+        if not phone:
+            abort(422, description = "No se ha provicionado un número telefónico.")
+
+        if len(phone) >= 10:
+            abort(422, description = "Se ha provicionado un número telefónico inválido.")
+
+        if User.query.filter(User.email == email).one_or_none() is not None:
+            abort(422, description ="El correo electrónico ya está en uso.")
+
+        if User.query.filter(User.phone == phone).one_or_none() is not None:
+            abort(422, description="El número telefónico ya está en uso.")  
+
         user = User(email=email, name=name, phone=phone)
         user.set_password(password)
         user_id = user.create()
@@ -40,16 +62,24 @@ def create_app():
             "user_id" : user_id,
         })
     
+    # ------------- LOGIN -------------
+
     @app.route("/login", methods=["POST"])
     def login_user():
         body = request.get_json()
         email = body.get("email", None)
         password = body.get("password", None)
-        if not email or not password:
-            abort(422)
+
+        if not email:
+            abort(422, description = "No se ha provicionado un correo electrónico.")
+
+        if not password:
+            abort(422, description = "No se ha provicionado una contraseña.")
+
         user = User.query.filter(User.email == email).one_or_none()
+
         if not user or not user.check_password(password):
-            abort(401)
+            abort(401, description = "Lo sentimos, las credenciales que está usando son inválidas.")
         # login logic (oauth or another kind of login)
 
         return jsonify({
@@ -58,6 +88,8 @@ def create_app():
             "user" : user.JSONSerialize()
         })
     
+    # ------------- PRODUCTS -------------
+
     @app.route("/products", methods=["GET"])
     def get_products():
         products = Product.query.all()
@@ -94,7 +126,7 @@ def create_app():
         product = Product.query.filter(Product.id == product_id).one_or_none()
 
         if product is None:
-            abort(404)
+            abort(404, description = "El producto no se ha encontrado.")
 
         product.delete()
         return jsonify({
@@ -107,7 +139,7 @@ def create_app():
         product = Product.query.filter(Product.id == product_id).one_or_none()
 
         if product is None:
-            abort(404)
+            abort(404, description = "El producto no se ha encontrado.")
 
         body = request.get_json()
         if "price" in body:
@@ -129,13 +161,13 @@ def create_app():
             "success" : True,
             "product_id" : product_id
         })
-    
+
     @app.route("/users/<user_id>",methods=["DELETE"])
     def delete_user(user_id):
         user = User.query.filter(User.id == user_id).one_or_none()
 
         if user is None:
-            abort(404)
+            abort(404, description = "El usuario no se ha encontrado.")
 
         user.delete()
         return jsonify({
@@ -149,7 +181,7 @@ def create_app():
         user = User.query.filter(User.id == user_id).one_or_none()
 
         if user is None:
-            abort(404)
+            abort(404, description = "El usuario no se ha encontrado.")
         
         body = request.get_json()
         if "email" in body:
@@ -170,36 +202,35 @@ def create_app():
             "user_id" : user_id
         })
 
-
     @app.errorhandler(400)
     def bad_request(error):
         return jsonify({
             "success": False,
-            "status": 400,
+            "status": error.code,
             "message": "bad request"
         }), 400
+    
+    @app.errorhandler(401)
+    def unauthorized(error):
+        return jsonify({
+            "success": False,
+            "status": error.code,
+            "message": error.description
+        }), 401
 
     @app.errorhandler(404)
     def not_found(error):
         return jsonify({
             "success": False,
-            "status": 404,
-            "message": "resource not found"
+            "status": error.code,
+            "message": error.description
         }), 404
-
-    @app.errorhandler(500)
-    def server_error(error):
-        return jsonify({
-            "success": False,
-            "status": 500,
-            "message": "internal server error"
-        }), 500
     
     @app.errorhandler(405)
     def method_not_allowed(error):
         return jsonify({
             "success": False,
-            "status": 405,
+            "status": error.code,
             "message": "method not allowed"
         }), 405
     
@@ -208,16 +239,16 @@ def create_app():
     def unprocessable_entity(error):
         return jsonify({
             "success": False,
-            "status": 422,
-            "message": "unprocessable entity"
+            "status": error.code,
+            "message": error.description
         }), 422
     
-    @app.errorhandler(401)
-    def unauthorized(error):
+    @app.errorhandler(500)
+    def server_error(error):
         return jsonify({
             "success": False,
-            "status": 401,
-            "message": "unauthorized"
-        }), 401
-    
+            "status": error.code,
+            "message": "internal server error"
+        }), 500
+
     return app
