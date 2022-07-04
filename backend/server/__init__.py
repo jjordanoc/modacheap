@@ -3,6 +3,8 @@ import os
 from flask import Flask, abort, jsonify, request
 from flask_cors import CORS
 from models import Product, User, setup_db
+from dotenv import load_dotenv
+load_dotenv()
 
 def create_app():
     app = Flask(__name__)
@@ -90,6 +92,10 @@ def create_app():
     @app.route("/products/<product_id>", methods=["DELETE"])
     def delete_product(product_id):
         product = Product.query.filter(Product.id == product_id).one_or_none()
+
+        if product is None:
+            abort(404)
+
         product.delete()
         return jsonify({
             "success" : True,
@@ -99,6 +105,10 @@ def create_app():
     @app.route("/products/<product_id>", methods=["PATCH"])
     def update_product(product_id):
         product = Product.query.filter(Product.id == product_id).one_or_none()
+
+        if product is None:
+            abort(404)
+
         body = request.get_json()
         if "price" in body:
             product.price = body.get("price")
@@ -129,6 +139,46 @@ def create_app():
             "message": "bad request"
         }), 400
     
+    @app.route("/users/<user_id>",methods=["DELETE"])
+    def delete_user(user_id):
+        user = User.query.filter(User.id == user_id).one_or_none()
+
+        if user is None:
+            abort(404)
+
+        user.delete()
+        return jsonify({
+            "success": True,
+            "product_id" : user_id
+        })
+        
+
+    @app.route("/users/<user_id>",methods=["PATCH"])
+    def update_user(user_id):
+        user = User.query.filter(User.id == user_id).one_or_none()
+
+        if user is None:
+            abort(404)
+        
+        body = request.get_json()
+        if "email" in body:
+            user.email = body.get("email")
+        if "password" in body:
+            user.password = body.get("password")
+        if "name" in body:
+            user.name = body.get("name")
+        if "phone" in body:
+            user.phone = body.get("phone")
+        if "products" in body:
+            user.products = body.get("products")
+        if "comments" in body:
+            user.comments = body.get("comments")
+        user.update()
+        return jsonify({
+            "success" : True,
+            "user_id" : user_id
+        })
+
     @app.errorhandler(404)
     def not_found(error):
         return jsonify({

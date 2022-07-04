@@ -31,3 +31,5 @@ __pycache__
 /static/uploaded/*
 .pytest_cache
 /.vscode
+run.sh
+test.sh
