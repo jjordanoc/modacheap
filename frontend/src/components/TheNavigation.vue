@@ -16,58 +16,72 @@
         <span class="navbar-toggler-icon"></span>
       </button>
       <div class="collapse navbar-collapse" id="navbarSupportedContent">
-        <!-- {% if usuario %} -->
         <ul class="navbar-nav mb-2 mb-lg-0 ms-auto">
-          <!-- {% if usuario.is_authenticated %}
-          <li class="fs-3 nav-item m-3">
-            <p class="nav-link active" aria-current="page">
-              ¡Bienvenido <strong>{{ usuario.nombre }}</strong
-              >!
-            </p>
-          </li>
-          <li class="nav-item m-3">
-            <router-link
-              class="btn btn-dark btn-lg"
-              aria-current="page"
-              href="{{url_for('producto_crear')}}"
-              >Vender</a
-            >
-          </li>
-          <li class="nav-item m-3">
-            <router-link
-              class="btn btn-dark btn-lg"
-              aria-current="page"
-              href="{{url_for('usuario_logout')}}"
-              >Salir</a
-            >
-          </li>
-          {% else %} -->
-          <li class="nav-item m-3">
-            <router-link class="btn btn-dark btn-lg" aria-current="page" to="/"
-              >Vender</router-link
-            >
-          </li>
-          <li class="nav-item m-3">
-            <router-link class="btn btn-dark btn-lg" aria-current="page" to="/"
-              >Iniciar Sesion</router-link
-            >
-          </li>
-          <li class="nav-item m-3">
-            <router-link class="btn btn-dark btn-lg" aria-current="page" to="/"
-              >Registrarse</router-link
-            >
-          </li>
-          <!-- {% endif %} -->
+          <div v-if="store.isAuthenticated" class="d-flex">
+            <li class="fs-3 nav-item m-3">
+              <p class="nav-link active" aria-current="page">
+                ¡Bienvenido <strong>{{ store.user.name }}</strong
+                >!
+              </p>
+            </li>
+            <li class="nav-item m-3">
+              <router-link
+                class="btn btn-dark btn-lg"
+                aria-current="page"
+                to="/vender"
+                >Vender</router-link
+              >
+            </li>
+            <li class="nav-item m-3">
+              <router-link
+                class="btn btn-dark btn-lg"
+                aria-current="page"
+                to="/login"
+                >Salir</router-link
+              >
+            </li>
+          </div>
+          <div v-else class="d-flex">
+            <li class="nav-item m-3">
+              <router-link
+                class="btn btn-dark btn-lg"
+                aria-current="page"
+                to="/vender"
+                >Vender</router-link
+              >
+            </li>
+            <li class="nav-item m-3">
+              <router-link
+                class="btn btn-dark btn-lg"
+                aria-current="page"
+                to="/login"
+                >Iniciar Sesion</router-link
+              >
+            </li>
+            <li class="nav-item m-3">
+              <router-link
+                class="btn btn-dark btn-lg"
+                aria-current="page"
+                to="/registrar"
+                >Registrarse</router-link
+              >
+            </li>
+          </div>
         </ul>
-        <!-- {% endif %} -->
       </div>
     </div>
   </nav>
 </template>
 
 <script>
+import { store } from "@/store";
 export default {
   name: "TheNavigation",
+  data() {
+    return {
+      store,
+    };
+  },
 };
 </script>
 

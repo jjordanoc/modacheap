@@ -4,7 +4,7 @@
       <div class="form-header">
         <h1>Login</h1>
       </div>
-      <form id="login-form">
+      <form id="login-form" @submit.prevent="store.login(email, password)">
         <div class="d-flex flex-column">
           <div class="form-group mb-2">
             <label for="correo" class="subtitle">Correo</label>
@@ -14,6 +14,7 @@
               type="email"
               required
               class="form-control"
+              v-model="email"
             />
           </div>
 
@@ -25,6 +26,7 @@
               type="password"
               required
               class="form-control"
+              v-model="password"
             />
           </div>
 
@@ -51,7 +53,15 @@
 </template>
 
 <script>
+import { store } from "@/store.js";
 export default {
   name: "LoginView",
+  data() {
+    return {
+      email: "",
+      password: "",
+      store,
+    };
+  },
 };
 </script>
