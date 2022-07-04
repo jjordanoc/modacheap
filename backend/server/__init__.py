@@ -129,15 +129,6 @@ def create_app():
             "success" : True,
             "product_id" : product_id
         })
-
-
-    @app.errorhandler(400)
-    def bad_request(error):
-        return jsonify({
-            "success": False,
-            "status": 400,
-            "message": "bad request"
-        }), 400
     
     @app.route("/users/<user_id>",methods=["DELETE"])
     def delete_user(user_id):
@@ -178,6 +169,15 @@ def create_app():
             "success" : True,
             "user_id" : user_id
         })
+
+
+    @app.errorhandler(400)
+    def bad_request(error):
+        return jsonify({
+            "success": False,
+            "status": 400,
+            "message": "bad request"
+        }), 400
 
     @app.errorhandler(404)
     def not_found(error):
