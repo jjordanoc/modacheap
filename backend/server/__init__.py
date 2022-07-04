@@ -22,6 +22,8 @@ def create_app():
         response.headers.add("Access-Control-Allow-Methods", "GET, POST, PATCH, DELETE, OPTIONS")
         return response
     
+    # ------------- REGISTER -------------
+
     @app.route("/register", methods=["POST"])
     def register_user():
         body = request.get_json()
@@ -60,6 +62,8 @@ def create_app():
             "user_id" : user_id,
         })
     
+    # ------------- LOGIN -------------
+
     @app.route("/login", methods=["POST"])
     def login_user():
         body = request.get_json()
@@ -84,6 +88,8 @@ def create_app():
             "user" : user.JSONSerialize()
         })
     
+    # ------------- PRODUCTS -------------
+
     @app.route("/products", methods=["GET"])
     def get_products():
         products = Product.query.all()
