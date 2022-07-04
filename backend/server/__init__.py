@@ -158,29 +158,34 @@ def create_app():
 
     @app.route("/users/<user_id>",methods=["PATCH"])
     def update_user(user_id):
-        user = User.query.filter(User.id == user_id).one_or_none()
-
-        if user is None:
-            abort(404)
-        
-        body = request.get_json()
-        if "email" in body:
-            user.email = body.get("email")
-        if "password" in body:
-            user.password = body.get("password")
-        if "name" in body:
-            user.name = body.get("name")
-        if "phone" in body:
-            user.phone = body.get("phone")
-        if "products" in body:
-            user.products = body.get("products")
-        if "comments" in body:
-            user.comments = body.get("comments")
-        user.update()
-        return jsonify({
-            "success" : True,
-            "user_id" : user_id
-        })
+        error_404 = False
+        try:
+            user = User.query.filter(User.id == user_id).one_or_none()
+            if user is None:
+                abort(404)
+            body = request.get_json()
+            if "email" in body:
+                user.email = body.get("email")
+            if "password" in body:
+                user.password = body.get("password")
+            if "name" in body:
+                user.name = body.get("name")
+            if "phone" in body:
+                user.phone = body.get("phone")
+            if "products" in body:
+                user.products = body.get("products")
+            if "comments" in body:
+                user.comments = body.get("comments")
+            user.update()
+            return jsonify({
+                "success" : True,
+                "user_id" : user_id
+            })
+        except:
+            if error_404:
+                abort(404)
+            else:
+                abort(500)
 
 
     @app.errorhandler(400)

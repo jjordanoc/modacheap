@@ -26,20 +26,18 @@ class TestApp(unittest.TestCase):
     # ------------- REGISTER ------------- 
     def test_user_create_success(self):
         json = {"email" : "test2@test.com", "password" : "testpass123", "name" : "Test Com", "phone" : "955108212"}
-        res = self.client.post("/register", json=json)
+        res = self.client.post("/register", json = json)
         data = res.get_json()
         self.assertEqual(res.status_code, 200)
         self.assertTrue(data.get("success"))
         self.assertTrue(data.get("user_id"))
-        self.assertTrue(data.get("user"))
-    
+        
     def test_user_create_failure(self):
         res = self.client.post("/register", json={})
         data = res.get_json()
         self.assertEqual(res.status_code, 422)
         self.assertFalse(data.get("success"))
         self.assertFalse(data.get("user_id"))
-        self.assertFalse(data.get("user"))
 
 
     # ------------- LOGIN -------------
@@ -66,7 +64,30 @@ class TestApp(unittest.TestCase):
         self.assertEqual(res.status_code, 401)
         self.assertFalse(data.get("success"))
         self.assertFalse(data.get("user_id"))
-    
+
+    # ------------- USERS -------------
+    def test_update_users_success(self):
+        json = {"email" : "test@gmail.com", "password" : "pass123", "name" : "Test", "phone" : "924681598"}
+        res0 = self.client.post("/register", json = json)
+        data0 = res0.get_json()
+        updated_id = data0.get("user_id")
+        res = self.client.patch("/users/" + str(updated_id), json={"email":"new_email@gmail.com"})
+        data = res.get_json()
+        self.assertEqual(res.status_code, 200)
+        self.assertEqual(data["success"], True)
+        self.assertEqual(data["user_id"], str(updated_id))
+
+    def test_delete_users_success(self):
+        json = {"email" : "test@gmail.com", "password" : "pass123", "name" : "Test", "phone" : "924681598"}
+        res = self.client.post("/register", json = json)
+        data = res.get_json()
+        deleted_id = data.get("user_id")
+        res = self.client.delete("/users/" +  str(deleted_id))
+
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data.get("success"))
+        self.assertTrue(data.get("user_id"))
+        
     # ------------- PRODUCTS -------------
 
     def test_product_get_success_default(self):
@@ -125,7 +146,7 @@ class TestApp(unittest.TestCase):
         data = res.get_json()
         self.assertEqual(res.status_code, 200)
         self.assertEqual(data["success"], True)
-        self.assertEqual(data["product_id"], data.get("product_id"))
+        self.assertEqual(data["product_id"], str(updated_id))
 
     def test_update_product_failed(self):
 
