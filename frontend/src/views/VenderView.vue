@@ -1,7 +1,7 @@
 <template>
   <div class="d-flex flex-column align-items-center">
     <h1 class="mt-4">Vende un producto</h1>
-    <form id="vender-form" class="flex-wrap">
+    <form id="vender-form" class="flex-wrap" @submit.prevent="createProduct()">
       <div class="d-flex flex-row justify-content-center mt-4">
         <div class="m-3 d-flex flex-column producto-imagen">
           <div class="imagen-bg">
@@ -11,19 +11,45 @@
                 <input type="radio" name="r" id="r2" checked />
                 <input type="radio" name="r" id="r1" checked />
                 <div class="slide s1">
-                  <button class="imagen_add w-100" type="button">
-                    <img src="" id="imagen_1" />
-                  </button>
+                  <label class="imagen_add w-100">
+                    <img
+                      src="@/assets/imagen_add.png"
+                      id="imagen_1"
+                      ref="imageSource1"
+                    />
+                    <input
+                      class="file"
+                      type="file"
+                      id="file1"
+                      name="file1"
+                      accept="image/*"
+                      required
+                      @change="addImage(1, $event)"
+                    />
+                  </label>
                 </div>
                 <div class="slide">
-                  <button class="imagen_add w-100" type="button">
-                    <img src="" id="imagen_2" />
-                  </button>
+                  <label class="imagen_add w-100">
+                    <img
+                      src="@/assets/imagen_add.png"
+                      id="imagen_2"
+                      ref="imageSource2"
+                    />
+                    <input
+                      class="file"
+                      type="file"
+                      id="file2"
+                      name="file2"
+                      accept="image/*"
+                      required
+                      @change="addImage(2, $event)"
+                    />
+                  </label>
                 </div>
 
                 <div class="slide">
                   <button class="imagen_add w-100" type="button">
-                    <img src="" id="imagen_3" />
+                    <img src="@/assets/imagen_add.png" id="imagen_3" />
                   </button>
                 </div>
               </div>
@@ -34,21 +60,14 @@
               </div>
             </div>
           </div>
-          <input
-            type="file"
-            id="file1"
-            name="file1"
-            accept="image/*"
-            required
-            style="display: none"
-          />
-          <input
+
+          <!-- <input
             type="file"
             id="file2"
             name="file2"
             accept="image/*"
             required
-            style="display: none"
+            @change="addImage($event)"
           />
           <input
             type="file"
@@ -56,8 +75,8 @@
             name="file3"
             accept="image/*"
             required
-            style="display: none"
-          />
+            @change="addImage($event)"
+          /> -->
           <p>Incluye 3 imágenes del producto.</p>
 
           <div class="d-flex flex-column mt-4">
@@ -73,6 +92,7 @@
                 required
                 class="form-control border-primary"
                 cols="50"
+                v-model="description"
               ></textarea>
             </div>
           </div>
@@ -91,6 +111,7 @@
                 class="form-control"
                 minlength="5"
                 maxlength="80"
+                v-model="name"
               />
             </div>
 
@@ -105,6 +126,7 @@
                 step="any"
                 required
                 class="form-control"
+                v-model="price"
               />
             </div>
 
@@ -123,7 +145,14 @@
 
             <div class="from-group mb-3">
               <label for="sexo">Género de la prenda:</label>
-              <select name="sexo" id="sexo" required class="form-select">
+              <select
+                name="sexo"
+                id="sexo"
+                required
+                class="form-select"
+                v-model="sex"
+              >
+                <option disabled value="">Seleccionar</option>
                 <option value="M">Hombre</option>
                 <option value="F">Mujer</option>
                 <option value="U">Unisex</option>
@@ -137,7 +166,9 @@
                 id="categoria"
                 required
                 class="form-select"
+                v-model="category"
               >
+                <option disabled value="">Seleccionar</option>
                 <option value="Abrigos">Abrigos</option>
                 <option value="Polos">Polos</option>
                 <option value="Pantalones">Pantalones</option>
@@ -156,7 +187,9 @@
                 id="distrito"
                 required
                 class="form-select"
+                v-model="city"
               >
+                <option disabled value="">Seleccionar</option>
                 <option value="ANCON">ANCON</option>
                 <option value="ATE">ATE</option>
                 <option value="BARRANCO">BARRANCO</option>
@@ -210,11 +243,6 @@
                 </option>
               </select>
             </div>
-            <input
-              type="hidden"
-              value="{{usuario.correo}}"
-              id="usuario_correo"
-            />
             <input type="submit" value="Crear" class="btn btn-danger w-100" />
           </div>
         </div>
@@ -223,8 +251,73 @@
   </div>
 </template>
 
+<style>
+.file {
+  display: none;
+}
+.imagen_add:hover {
+  cursor: pointer;
+}
+</style>
+
 <script>
+import router from "@/router";
+import { store } from "@/store";
+
 export default {
-  data() {},
+  name: "VenderView",
+  data() {
+    return {
+      description: "",
+      name: "",
+      price: 0,
+      size: "",
+      sex: "",
+      city: "",
+      category: "",
+      images: [],
+      store,
+    };
+  },
+  methods: {
+    createProduct() {
+      fetch("http://127.0.0.1:5000/products", {
+        method: "POST",
+        body: JSON.stringify({
+          description: this.description,
+          name: this.name,
+          price: this.price,
+          size: this.size,
+          sex: this.sex,
+          city: this.city,
+          category: this.category,
+          user_id: this.store.user.id,
+        }),
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then((res) => res.json())
+        .then((resJson) => {
+          if (resJson["success"]) {
+            // add images to server
+
+            console.log(resJson);
+            router.push("/");
+          } else {
+            console.log(resJson);
+          }
+        });
+    },
+    addImage(num, event) {
+      console.log(event);
+      console.log(event.target.files[0]);
+      this.images.push(event.target.files[0]);
+      console.log(this.$refs, "imageSource" + num);
+      this.$refs["imageSource" + num].src = URL.createObjectURL(
+        event.target.files[0]
+      );
+    },
+  },
 };
 </script>
