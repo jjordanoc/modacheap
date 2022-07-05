@@ -131,10 +131,10 @@
         v-if="productsData.products"
       >
         <!-- {% for producto in productos %} -->
-        <a
+        <router-link
           v-for="product in productsData.products"
           :key="product.id"
-          href="/"
+          :to="`/producto/${product.id}`"
           style="text-decoration: none; color: var(--text-color)"
           class="col"
         >
@@ -152,7 +152,7 @@
               <p class="card-text4">Precio: S./{{ product.price }}</p>
             </div>
           </div>
-        </a>
+        </router-link>
         <!-- {% endfor %} -->
       </div>
       <!-- {% else %} -->

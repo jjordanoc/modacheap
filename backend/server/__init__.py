@@ -5,6 +5,8 @@ from flask_cors import CORS
 from sqlalchemy import desc
 from models import Product, User, Image, setup_db
 from dotenv import load_dotenv
+from shortuuid import ShortUUID
+from werkzeug.utils import secure_filename
 load_dotenv()
 
 def create_app():
@@ -247,6 +249,11 @@ def create_app():
 
         if not product_id:
             abort(404, description = "No se ha encontrado el identificador del producto.")
+
+        file = request.files.get("file")
+        random_seed = ShortUUID().random(length=50)
+        img_id = secure_filename(str(random_seed) + str(file.filename))
+        file.save(os.path.join(app.config["UPLOAD_FOLDER"], img_id))
 
         image = Image(product_id=product_id)
         image_id = image.create()
