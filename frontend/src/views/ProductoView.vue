@@ -8,14 +8,20 @@
             <input type="radio" name="r" id="r2" checked />
             <input type="radio" name="r" id="r1" checked />
             <div class="slide s1">
-              <img :src="product.images[0]" />
+              <img
+                :src="`http://127.0.0.1:5000/static/uploaded/${product.images[0]}`"
+              />
             </div>
             <div class="slide">
-              <img :src="product.images[1]" />
+              <img
+                :src="`http://127.0.0.1:5000/static/uploaded/${product.images[1]}`"
+              />
             </div>
 
             <div class="slide">
-              <img :src="product.images[2]" />
+              <img
+                :src="`http://127.0.0.1:5000/static/uploaded/${product.images[2]}`"
+              />
             </div>
           </div>
           <div class="navigation">
@@ -97,6 +103,36 @@
             </div>
         </div> -->
     </div>
+    <div class="d-flex flex-column">
+      <div class="producto-campo">
+        <h2>{{ product.name }}</h2>
+        <h3>Talla: {{ product.size }}</h3>
+        <h3>S/.{{ product.price }}</h3>
+
+        <p>{{ product.city }}</p>
+      </div>
+
+      <div class="producto-campo">
+        <h3>Contacto del vendedor</h3>
+        <p>{{ user.name }}</p>
+        <a
+          :href="`https://api.whatsapp.com/send?phone=51${user.phone}`"
+          target="_blank"
+        >
+          <div class="whatsapp-logo">
+            <img src="" />
+            <p>Contactar con el vendedor</p>
+          </div>
+        </a>
+      </div>
+
+      <div class="producto-campo">
+        <div class="d-grid gap-2">
+          <a class="btn btn-warning" href="">Editar producto</a>
+          <a class="btn btn-danger" href="">Eliminar producto</a>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -112,6 +148,7 @@ export default {
   data() {
     return {
       product: {},
+      user: {},
     };
   },
   methods: {
@@ -121,7 +158,9 @@ export default {
       })
         .then((res) => res.json())
         .then((resJson) => {
+          console.log(resJson);
           this.product = resJson.product;
+          this.user = resJson.user;
         });
     },
   },

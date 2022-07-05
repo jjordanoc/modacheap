@@ -45,7 +45,9 @@ class Product(db.Model):
             "size" : self.size,
             "sex" : self.sex,
             "category" : self.category,
-            "city" : self.city
+            "city" : self.city,
+            "images" : [image.JSONSerialize() for image in self.images],
+            "comments" : [comment.JSONSerialize() for comment in self.comments]
         }
     
     def create(self):

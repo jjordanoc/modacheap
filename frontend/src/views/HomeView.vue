@@ -134,20 +134,34 @@
         <router-link
           v-for="product in productsData.products"
           :key="product.id"
-          :to="`/producto/${product.id}`"
+          :to="{
+            name: 'producto',
+            params: {
+              product_id: product.id,
+            },
+          }"
           style="text-decoration: none; color: var(--text-color)"
           class="col"
         >
           <div class="card">
-            <img src="" class="card-img-top" width="15" height="280" />
+            <img
+              :src="
+                product.images[0]
+                  ? `http://127.0.0.1:5000/static/uploaded/${product.images[0].id}`
+                  : require('@/assets/imagen_add.png')
+              "
+              class="card-img-top"
+              width="15"
+              height="280"
+            />
             <div class="card-body">
               <h5 class="card-title">{{ product.name }}</h5>
               <p class="card-text1">
-                <!-- Talla: {{ producto.talla }} <br />
-                {% if producto.sexo == "M" %} Género: Hombre <br />
+                Talla: {{ product.size }} <br />
+                <!-- {% if producto.sexo == "M" %} Género: Hombre <br />
                 {% elif producto.sexo == "F" %} Género: Mujer <br />
-                {% else %} Género: Unisex <br />
-                {% endif %} Distrito: {{ producto.distrito }} -->
+                {% else %} Género: Unisex <br /> -->
+                Distrito: {{ product.distrito }}
               </p>
               <p class="card-text4">Precio: S./{{ product.price }}</p>
             </div>
@@ -200,8 +214,8 @@ export default {
       })
         .then((res) => res.json())
         .then((resJson) => {
+          // error handling
           this.productsData = resJson;
-          console.log(resJson);
         });
     },
     filterBy(attribute, category) {
@@ -212,6 +226,7 @@ export default {
   },
   mounted() {
     this.getProducts();
+    console.log(this.productsData);
   },
 };
 </script>

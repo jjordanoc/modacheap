@@ -322,16 +322,19 @@ export default {
           if (resJson["success"]) {
             // add images to server
             this.images.forEach((file) => {
+              console.log(file);
               let formData = new FormData();
               formData.append("file", file, file.name);
               formData.append("product_id", resJson["product_id"]);
-              fetch("http://127.0.0.1:5000/images", {
-                method: "POST",
-                body: formData,
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              });
+              console.log(resJson);
+              fetch(
+                `http://127.0.0.1:5000/products/${resJson["product_id"]}/images`,
+                {
+                  method: "POST",
+                  body: formData,
+                  headers: {},
+                }
+              );
             });
             console.log(resJson);
             router.push("/");
