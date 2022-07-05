@@ -51,7 +51,7 @@
             </li>
             <li><hr class="dropdown-divider" /></li>
             <li v-for="data in filterData[filter]" :key="data">
-              <button class="dropdown-item" onclick="filterBy(filter, data)">
+              <button class="dropdown-item" @click="filterBy(filter, data)">
                 {{ data }}
               </button>
             </li>
@@ -87,7 +87,7 @@
               ]"
               :key="option"
             >
-              <button class="dropdown-item" onclick="orderBy(option)">
+              <button class="dropdown-item" @click="orderBy(option)">
                 {{ option }}
               </button>
             </li>
@@ -173,6 +173,7 @@ export default {
         size: ["XXS", "XS", "S", "M", "L", "XL", "XXL"],
         sex: ["F", "M", "U"],
       },
+      query: "",
     };
   },
   methods: {
@@ -190,6 +191,7 @@ export default {
       this.productsData.products.filter(
         (product) => product[attribute] === category
       );
+      console.log(this.productsData.products);
     },
     orderBy(option) {
       this.productsData.products.sort((p1, p2) => {
@@ -218,6 +220,7 @@ export default {
         }
         return 0;
       });
+      console.log(this.productsData.products);
     },
   },
   mounted() {
