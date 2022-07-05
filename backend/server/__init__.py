@@ -3,8 +3,10 @@ import os
 from flask import Flask, abort, jsonify, request
 from flask_cors import CORS
 from sqlalchemy import desc
-from models import Product, User, setup_db
+from models import Product, User, Image, setup_db
 from dotenv import load_dotenv
+from shortuuid import ShortUUID
+from werkzeug.utils import secure_filename
 load_dotenv()
 
 def create_app():
@@ -110,9 +112,31 @@ def create_app():
         sex = body.get("sex", None)
         category = body.get("category", None)
         city = body.get("city", None)
-        if not user_id or not price or not name or not description or not size or not sex or not category or not city:
-            abort(404)
 
+        if not user_id:
+            abort(404, description="No se ha encontrado el identificador del usuario.")
+
+        if not price:
+            abort(422, description="No se ha provicionado un precio al producto.")
+
+        if not name:
+            abort(422, description="No se ha provicionado un nombre al producto.")
+
+        if not description:
+            abort(422, description="No se ha provicionado una descripción al producto.")
+
+        if not size:
+            abort(422, description="No se ha provicionado una talla al producto.")
+        
+        if not sex:
+            abort(422, description="No se ha provicionado un género al producto.")
+
+        if not category:
+            abort(422, description="No se ha provicionado una categoría al producto.")
+
+        if not city:
+            abort(422, description="No se ha provicionado una ciudad al producto.")
+        
         product = Product(user_id=user_id, price=price, name=name, description=description, size=size, sex=sex, category=category, city=city)
         product_id = product.create()
 
@@ -178,29 +202,99 @@ def create_app():
 
     @app.route("/users/<user_id>",methods=["PATCH"])
     def update_user(user_id):
-        user = User.query.filter(User.id == user_id).one_or_none()
+        error_404 = False
+        try:
+            user = User.query.filter(User.id == user_id).one_or_none()
+            if user is None:
+                abort(404)
+            body = request.get_json()
+            if "email" in body:
+                user.email = body.get("email")
+            if "password" in body:
+                user.password = body.get("password")
+            if "name" in body:
+                user.name = body.get("name")
+            if "phone" in body:
+                user.phone = body.get("phone")
+            if "products" in body:
+                user.products = body.get("products")
+            if "comments" in body:
+                user.comments = body.get("comments")
+            user.update()
+            return jsonify({
+                "success" : True,
+                "user_id" : user_id
+            })
+        except:
+            if error_404:
+                abort(404)
+            else:
+                abort(500)
 
-        if user is None:
-            abort(404, description = "El usuario no se ha encontrado.")
-        
-        body = request.get_json()
-        if "email" in body:
-            user.email = body.get("email")
-        if "password" in body:
-            user.password = body.get("password")
-        if "name" in body:
-            user.name = body.get("name")
-        if "phone" in body:
-            user.phone = body.get("phone")
-        if "products" in body:
-            user.products = body.get("products")
-        if "comments" in body:
-            user.comments = body.get("comments")
-        user.update()
+    # ------------- IMAGES -------------
+
+    @app.route("/images", methods=["GET"])
+    def get_images():
+        images = Image.query.all()
         return jsonify({
             "success" : True,
-            "user_id" : user_id
+            "images" : [image.JSONSerialize() for image in images],
+            "count" : len(images)
         })
+    
+    @app.route("/images", methods=["POST"])
+    def create_image():
+        body = request.get_json()
+        product_id = body.get("product_id", None)
+
+        if not product_id:
+            abort(404, description = "No se ha encontrado el identificador del producto.")
+
+        file = request.files.get("file")
+        random_seed = ShortUUID().random(length=50)
+        img_id = secure_filename(str(random_seed) + str(file.filename))
+        file.save(os.path.join(app.config["UPLOAD_FOLDER"], img_id))
+
+        image = Image(product_id=product_id)
+        image_id = image.create()
+
+        return jsonify({
+            "success" : True,
+            "image_id" : image_id
+        })
+    
+    @app.route("/images/<image_id>", methods=["DELETE"])
+    def delete_image(image_id):
+        image = Image.query.filter(Image.id == image_id).one_or_none()
+
+        if image is None:
+            abort(404, description = "La imagen no se ha encontrado.")
+
+        image.delete()
+        return jsonify({
+            "success" : True,
+            "product_id" : image_id
+        })
+    
+    @app.route("/images/<image_id>", methods=["PATCH"])
+    def update_image(image_id):
+        image = Image.query.filter(Image.id == image_id).one_or_none()
+
+        if image is None:
+            abort(404, description = "La imagen no se ha encontrado.")
+
+        body = request.get_json()
+        if "product_id" in body:
+            image.product_id = body.get("product_id")
+        
+        image.update()
+
+        return jsonify({
+            "success" : True,
+            "product_id" : image_id
+        })
+
+    # ------------- ERROR HANDLRES -------------
 
     @app.errorhandler(400)
     def bad_request(error):

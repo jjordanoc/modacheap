@@ -48,9 +48,22 @@
                 </div>
 
                 <div class="slide">
-                  <button class="imagen_add w-100" type="button">
-                    <img src="@/assets/imagen_add.png" id="imagen_3" />
-                  </button>
+                  <label class="imagen_add w-100">
+                    <img
+                      src="@/assets/imagen_add.png"
+                      id="imagen_3"
+                      ref="imageSource3"
+                    />
+                    <input
+                      class="file"
+                      type="file"
+                      id="file3"
+                      name="file3"
+                      accept="image/*"
+                      required
+                      @change="addImage(3, $event)"
+                    />
+                  </label>
                 </div>
               </div>
               <div class="d-flex navigation">
@@ -132,7 +145,14 @@
 
             <div class="form-group mb-3">
               <label for="talla">Talla de la prenda:</label>
-              <select name="talla" id="talla" required class="form-select">
+              <select
+                name="talla"
+                id="talla"
+                required
+                class="form-select"
+                v-model="size"
+              >
+                <option disabled value="">Seleccionar</option>
                 <option value="XXS">XXS</option>
                 <option value="XS">XS</option>
                 <option value="S">S</option>
@@ -301,7 +321,18 @@ export default {
         .then((resJson) => {
           if (resJson["success"]) {
             // add images to server
-
+            this.images.forEach((file) => {
+              let formData = new FormData();
+              formData.append("file", file, file.name);
+              formData.append("product_id", resJson["product_id"]);
+              fetch("http://127.0.0.1:5000/images", {
+                method: "POST",
+                body: formData,
+                headers: {
+                  "Content-Type": "application/json",
+                },
+              });
+            });
             console.log(resJson);
             router.push("/");
           } else {

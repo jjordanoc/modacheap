@@ -101,10 +101,11 @@
         class="row row-cols-1 row-cols-md-3 g-3"
         v-if="productsData.products"
       >
-        <a
+        <!-- {% for producto in productos %} -->
+        <router-link
           v-for="product in productsData.products"
           :key="product.id"
-          href="/"
+          :to="`/producto/${product.id}`"
           style="text-decoration: none; color: var(--text-color)"
           class="col"
         >
@@ -129,7 +130,8 @@
               <p class="card-text4">Precio: S./{{ product.price }}</p>
             </div>
           </div>
-        </a>
+        </router-link>
+        <!-- {% endfor %} -->
       </div>
       <!-- {% else %} -->
       <p class="fs-3" v-else>
@@ -150,7 +152,7 @@ export default {
     return {
       productsData: {
         count: 0,
-        products: ["Gorra 1", "Camisa 1", "Camisa 2"],
+        products: [],
       },
       dataName: {
         category: ["Categoría", "la categoría"],
@@ -223,7 +225,3 @@ export default {
   },
 };
 </script>
-
-<!--
-
-    -->
