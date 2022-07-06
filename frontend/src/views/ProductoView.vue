@@ -1,21 +1,27 @@
 <template>
-  <div class="d-flex flex-row justify-content-center mt-4">
+  <div class="d-flex flex-row justify-content-center mt-4" v-if="product">
     <div class="m-3 d-flex flex-column producto-imagen">
       <div class="imagen-bg">
         <div class="slider">
-          <div class="slides">
+          <div class="slides" v-if="product.images">
             <input type="radio" name="r" id="r3" checked />
             <input type="radio" name="r" id="r2" checked />
             <input type="radio" name="r" id="r1" checked />
             <div class="slide s1">
-              <img :src="product.images[0]" />
+              <img
+                :src="`http://127.0.0.1:5000/static/uploaded/${product.images[0].id}`"
+              />
             </div>
             <div class="slide">
-              <img :src="product.images[1]" />
+              <img
+                :src="`http://127.0.0.1:5000/static/uploaded/${product.images[1].id}`"
+              />
             </div>
 
             <div class="slide">
-              <img :src="product.images[2]" />
+              <img
+                :src="`http://127.0.0.1:5000/static/uploaded/${product.images[2].id}`"
+              />
             </div>
           </div>
           <div class="navigation">
@@ -97,31 +103,81 @@
             </div>
         </div> -->
     </div>
+    <div class="d-flex flex-column">
+      <div class="producto-campo">
+        <h2>{{ product.name }}</h2>
+        <h3>Talla: {{ product.size }}</h3>
+        <h3>S/.{{ product.price }}</h3>
+
+        <p>{{ product.city }}</p>
+      </div>
+
+      <div class="producto-campo">
+        <h3>Contacto del vendedor</h3>
+        <p>{{ user.name }}</p>
+        <a
+          :href="`https://api.whatsapp.com/send?phone=51${user.phone}`"
+          target="_blank"
+        >
+          <div class="whatsapp-logo">
+            <img src="@/assets/whatsapp_logo.png" />
+            <p>Contactar con el vendedor</p>
+          </div>
+        </a>
+      </div>
+
+      <div class="producto-campo">
+        <div class="d-grid gap-2">
+          <a class="btn btn-warning" href="">Editar producto</a>
+          <button class="btn btn-danger">Eliminar producto</button>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
+import router from "@/router";
+
 export default {
   name: "ProductoView",
   props: {
-    id: {
-      type: Number,
+    product_id: {
+      type: String,
       required: true,
     },
   },
   data() {
     return {
       product: {},
+      user: {},
     };
   },
   methods: {
     getProduct() {
-      fetch("http://127.0.0.1:5000/products/" + this.id, {
+      console.log(this.product_id);
+      fetch("http://127.0.0.1:5000/products/" + this.product_id, {
         method: "GET",
       })
         .then((res) => res.json())
         .then((resJson) => {
+          console.log(resJson);
           this.product = resJson.product;
+          this.user = resJson.user;
+        });
+    },
+    deleteProduct() {
+      fetch("http://127.0.0.1:5000/products/" + this.product_id, {
+        method: "DELETE",
+      })
+        .then((res) => res.json())
+        .then((resJson) => {
+          console.log(resJson);
+          if (resJson["success"]) {
+            router.push("/");
+          } else {
+            // error handling
+          }
         });
     },
   },

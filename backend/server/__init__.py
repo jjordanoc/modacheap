@@ -1,6 +1,6 @@
 import json
 import os
-from flask import Flask, abort, jsonify, request
+from flask import Flask, abort, jsonify, request, send_from_directory, send_file
 from flask_cors import CORS
 from sqlalchemy import desc
 from models import Product, User, Image, setup_db
@@ -99,6 +99,17 @@ def create_app():
             "success" : True,
             "products" : [product.JSONSerialize() for product in products],
             "count" : len(products)
+        })
+    
+    @app.route("/products/<product_id>", methods=["GET"])
+    def get_product(product_id):
+        product = Product.query.filter(Product.id == product_id).one_or_none()
+        if product is None:
+            abort(404, description="No se encontro el producto")
+        return jsonify({
+            "success" : True,
+            "product" : product.JSONSerialize(),
+            "user" : product.user.JSONSerialize(),
         })
     
     @app.route("/products", methods=["POST"])
@@ -242,12 +253,9 @@ def create_app():
             "count" : len(images)
         })
     
-    @app.route("/images", methods=["POST"])
-    def create_image():
-        body = request.get_json()
-        product_id = body.get("product_id", None)
-
-        if not product_id:
+    @app.route("/products/<product_id>/images", methods=["POST"])
+    def create_image(product_id):
+        if product_id is None:
             abort(404, description = "No se ha encontrado el identificador del producto.")
 
         file = request.files.get("file")
@@ -255,12 +263,12 @@ def create_app():
         img_id = secure_filename(str(random_seed) + str(file.filename))
         file.save(os.path.join(app.config["UPLOAD_FOLDER"], img_id))
 
-        image = Image(product_id=product_id)
-        image_id = image.create()
+        image = Image(id=img_id, product_id=product_id)
+        image.create()
 
         return jsonify({
             "success" : True,
-            "image_id" : image_id
+            "image_id" : img_id
         })
     
     @app.route("/images/<image_id>", methods=["DELETE"])
@@ -293,6 +301,10 @@ def create_app():
             "success" : True,
             "product_id" : image_id
         })
+
+    @app.route("/static/uploaded/<img_id>")
+    def static_uploaded(img_id):
+        return send_from_directory("../static/uploaded", img_id)
 
     # ------------- ERROR HANDLRES -------------
 

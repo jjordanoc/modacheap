@@ -66,30 +66,13 @@
                   </label>
                 </div>
               </div>
-              <div class="d-flex navigation">
+              <div class="navigation">
                 <label for="r1" class="bar"></label>
                 <label for="r2" class="bar"></label>
                 <label for="r3" class="bar"></label>
               </div>
             </div>
           </div>
-
-          <!-- <input
-            type="file"
-            id="file2"
-            name="file2"
-            accept="image/*"
-            required
-            @change="addImage($event)"
-          />
-          <input
-            type="file"
-            id="file3"
-            name="file3"
-            accept="image/*"
-            required
-            @change="addImage($event)"
-          /> -->
           <p>Incluye 3 imágenes del producto.</p>
 
           <div class="d-flex flex-column mt-4">
@@ -322,16 +305,19 @@ export default {
           if (resJson["success"]) {
             // add images to server
             this.images.forEach((file) => {
+              console.log(file);
               let formData = new FormData();
               formData.append("file", file, file.name);
               formData.append("product_id", resJson["product_id"]);
-              fetch("http://127.0.0.1:5000/images", {
-                method: "POST",
-                body: formData,
-                headers: {
-                  "Content-Type": "application/json",
-                },
-              });
+              console.log(resJson);
+              fetch(
+                `http://127.0.0.1:5000/products/${resJson["product_id"]}/images`,
+                {
+                  method: "POST",
+                  body: formData,
+                  headers: {},
+                }
+              );
             });
             console.log(resJson);
             router.push("/");

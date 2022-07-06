@@ -96,21 +96,33 @@
       </div>
       <br />
       <!-- Productos -->
-      <!-- {% if productos %} -->
       <div
         class="row row-cols-1 row-cols-md-3 g-3"
         v-if="productsData.products"
       >
-        <!-- {% for producto in productos %} -->
         <router-link
           v-for="product in productsData.products"
           :key="product.id"
-          :to="`/producto/${product.id}`"
+          :to="{
+            name: 'producto',
+            params: {
+              product_id: product.id,
+            },
+          }"
           style="text-decoration: none; color: var(--text-color)"
           class="col"
         >
           <div class="card">
-            <img src="" class="card-img-top" width="15" height="280" />
+            <img
+              :src="
+                product.images[0]
+                  ? `http://127.0.0.1:5000/static/uploaded/${product.images[0].id}`
+                  : require('@/assets/imagen_add.png')
+              "
+              class="card-img-top"
+              width="15"
+              height="280"
+            />
             <div class="card-body">
               <h5 class="card-title">{{ product.name }}</h5>
               <div class="card-text1">
@@ -131,21 +143,17 @@
             </div>
           </div>
         </router-link>
-        <!-- {% endfor %} -->
       </div>
-      <!-- {% else %} -->
       <p class="fs-3" v-else>
         No se encontraron resultados. ¡Te animamos a vender productos de este
         tipo! <br />
       </p>
-      <!-- {% endif %} -->
     </div>
     <div class="col-2"></div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
 export default {
   name: "HomeView",
   data() {
@@ -183,8 +191,8 @@ export default {
       })
         .then((res) => res.json())
         .then((resJson) => {
+          // error handling
           this.productsData = resJson;
-          console.log(resJson);
         });
     },
     filterBy(attribute, category) {
@@ -227,6 +235,7 @@ export default {
   },
   mounted() {
     this.getProducts();
+    console.log(this.productsData);
   },
 };
 </script>

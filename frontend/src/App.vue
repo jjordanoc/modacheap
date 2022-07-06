@@ -1,20 +1,32 @@
 <template>
   <TheNavigation />
+  <UserNotification
+    :show="store.showNotification"
+    :category="store.notificationCategory"
+    :message="store.notificationMessage"
+  />
   <router-view />
 </template>
 
 <script>
 import TheNavigation from "./components/TheNavigation.vue";
+import UserNotification from "./components/UserNotification.vue";
+import { store } from "./store";
 export default {
   name: "App",
-  components: { TheNavigation },
+  components: { TheNavigation, UserNotification },
+  data() {
+    return {
+      store,
+    };
+  },
 };
 </script>
 
 <style>
 * {
   --title-color: #d40b0b;
-  --main-background-color: #dbdaef;
+  --main-background-color: #f6f6f8;
   --text-color: #242736;
   --title-font: "Caveat", cursive;
   --text-font: "Josefin Sans", sans-serif;
