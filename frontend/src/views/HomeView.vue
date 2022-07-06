@@ -196,11 +196,9 @@ export default {
         });
     },
     filterBy(attribute, category) {
-      this.productsData.products.filter(
-        (product) => {
-          return product[attribute] === category;
-        }
-      );
+      this.productsData.products.filter((product) => {
+        return product[attribute] === category;
+      });
       console.log(this.productsData.products);
     },
     orderBy(option) {
