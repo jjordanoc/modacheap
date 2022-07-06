@@ -189,7 +189,9 @@ export default {
     },
     filterBy(attribute, category) {
       this.productsData.products.filter(
-        (product) => product[attribute] === category
+        (product) => {
+          return product[attribute] === category;
+        }
       );
       console.log(this.productsData.products);
     },
@@ -204,17 +206,17 @@ export default {
           fb = p2.name.toLowerCase();
         }
         if (option === "Menor Precio" || option === "Alfabeto (A-Z)") {
-          if (fa > fb) {
+          if (fa < fb) {
             return -1;
           }
-          if (fa < fb) {
+          if (fa > fb) {
             return 1;
           }
         } else if (option === "Mayor Precio" || option === "Alfabeto (Z-A)") {
-          if (fa < fb) {
+          if (fa > fb) {
             return -1;
           }
-          if (fa > fb) {
+          if (fa < fb) {
             return 1;
           }
         }
