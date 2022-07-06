@@ -109,7 +109,7 @@ def create_app():
         return jsonify({
             "success" : True,
             "product" : product.JSONSerialize(),
-            "user" : product.user,
+            "user" : product.user.JSONSerialize(),
         })
     
     @app.route("/products", methods=["POST"])

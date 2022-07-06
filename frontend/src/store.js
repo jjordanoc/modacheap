@@ -24,7 +24,21 @@ export const store = reactive({
           router.push("/");
         } else {
           console.log(resJson);
+          this.displayNotification("A", "warning");
         }
       });
   },
+  displayNotification(message, category) {
+    this.showNotification = true;
+    this.notificationMessage = message;
+    this.notificationCategory = category;
+  },
+  hideNotification() {
+    this.notificationMessage = "";
+    this.notificationCategory = "";
+    this.showNotification = false;
+  },
+  showNotification: false,
+  notificationMessage: "",
+  notificationCategory: "",
 });

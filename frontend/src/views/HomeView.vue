@@ -96,12 +96,10 @@
       </div>
       <br />
       <!-- Productos -->
-      <!-- {% if productos %} -->
       <div
         class="row row-cols-1 row-cols-md-3 g-3"
         v-if="productsData.products"
       >
-        <!-- {% for producto in productos %} -->
         <router-link
           v-for="product in productsData.products"
           :key="product.id"
@@ -145,21 +143,17 @@
             </div>
           </div>
         </router-link>
-        <!-- {% endfor %} -->
       </div>
-      <!-- {% else %} -->
       <p class="fs-3" v-else>
         No se encontraron resultados. ¡Te animamos a vender productos de este
         tipo! <br />
       </p>
-      <!-- {% endif %} -->
     </div>
     <div class="col-2"></div>
   </div>
 </template>
 
 <script>
-// @ is an alias to /src
 export default {
   name: "HomeView",
   data() {

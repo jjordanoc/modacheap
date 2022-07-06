@@ -66,30 +66,13 @@
                   </label>
                 </div>
               </div>
-              <div class="d-flex navigation">
+              <div class="navigation">
                 <label for="r1" class="bar"></label>
                 <label for="r2" class="bar"></label>
                 <label for="r3" class="bar"></label>
               </div>
             </div>
           </div>
-
-          <!-- <input
-            type="file"
-            id="file2"
-            name="file2"
-            accept="image/*"
-            required
-            @change="addImage($event)"
-          />
-          <input
-            type="file"
-            id="file3"
-            name="file3"
-            accept="image/*"
-            required
-            @change="addImage($event)"
-          /> -->
           <p>Incluye 3 imágenes del producto.</p>
 
           <div class="d-flex flex-column mt-4">
