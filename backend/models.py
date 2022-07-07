@@ -204,7 +204,8 @@ class Comment(db.Model):
             "product_id" : self.id,
             "user_id" : self.user_id,
             "content" : self.content,
-            "creation_date" : self.creation_date
+            "creation_date" : self.creation_date,
+            "user" : self.user.JSONSerialize(),
         }
     
     def create(self):

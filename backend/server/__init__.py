@@ -106,6 +106,7 @@ def create_app():
         product = Product.query.filter(Product.id == product_id).one_or_none()
         if product is None:
             abort(404, description="No se ha encontrado el producto.")
+        print(product.user.JSONSerialize())
         return jsonify({
             "success" : True,
             "product" : product.JSONSerialize(),

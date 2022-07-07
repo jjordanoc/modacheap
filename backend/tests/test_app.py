@@ -132,6 +132,14 @@ class TestApp(unittest.TestCase):
             self.assertEqual(len(products), data.get("count"))
             self.assertEqual(len(products), 0)
     
+    def test_product_get_failed_default(self):
+        res = self.client.get('/peliculas/15151515') 
+        data = res.get_json()
+    
+        self.assertEqual(res.status_code, 404)  
+        self.assertEqual(data['success'], False)
+
+
     def test_product_create_success(self):
         res = self.client.post("/products", json=self.new_products)
         data = res.get_json()

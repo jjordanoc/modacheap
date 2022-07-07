@@ -48,6 +48,19 @@ const routes = [
     component: () =>
       import(/* webpackChunkName: "producto" */ "../views/ProductoView.vue"),
   },
+  {
+    path: "/editar/:product_id",
+    props: true,
+    name: "editar",
+    meta: { requiresAuth: true },
+    // route level code-splitting
+    // this generates a separate chunk (about.[hash].js) for this route
+    // which is lazy-loaded when the route is visited.
+    component: () =>
+      import(
+        /* webpackChunkName: "editar" */ "../views/EditarProductoView.vue"
+      ),
+  },
 ];
 
 const router = createRouter({
