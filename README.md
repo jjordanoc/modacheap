@@ -37,7 +37,6 @@ Se utilizo Vue.js y Vue Client para nuestra interfaz de usuario y mejor experien
 Para el desarrollo backend se emplearon las siguientes librerias/frameworks:
 + Flask
 + Flask SQLAlchemy
-+ Flask Login
 + Flask Migrate
 + Werkzeug
 + Shortuuid

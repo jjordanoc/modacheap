@@ -106,6 +106,7 @@ def create_app():
         product = Product.query.filter(Product.id == product_id).one_or_none()
         if product is None:
             abort(404, description="No se ha encontrado el producto.")
+        print(product.user.JSONSerialize())
         return jsonify({
             "success" : True,
             "product" : product.JSONSerialize(),
@@ -340,7 +341,7 @@ def create_app():
             "count" : len(comments)
         })
 
-    @app.route("/products/<product_id>/comment", methods = ["POST"])
+    @app.route("/products/<product_id>/comments", methods = ["POST"])
     def create_comment(product_id):
         if product_id is None:
             abort(404, description = "No se ha encontrado el identificador del producto.")
@@ -354,10 +355,10 @@ def create_app():
 
         return jsonify({
             "success" : True,
-            "image_id" : comment_id
+            "comment_id" : comment_id
         })
 
-    @app.route("/comment/<comment_id>", methods = ["PATCH"])
+    @app.route("/comments/<comment_id>", methods = ["PATCH"])
     def update_comment(comment_id):
         comment = Comment.query.filter(Comment.id == comment_id).one_or_none()
 
@@ -376,7 +377,7 @@ def create_app():
             "comment_id" : comment_id
         })
 
-    @app.route("/comment/<comment_id>", methods = ["DELETE"])
+    @app.route("/comments/<comment_id>", methods = ["DELETE"])
     def delete_comment(comment_id):
         comment = Comment.query.filter(Comment.id == comment_id).one_or_none()
 
