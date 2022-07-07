@@ -14,18 +14,18 @@
       <form
         class="d-flex m-2"
         role="search"
-        action="/producto/buscar"
-        method="GET"
+        href="HomeView.vue#product-cards"
       >
         <div class="input-group">
           <input
+            v-model="message"
             class="form-control me-2"
             type="search"
             placeholder="Zapatos Adidas"
             aria-label="Search"
             name="buscar"
           />
-          <input class="btn btn-outline-danger" type="submit" value="Buscar" />
+          <input class="btn btn-outline-danger" type="submit" value="Buscar" @click="filterBy('name', message)"/>
         </div>
       </form>
       <div class="d-flex flex-row justify-content-center">
@@ -64,8 +64,8 @@
   <div class="row w-100">
     <div class="col-2"></div>
     <div class="col-8">
-      <div class="d-flex justify-content-between">
-        <strong>{{ productsData.count }} producto(s) disponibles</strong>
+      <div id="product-cards" class="d-flex justify-content-between">
+        <strong>{{ productsData.products.length }} producto(s) disponibles</strong>
         <!-- Ordenar por -->
         <div class="dropdown">
           <button
@@ -98,7 +98,7 @@
       <!-- Productos -->
       <div
         class="row row-cols-1 row-cols-md-3 g-3"
-        v-if="productsData.products"
+        v-if="productsData.products.length"
       >
         <router-link
           v-for="product in productsData.products"
@@ -161,11 +161,12 @@ export default {
       productsData: {
         count: 0,
         products: [],
+        filtered: [],
       },
       dataName: {
         category: ["Categoría", "la categoría"],
         size: ["Talla", "la talla"],
-        sex: ["Tipo", "el tipo"],
+        sex: ["Género", "el género"],
       },
       filterData: {
         category: [
@@ -193,14 +194,14 @@ export default {
         .then((resJson) => {
           // error handling
           this.productsData = resJson;
+          this.productsData.filtered = this.productsData.products;
         });
     },
     filterBy(attribute, category) {
-      this.productsData.products.filter(
-        (product) => {
-          return product[attribute] === category;
-        }
-      );
+      this.productsData.products = this.productsData.filtered;
+      this.productsData.products = this.productsData.products.filter(function(product){
+        return (product[attribute] == category);
+      });
       console.log(this.productsData.products);
     },
     orderBy(option) {
