@@ -120,11 +120,7 @@ Para este proyecto se utilizo dos hosts locales
 
 ## Manejo de errores HTTP
 
-+ 500 : Errores en el Servidor
-    + Los errores en el servidor redireccionan automaticamente al usuario a la pagina principal, notificando al usuario de que ha ocurrido un error por medio de un mensaje.
-+ 400 : Errores en el Cliente
-  + Los errores en el cliente muestran una notificacion al usuario de que ha ocurrido un error.
-+ Los codigos 100, 200 y 300 solo se utilizan para verificacion, no se notifican al usuario.
+Los errores de tipo 400, 401, 404, 405, 422 y 500 mandan una respuesta en formato JSON siguiendo un mismo patron: _success_, _message_ y _status_.
 
 ## Cómo ejecutar el sistema (Deployment scripts)
 
