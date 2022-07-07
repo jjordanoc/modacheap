@@ -20,11 +20,9 @@ export const store = reactive({
         if (resJson["success"]) {
           this.isAuthenticated = true;
           this.user = resJson["user"];
-          console.log("Authenticated user");
           router.push("/");
         } else {
-          console.log(resJson);
-          this.displayNotification("A", "warning");
+          this.displayNotification(resJson["message"], "danger");
         }
       });
   },
@@ -32,11 +30,6 @@ export const store = reactive({
     this.showNotification = true;
     this.notificationMessage = message;
     this.notificationCategory = category;
-  },
-  hideNotification() {
-    this.notificationMessage = "";
-    this.notificationCategory = "";
-    this.showNotification = false;
   },
   showNotification: false,
   notificationMessage: "",
