@@ -52,14 +52,15 @@ Se debe crear un archivo `.env` en el directorio raiz del proyecto que establezc
 
 ## Información acerca de los API. Requests y Responses de cada endpoint utilizado en el sistema.
 
-+ `/` : Es la pagina principal de la aplicacion. Retorna el template index.html, sin el usuario ademas con todos los productos disponibles en la aplicacion
-+ `/register` : Cuando el servidor recibe una solicitud POST, registra a el usuario con sus atributos, almacena la sesion del usuario y retorna un estado exitoso. Cuando ocurre algun error en el registro, retorna un estado fallido y un mensaje
++ `/register` :
+  + POST: 
+    + Registra a el usuario con sus atributos, almacena la sesion del usuario y retorna un estado exitoso. Cuando ocurre algun error en el registro, retorna un estado fallido y un mensaje
 
 + `/login` : 
-  * GET
+  * POST
     + Se inicia la sesion del usuario en la aplicacion y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
 
-+ `/products/` :
++ `/products` :
   + POST : 
     - El usuario puede crear los productos en la aplicacion web, mediante el metodo `POST`, y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
 + `/products/<product_id>` :
@@ -79,7 +80,7 @@ Se debe crear un archivo `.env` en el directorio raiz del proyecto que establezc
     - El usuario puede obtener todas las fotos de los productos de la aplicacion en la pagina, mediante el metodo `GET` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
 
 + `/products/<product_id>/images`
-  -POST:
+  - POST:
     - El usuario puede poner o crear las imagenes del producto seleccionado en la aplicacion mediante el metodo `POST` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
 + `/images/<image_id>`
   - DELETE:
@@ -98,14 +99,14 @@ Se debe crear un archivo `.env` en el directorio raiz del proyecto que establezc
   + DELETE :
     - El usuario puede eliminar su comentario hecho en una publicacion de un producto mediante el metodo `DELETE` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
 +  `/products/<product_id>/comment`
-  + POST:
-    - El usuario puede crear o añadir comentarios en su propio producto o en el de otros mediante el metodo `POST` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.  
+   +   POST:
+        - El usuario puede crear o añadir comentarios en su propio producto o en el de otros mediante el metodo `POST` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.  
 
 
 
 ## Hosts
 
-Para este proyecto se utilizo dos Host
+Para este proyecto se utilizo dos hosts locales
 + El Frontend corre en el puerto 8080, que es el puerto donde esta Vue.js 
 + El Backend corre en el puerto 5000, que es el puerto donde corre Flask  
 
@@ -120,6 +121,8 @@ Para este proyecto se utilizo dos Host
 
 ## Cómo ejecutar el sistema (Deployment scripts)
 
+**Backend**
+
 Para usuarios de Windows:
 
 Primero se debe crear el archivo `.env` con los valores de `SECRET_KEY` y `UPLOAD_FOLDER`.
@@ -131,6 +134,11 @@ Primero se debe crear el archivo `.env` con los valores de `SECRET_KEY` y `UPLOA
 Para usuarios de Linux:
 
 `./run.sh`
+
+
+**Frontend**
+
+Para iniciar el frontend, se debe correr el comando `npm run serve`.
 
 ## Manejo de test
 
@@ -148,4 +156,4 @@ Para usuarios de Linux:
 
 ## Modelo relacional
 
-![Modelo relacional](imageReadMe/modeloRelacional.PNG)
+![Modelo relacional](diagrams/modelo.PNG)
