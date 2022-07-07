@@ -99,6 +99,7 @@
                   aria-label="Basic example"
                 >
                   <button
+                    v-if="comment.user.id == store.user.id"
                     class="btn btn-outline-danger btn-sm delete-button"
                     @click="deleteComment(comment.id)"
                   >
@@ -210,20 +211,25 @@ export default {
         });
     },
     createComment() {
+      let comment = {
+        creation_date: new Date().toLocaleString(),
+        content: this.content,
+        user: this.store.user,
+        user_id: this.store.user.id,
+      };
       fetch(`http://127.0.0.1:5000/products/${this.product_id}/comments`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
-        body: JSON.stringify({
-          creation_date: new Date().toLocaleString(),
-          content: this.content,
-          user_id: this.user.id,
-        }),
+        body: JSON.stringify(comment),
       })
         .then((res) => res.json())
         .then((resJson) => {
-          console.log(resJson);
+          if (resJson["success"]) {
+            this.product.comments.push(comment);
+            this.content = "";
+          }
         });
     },
     deleteComment(id) {
@@ -232,7 +238,11 @@ export default {
       })
         .then((res) => res.json())
         .then((resJson) => {
-          console.log(resJson);
+          if (resJson["success"]) {
+            this.product.comments = this.product.comments.filter(
+              (elem) => elem.id === id
+            );
+          }
         });
     },
   },

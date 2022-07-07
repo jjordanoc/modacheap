@@ -11,11 +11,7 @@
       <p id="search-description">
         Encuentra una prenda <strong>a tu medida</strong>
       </p>
-      <form
-        class="d-flex m-2"
-        role="search"
-        @click.prevent="searchProducts()"
-      >
+      <form class="d-flex m-2" role="search" @submit.prevent="searchProducts()">
         <div class="input-group">
           <input
             class="form-control me-2"
@@ -25,7 +21,7 @@
             name="buscar"
             v-model="query"
           />
-          <input class="btn btn-outline-danger" type="submit" value="Buscar"/>
+          <input class="btn btn-outline-danger" type="submit" value="Buscar" />
         </div>
       </form>
       <div class="d-flex flex-row justify-content-center">
@@ -65,7 +61,9 @@
     <div class="col-2"></div>
     <div class="col-8">
       <div id="product-cards" class="d-flex justify-content-between">
-        <strong>{{ productsData.products.length }} producto(s) disponibles</strong>
+        <strong
+          >{{ productsData.products.length }} producto(s) disponibles</strong
+        >
         <!-- Ordenar por -->
         <div class="dropdown">
           <button
@@ -198,21 +196,32 @@ export default {
           this.productsData.original = this.productsData.products;
         });
     },
-    searchProducts(){
+    searchProducts() {
       this.productsData.products = this.productsData.original;
       this.productsData.searched = [];
-      for (let producto=0; this.productsData.products[producto]!==undefined; producto++){
-        if (this.productsData.products[producto]['name'].toLowerCase().search(this.query.toLowerCase())!==-1){
-          this.productsData.searched.push(this.productsData.products[producto])
+      for (
+        let producto = 0;
+        this.productsData.products[producto] !== undefined;
+        producto++
+      ) {
+        if (
+          this.productsData.products[producto]["name"]
+            .toLowerCase()
+            .search(this.query.toLowerCase()) !== -1
+        ) {
+          this.productsData.searched.push(this.productsData.products[producto]);
         }
+        location.href = "#product-cards";
       }
       this.productsData.products = this.productsData.searched;
       console.log(this.productsData.products);
     },
     filterBy(attribute, category) {
       this.productsData.products = this.productsData.original;
-      this.productsData.products = this.productsData.products.filter(function(product){
-        return (product[attribute] == category);
+      this.productsData.products = this.productsData.products.filter(function (
+        product
+      ) {
+        return product[attribute] == category;
       });
       console.log(this.productsData.products);
     },
