@@ -125,7 +125,7 @@ def create_app():
         city = body.get("city", None)
 
         if not user_id:
-            abort(404, description="No se ha encontrado el identificador del usuario.")
+            abort(404, description="No se ha encontrado el usuario.")
 
         if not price:
             abort(422, description="No se ha provicionado un precio al producto.")
@@ -161,7 +161,7 @@ def create_app():
         product = Product.query.filter(Product.id == product_id).one_or_none()
 
         if product is None:
-            abort(404, description = "El producto no se ha encontrado.")
+            abort(404, description = "No se ha encontrado el producto.")
 
         product.delete()
         return jsonify({
@@ -256,7 +256,7 @@ def create_app():
         user = User.query.filter(User.id == user_id).one_or_none()
 
         if user is None:
-            abort(404, description = "El usuario no se ha encontrado.")
+            abort(404, description = "No se ha encontrado el usuario.")
 
         user.delete()
         return jsonify({
@@ -279,7 +279,7 @@ def create_app():
     @app.route("/products/<product_id>/images", methods=["POST"])
     def create_image(product_id):
         if product_id is None:
-            abort(404, description = "No se ha encontrado el identificador del producto.")
+            abort(404, description = "No se ha encontrado el producto.")
 
         file = request.files.get("file")
         random_seed = ShortUUID().random(length=50)
@@ -299,7 +299,7 @@ def create_app():
         image = Image.query.filter(Image.id == image_id).one_or_none()
 
         if image is None:
-            abort(404, description = "La imagen no se ha encontrado.")
+            abort(404, description = "No se ha encontrado la imagen.")
 
         image.delete()
         return jsonify({
@@ -312,7 +312,7 @@ def create_app():
         image = Image.query.filter(Image.id == image_id).one_or_none()
 
         if image is None:
-            abort(404, description = "La imagen no se ha encontrado.")
+            abort(404, description = "No se ha encontrado la imagen.")
 
         body = request.get_json()
         if "product_id" in body:
@@ -329,7 +329,7 @@ def create_app():
     def static_uploaded(img_id):
         return send_from_directory("../static/uploaded", img_id)
 
-    # ------------- COMMENTARIES -------------
+    # ------------- COMMENTS -------------
 
     @app.route("/comments", methods=["GET"])
     def get_comments():
@@ -340,10 +340,24 @@ def create_app():
             "count" : len(comments)
         })
 
-    @app.route("/products/<product_id>/comment", methods = ["POST"])
+    @app.route("/comments/<comment_id>", methods=["GET"])
+    def get_comment(comment_id):
+        comment = Comment.query.filter(Comment.id == comment_id).one_or_none()
+        if comment is None:
+            abort(404, description="No se ha encontrado el comentario.")
+        return jsonify({
+            "success" : True,
+            "comment" : comment.JSONSerialize()
+        })
+
+    @app.route("/products/<product_id>/comments", methods = ["POST"])
     def create_comment(product_id):
-        if product_id is None:
-            abort(404, description = "No se ha encontrado el identificador del producto.")
+
+        product = Product.query.filter(Product.id == product_id).one_or_none()
+
+        if product is None:
+            abort(404, description = "No se ha encontrado el producto.")
+
         body = request.get_json()
         user_id = body.get("user_id", None)
         content = body.get("content", None)
@@ -354,15 +368,15 @@ def create_app():
 
         return jsonify({
             "success" : True,
-            "image_id" : comment_id
+            "comment_id" : comment_id
         })
 
-    @app.route("/comment/<comment_id>", methods = ["PATCH"])
+    @app.route("/comments/<comment_id>", methods = ["PATCH"])
     def update_comment(comment_id):
         comment = Comment.query.filter(Comment.id == comment_id).one_or_none()
 
         if comment is None:
-            abort(404, description = "El comentario no se ha encontrado.")
+            abort(404, description = "No se ha encontrado el comentario.")
 
         body = request.get_json()
 
@@ -376,12 +390,12 @@ def create_app():
             "comment_id" : comment_id
         })
 
-    @app.route("/comment/<comment_id>", methods = ["DELETE"])
+    @app.route("/comments/<comment_id>", methods = ["DELETE"])
     def delete_comment(comment_id):
         comment = Comment.query.filter(Comment.id == comment_id).one_or_none()
 
         if comment is None:
-            abort(404, description = "El comentario no se ha encontrado.")
+            abort(404, description = "No se ha encontrado el comentario.")
 
         comment.delete()
 
