@@ -14,19 +14,18 @@
       <form
         class="d-flex m-2"
         role="search"
-        action="/producto/buscar"
-        method="GET"
+        @click.prevent="searchProducts()"
       >
         <div class="input-group">
           <input
-            v-model="message"
             class="form-control me-2"
             type="search"
             placeholder="Zapatos Adidas"
             aria-label="Search"
             name="buscar"
+            v-model="query"
           />
-          <input class="btn btn-outline-danger" type="submit" value="Buscar" @click="filterBy('name', message)"/>
+          <input class="btn btn-outline-danger" type="submit" value="Buscar"/>
         </div>
       </form>
       <div class="d-flex flex-row justify-content-center">
@@ -163,6 +162,7 @@ export default {
         count: 0,
         products: [],
         filtered: [],
+        searched: [],
       },
       dataName: {
         category: ["Categoría", "la categoría"],
@@ -195,11 +195,22 @@ export default {
         .then((resJson) => {
           // error handling
           this.productsData = resJson;
-          this.productsData.filtered = this.productsData.products;
+          this.productsData.original = this.productsData.products;
         });
     },
+    searchProducts(){
+      this.productsData.products = this.productsData.original;
+      this.productsData.searched = [];
+      for (let producto=0; this.productsData.products[producto]!==undefined; producto++){
+        if (this.productsData.products[producto]['name'].toLowerCase().search(this.query.toLowerCase())!==-1){
+          this.productsData.searched.push(this.productsData.products[producto])
+        }
+      }
+      this.productsData.products = this.productsData.searched;
+      console.log(this.productsData.products);
+    },
     filterBy(attribute, category) {
-      this.productsData.products = this.productsData.filtered;
+      this.productsData.products = this.productsData.original;
       this.productsData.products = this.productsData.products.filter(function(product){
         return (product[attribute] == category);
       });
