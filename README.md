@@ -89,7 +89,10 @@ Se debe crear un archivo `.env` en el directorio raiz del proyecto que establezc
 + `/comments` : 
   + GET :
     - El usuario puede ver los comentarios de cada articulo o producto mostrado en la aplicacion web mediante el metodo `GET` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
-+ `/comment/<comment_id>`
++ `/comments/<comment_id>`
+  + GET :
+    - Retorna el comentario, mediante su id con el metodo `GET` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
+
   + PATCH :
     - El usuario puede modificar cosas en su comentario hecho en una publicacion de un producto mediante el metodo `PATCH` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
   + DELETE :
@@ -97,20 +100,15 @@ Se debe crear un archivo `.env` en el directorio raiz del proyecto que establezc
 +  `/products/<product_id>/comment`
   + POST:
     - El usuario puede crear o añadir comentarios en su propio producto o en el de otros mediante el metodo `POST` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.  
-  + 
+
 
 
 ## Hosts
 
-Para la primera parte del desarrollo de este proyecto se utilizo unicamente un host local.
+Para este proyecto se utilizo dos Host
++ El Frontend corre en el puerto 8080, que es el puerto donde esta Vue.js 
++ El Backend corre en el puerto 5000, que es el puerto donde corre Flask  
 
-##  Forma de autenticación
-
-La autenticacion se maneja por medio de `flask_login`.
-
-Se implemento un modelo `Usuario` con todos los atributos requeridos para registrar un usuario.
-
-Ademas, cabe destacar que las claves se almacenan encriptadas.
 
 ## Manejo de errores HTTP
 
@@ -147,3 +145,7 @@ Para saber que nuestra aplicacion web funciona correctamente, y nuestros endpoin
 Para usuarios de Linux:
 
 `./test.sh`
+
+## Modelo relacional
+
+![Modelo relacional](imageReadMe/modeloRelacional.PNG)
