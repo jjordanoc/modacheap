@@ -61,12 +61,19 @@ Se debe crear un archivo `.env` en el directorio raiz del proyecto que establezc
     + Se inicia la sesion del usuario en la aplicacion y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
 
 + `/products` :
+  + GET : 
+    + Retorna todos los productos.
   + POST : 
     - El usuario puede crear los productos en la aplicacion web, mediante el metodo `POST`, y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
 + `/products/<product_id>` :
-  + PATCH : El usuario ya registrado y logeado en la pagina, podra modificar un producto que el haya creado, mediante el metodo `PATCH` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
+  + GET : 
+    + Retorna el producto con id `product_id`.
   
-  + DELETE : El usuario ya registrado y logeado en la pagina, podra eliminar un producto que el haya creado, mediante el metodo `DELETE` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
+  + PATCH : 
+    + El usuario ya registrado y logeado en la pagina, podra modificar un producto que el haya creado, mediante el metodo `PATCH` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
+  
+  + DELETE : 
+    + El usuario ya registrado y logeado en la pagina, podra eliminar un producto que el haya creado, mediante el metodo `DELETE` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
 
 + `/users` :
   - PATCH
