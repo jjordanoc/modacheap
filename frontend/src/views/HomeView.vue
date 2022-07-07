@@ -14,8 +14,7 @@
       <form
         class="d-flex m-2"
         role="search"
-        action="/producto/buscar"
-        method="GET"
+        @click.prevent="searchProducts()"
       >
         <div class="input-group">
           <input
@@ -24,8 +23,9 @@
             placeholder="Zapatos Adidas"
             aria-label="Search"
             name="buscar"
+            v-model="query"
           />
-          <input class="btn btn-outline-danger" type="submit" value="Buscar" />
+          <input class="btn btn-outline-danger" type="submit" value="Buscar"/>
         </div>
       </form>
       <div class="d-flex flex-row justify-content-center">
@@ -64,8 +64,8 @@
   <div class="row w-100">
     <div class="col-2"></div>
     <div class="col-8">
-      <div class="d-flex justify-content-between">
-        <strong>{{ productsData.count }} producto(s) disponibles</strong>
+      <div id="product-cards" class="d-flex justify-content-between">
+        <strong>{{ productsData.products.length }} producto(s) disponibles</strong>
         <!-- Ordenar por -->
         <div class="dropdown">
           <button
@@ -98,7 +98,7 @@
       <!-- Productos -->
       <div
         class="row row-cols-1 row-cols-md-3 g-3"
-        v-if="productsData.products"
+        v-if="productsData.products.length"
       >
         <router-link
           v-for="product in productsData.products"
@@ -161,11 +161,13 @@ export default {
       productsData: {
         count: 0,
         products: [],
+        filtered: [],
+        searched: [],
       },
       dataName: {
         category: ["Categoría", "la categoría"],
         size: ["Talla", "la talla"],
-        sex: ["Tipo", "el tipo"],
+        sex: ["Género", "el género"],
       },
       filterData: {
         category: [
@@ -193,11 +195,24 @@ export default {
         .then((resJson) => {
           // error handling
           this.productsData = resJson;
+          this.productsData.original = this.productsData.products;
         });
     },
+    searchProducts(){
+      this.productsData.products = this.productsData.original;
+      this.productsData.searched = [];
+      for (let producto=0; this.productsData.products[producto]!==undefined; producto++){
+        if (this.productsData.products[producto]['name'].toLowerCase().search(this.query.toLowerCase())!==-1){
+          this.productsData.searched.push(this.productsData.products[producto])
+        }
+      }
+      this.productsData.products = this.productsData.searched;
+      console.log(this.productsData.products);
+    },
     filterBy(attribute, category) {
-      this.productsData.products.filter((product) => {
-        return product[attribute] === category;
+      this.productsData.products = this.productsData.original;
+      this.productsData.products = this.productsData.products.filter(function(product){
+        return (product[attribute] == category);
       });
       console.log(this.productsData.products);
     },

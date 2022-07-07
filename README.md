@@ -30,6 +30,8 @@ Plataforma web en donde se realiza compra y venta de vestimenta de segunda mano 
 
 Para agilizar el desarrollo front-end se utilizo Bootstrap 5.
 
+Se utilizo Vue.js y Vue Client para nuestra interfaz de usuario y mejor experiencia
+
 **Back-end:**
 
 Para el desarrollo backend se emplearon las siguientes librerias/frameworks:
@@ -56,6 +58,10 @@ Se debe crear un archivo `.env` en el directorio raiz del proyecto que establezc
 
 + `/usuario/registrar`: Se puede acceder mediante `GET` o `POST`. Cuando el servidor recibe una solicitud `GET`, retorna la pagina `register.html`. En cambio, cuando se recibe un `POST`, se utiliza para registrar al usuario en la aplicacion. Si todo sale bien, almacena la sesion del usuario y retorna un estado exitoso. Cuando ocurre algun error en el registro, retorna un estado fallido y un mensaje.
 
++ `usuario/modificar`: Permite que el usuario pueda modificar su perfil o su contraseña o su nombre. Se recibe una solicitud `GET` o `POST` y utiliza el metodo `UPDATE` 
+
++ `usuario/eliminar`: Permite que el usuario pueda eliminar su cuenta o su usario de la pagina. Se recibe una solicitud `GET` o `POST` y se utiliza el metodo `DELETE`
+
 + `/producto/buscar`: Permite buscar un producto por su nombre. Recibe una solicitud `GET` con el parametro para la busqueda en forma de *URL query parameters*.
 
 + `/producto/ver/`: Se puede acceder mediante `GET`. Retorna un template con el producto actual a ver. Permite relacionar el producto con el usuario que lo vende y que este sea capaz de contactarlo con un solo click mediante el __api de *WhatsApp*__.
@@ -66,7 +72,7 @@ Se debe crear un archivo `.env` en el directorio raiz del proyecto que establezc
 
 + `/producto/genero/`: Se puede acceder mediante `GET`. Retorna un template con los productos de un genero en especifico
 
-+ `/producto/ordernar/<>/ <>`: Se puede acceder mediante `GET`. Tiene 2 parametros, un criterio para filtrar los elementos, y el otro que atributo del producto (precio,nombre). Retorna en template con los productos con el criterio y el orden indicado
++ `/producto/ordernar/<>/<>` : Se puede acceder mediante `GET`. Tiene 2 parametros, un criterio para filtrar los elementos, y el otro que atributo del producto (precio,nombre). Retorna en template con los productos con el criterio y el orden indicado
 
 + `/producto/crear`: Se puede acceder mediante `GET` o `POST`. Cuando el servidor recibe una solicitud `GET`, retorna la pagina `vender.html`. En cambio, cuando se recibe un `POST`, se utiliza para registrar un nuevo producto en la aplicacion. Se retorna al cliente una respuesta que tiene el nuevo producto creado con todos sus atributos, asi como un estado y un mensaje. Esta informacion sera utilizada posteriormente para crear las imagenes asociadas a cada producto.
 
@@ -116,3 +122,17 @@ Primero se debe crear el archivo `.env` con los valores de `SECRET_KEY` y `UPLOA
 Para usuarios de Linux:
 
 `./run.sh`
+
+## Manejo de test
+
+Para saber que nuestra aplicacion web funciona correctamente, y nuestros endpoints hacen cada rol, y transmiten el mensaje correcto cuando hay un error o no.
+
++ Para la prueba de los test, se evaluo todos los endpoints con su metodo con sus casos exitosos y los fallidos
+
++ En cada prueba se verifico el mensaje y el codigo http recibido de los test 
+
++ Todos los test son satisfactorios y corren de manera correcta verificando la efectividad de los endpoints
+
+Para usuarios de Linux:
+
+`./test.sh`
