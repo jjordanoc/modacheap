@@ -39,6 +39,9 @@ Para el desarrollo backend se emplearon las siguientes librerias/frameworks:
 + Flask SQLAlchemy
 + Flask Login
 + Flask Migrate
++ Werkzeug
++ Shortuuid
++ dotenv
 
 **Base de datos:**
 
@@ -50,45 +53,54 @@ Se debe crear un archivo `.env` en el directorio raiz del proyecto que establezc
 
 ## Información acerca de los API. Requests y Responses de cada endpoint utilizado en el sistema.
 
-+ `/usuario/login`: Se puede acceder mediante `GET` o `POST`. Cuando el servidor recibe una solicitud `GET`, retorna la pagina `login.html`. En cambio, cuando se recibe un `POST`, se utiliza para iniciar la sesion del usuario en la aplicacion y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
++ `/` : Es la pagina principal de la aplicacion. Retorna el template index.html, sin el usuario ademas con todos los productos disponibles en la aplicacion
++ `/register` : Cuando el servidor recibe una solicitud POST, registra a el usuario con sus atributos, almacena la sesion del usuario y retorna un estado exitoso. Cuando ocurre algun error en el registro, retorna un estado fallido y un mensaje
 
-+ `/usuario/logout`: Solo se accede mediante `GET`. Cierra la sesion del usuario y retorna una redireccion a la pagina de iniciar sesion.
++ `/login` : 
+  * GET
+    + Se inicia la sesion del usuario en la aplicacion y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
 
-+ `/`: Es la pagina principal de la aplicacion. Retorna el template `index.html`, sin el usuario ademas con todos los productos disponibles en la aplicacion
++ `/products/` :
+  + POST : 
+    - El usuario puede crear los productos en la aplicacion web, mediante el metodo `POST`, y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
++ `/products/<product_id>` :
+  + PATCH : El usuario ya registrado y logeado en la pagina, podra modificar un producto que el haya creado, mediante el metodo `PATCH` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
+  
+  + DELETE : El usuario ya registrado y logeado en la pagina, podra eliminar un producto que el haya creado, mediante el metodo `DELETE` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
 
-+ `/usuario/registrar`: Se puede acceder mediante `GET` o `POST`. Cuando el servidor recibe una solicitud `GET`, retorna la pagina `register.html`. En cambio, cuando se recibe un `POST`, se utiliza para registrar al usuario en la aplicacion. Si todo sale bien, almacena la sesion del usuario y retorna un estado exitoso. Cuando ocurre algun error en el registro, retorna un estado fallido y un mensaje.
++ `/users` :
+  - PATCH
+    + EL usuario puede modificar sus atributos en la aplicacion mediante el metodo `PATCH` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
 
-+ `usuario/modificar`: Permite que el usuario pueda modificar su perfil o su contraseña o su nombre. Se recibe una solicitud `GET` o `POST` y utiliza el metodo `UPDATE` 
+  - DELETE  
+    + El usuario puede eliminar su cuenta de la aplicacion en la pagina, mediante el metodo `DELETE` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
 
-+ `usuario/eliminar`: Permite que el usuario pueda eliminar su cuenta o su usario de la pagina. Se recibe una solicitud `GET` o `POST` y se utiliza el metodo `DELETE`
++ `/images` : 
+  - GET
+    - El usuario puede obtener todas las fotos de los productos de la aplicacion en la pagina, mediante el metodo `GET` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
 
-+ `/producto/buscar`: Permite buscar un producto por su nombre. Recibe una solicitud `GET` con el parametro para la busqueda en forma de *URL query parameters*.
++ `/products/<product_id>/images`
+  -POST:
+    - El usuario puede poner o crear las imagenes del producto seleccionado en la aplicacion mediante el metodo `POST` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
++ `/images/<image_id>`
+  - DELETE:
+    - El usuario puede eliminar o borrar las imagenes del producto seleccionado en la aplicacion mediante el metodo `DELETE` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
+  - PATCH:
+    - El usuario puede modificar las imagenes del producto seleccionado en la aplicacion mediante el metodo `PATCH` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
++ `/comments` : 
+  + GET :
+    - El usuario puede ver los comentarios de cada articulo o producto mostrado en la aplicacion web mediante el metodo `GET` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
++ `/comment/<comment_id>`
+  + PATCH :
+    - El usuario puede modificar cosas en su comentario hecho en una publicacion de un producto mediante el metodo `PATCH` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
+  + DELETE :
+    - El usuario puede eliminar su comentario hecho en una publicacion de un producto mediante el metodo `DELETE` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.
++  `/products/<product_id>/comment`
+  + POST:
+    - El usuario puede crear o añadir comentarios en su propio producto o en el de otros mediante el metodo `POST` y retorna una respuesta al cliente el estado de la solicitud (si fue exitosa o no) y un mensaje.  
+  + 
 
-+ `/producto/ver/`: Se puede acceder mediante `GET`. Retorna un template con el producto actual a ver. Permite relacionar el producto con el usuario que lo vende y que este sea capaz de contactarlo con un solo click mediante el __api de *WhatsApp*__.
 
-+ `/producto/categoria/`:  Se puede acceder mediante `GET`. Retorna un template con los productos de una categoria en especifico.
-
-+ `/producto/talla/`: Se puede acceder mediante `GET`. Retorna un template con los productos de una talla en especifico
-
-+ `/producto/genero/`: Se puede acceder mediante `GET`. Retorna un template con los productos de un genero en especifico
-
-+ `/producto/ordernar/<>/<>` : Se puede acceder mediante `GET`. Tiene 2 parametros, un criterio para filtrar los elementos, y el otro que atributo del producto (precio,nombre). Retorna en template con los productos con el criterio y el orden indicado
-
-+ `/producto/crear`: Se puede acceder mediante `GET` o `POST`. Cuando el servidor recibe una solicitud `GET`, retorna la pagina `vender.html`. En cambio, cuando se recibe un `POST`, se utiliza para registrar un nuevo producto en la aplicacion. Se retorna al cliente una respuesta que tiene el nuevo producto creado con todos sus atributos, asi como un estado y un mensaje. Esta informacion sera utilizada posteriormente para crear las imagenes asociadas a cada producto.
-
-+ `/producto/borrar/`: Se puede acceder mediante `GET` o `POST`  y el metodo `DELETE`. Se elimina el porducto de la base de datos, para esto, se debe estar logeado, y que el producto sea creado por el mismo usuario
-
-+ `/producto/editar/`:  Se puede acceder mediante `GET` o `POST`. Se puede modificar la informacion del producto. Se envia una solicitud al servidor y te retorna a la pagina `editar.html`. La informacion nueva y recopilada, sera la nueva informacion del producto
-
-+ `/usuario/comentar`: Se puede acceder mediante `GET` o `POST`. Se puede añadir comentarios. Se mandara una peticion al servidor para modificar la vista de la pagina `producto.html` y agregar el comentario
-
-+ `/comentario/eliminar/`: Se puede acceder mediante `GET` y por le metodo `DELETE`, para eliminar el comentario del usuario, verificando si esta logeado y si el comentario es suyo
-
-+ `/imagen/crear`: Se puede acceder mediante `POST`. Permite crear las imagenes asociadas a cada uno de los post y almacenarlas directamente en el servidor en la carpeta `static/uploaded`. Retorna una respuesta al cliente que contiene el estado de la solicitud y un mensaje.
-
-+ `/static/uploaded/`: Permite acceder a los recursos creados por el usuario.
-
-+ `/static/resources/`: Permite acceder a los recursos requeridos por la aplicacion.
 ## Hosts
 
 Para la primera parte del desarrollo de este proyecto se utilizo unicamente un host local.
