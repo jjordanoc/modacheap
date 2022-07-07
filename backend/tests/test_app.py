@@ -67,6 +67,29 @@ class TestApp(unittest.TestCase):
         self.assertFalse(data.get("user_id"))
 
     # ------------- USERS -------------
+
+    def test_get_users_success(self):
+        res = self.client.get("/users")
+        data = res.get_json()
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data.get("success"))
+        self.assertTrue(data.get("users"))
+        self.assertTrue(data.get("count"))
+
+    def test_get_user_success(self):
+        res = self.client.get("/users/"+ str(self.test_user.id))
+        data = res.get_json()
+        self.assertEqual(res.status_code, 200)
+        self.assertTrue(data.get("success"))
+        self.assertTrue(data.get("user"))
+    
+    def test_get_user_failure(self):
+        res = self.client.get("/users/-1")
+        data = res.get_json()
+        self.assertEqual(res.status_code, 404)
+        self.assertFalse(data.get("success"))
+        self.assertEqual(data['message'], 'No se ha encontrado el usuario.')
+
     def test_update_users_success(self):
         json = {"email" : "test@gmail.com", "password" : "pass123", "name" : "Test", "phone" : "924681598"}
         res0 = self.client.post("/register", json = json)
@@ -143,7 +166,7 @@ class TestApp(unittest.TestCase):
         data = res.get_json()
 
         self.assertEqual(res.status_code, 404)
-        self.assertEqual(data['message'], 'El producto no se ha encontrado.')
+        self.assertEqual(data['message'], 'No se ha encontrado el producto.')
         self.assertEqual(data['success'], False)
 
     def test_update_product_success(self):
@@ -164,7 +187,7 @@ class TestApp(unittest.TestCase):
 
         self.assertEqual(res.status_code, 404)
         self.assertEqual(data['success'], False)
-        self.assertEqual(data['message'], 'El producto no se ha encontrado.')
+        self.assertEqual(data['message'], 'No se ha encontrado el producto.')
 
     # ------------- IMAGES -------------
 

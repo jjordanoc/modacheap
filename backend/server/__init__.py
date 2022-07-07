@@ -3,7 +3,7 @@ import os
 from flask import Flask, abort, jsonify, request, send_from_directory, send_file
 from flask_cors import CORS
 from sqlalchemy import desc
-from models import Product, User, Image, setup_db
+from models import Product, User, Image, Comment, setup_db
 from dotenv import load_dotenv
 from shortuuid import ShortUUID
 from werkzeug.utils import secure_filename
@@ -105,7 +105,7 @@ def create_app():
     def get_product(product_id):
         product = Product.query.filter(Product.id == product_id).one_or_none()
         if product is None:
-            abort(404, description="No se encontro el producto")
+            abort(404, description="No se ha encontrado el producto.")
         return jsonify({
             "success" : True,
             "product" : product.JSONSerialize(),
@@ -174,7 +174,7 @@ def create_app():
         product = Product.query.filter(Product.id == product_id).one_or_none()
 
         if product is None:
-            abort(404, description = "El producto no se ha encontrado.")
+            abort(404, description = "No se ha encontrado el producto.")
 
         body = request.get_json()
         if "price" in body:
@@ -197,19 +197,28 @@ def create_app():
             "product_id" : product_id
         })
 
-    @app.route("/users/<user_id>",methods=["DELETE"])
-    def delete_user(user_id):
-        user = User.query.filter(User.id == user_id).one_or_none()
 
-        if user is None:
-            abort(404, description = "El usuario no se ha encontrado.")
+    # ------------- USERS -------------
 
-        user.delete()
+    @app.route("/users", methods=["GET"])
+    def get_users():
+        users = User.query.all()
         return jsonify({
-            "success": True,
-            "product_id" : user_id
+            "success" : True,
+            "users" : [user.JSONSerialize() for user in users],
+            "count" : len(users)
         })
-        
+    
+    @app.route("/users/<user_id>", methods=["GET"])
+    def get_user(user_id):
+        user = User.query.filter(User.id == user_id).one_or_none()
+        if user is None:
+            abort(404, description="No se ha encontrado el usuario.")
+        return jsonify({
+            "success" : True,
+            "user" : user.JSONSerialize()
+        })
+
 
     @app.route("/users/<user_id>",methods=["PATCH"])
     def update_user(user_id):
@@ -241,6 +250,20 @@ def create_app():
                 abort(404)
             else:
                 abort(500)
+
+    @app.route("/users/<user_id>",methods=["DELETE"])
+    def delete_user(user_id):
+        user = User.query.filter(User.id == user_id).one_or_none()
+
+        if user is None:
+            abort(404, description = "El usuario no se ha encontrado.")
+
+        user.delete()
+        return jsonify({
+            "success": True,
+            "product_id" : user_id
+        })
+        
 
     # ------------- IMAGES -------------
 
@@ -305,6 +328,67 @@ def create_app():
     @app.route("/static/uploaded/<img_id>")
     def static_uploaded(img_id):
         return send_from_directory("../static/uploaded", img_id)
+
+    # ------------- COMMENTARIES -------------
+
+    @app.route("/comments", methods=["GET"])
+    def get_comments():
+        comments = Comment.query.all()
+        return jsonify({
+            "success" : True,
+            "comments" : [comment.JSONSerialize() for comment in comments],
+            "count" : len(comments)
+        })
+
+    @app.route("/products/<product_id>/comment", methods = ["POST"])
+    def create_comment(product_id):
+        if product_id is None:
+            abort(404, description = "No se ha encontrado el identificador del producto.")
+        body = request.get_json()
+        user_id = body.get("user_id", None)
+        content = body.get("content", None)
+        creation_date = body.get("creation_date", None)
+        
+        comment = Comment(user_id = user_id, product_id = product_id, content = content, creation_date = creation_date)
+        comment_id = comment.create()
+
+        return jsonify({
+            "success" : True,
+            "image_id" : comment_id
+        })
+
+    @app.route("/comment/<comment_id>", methods = ["PATCH"])
+    def update_comment(comment_id):
+        comment = Comment.query.filter(Comment.id == comment_id).one_or_none()
+
+        if comment is None:
+            abort(404, description = "El comentario no se ha encontrado.")
+
+        body = request.get_json()
+
+        if "content" in body:
+            comment.content = body.get("content")
+        
+        comment.update()
+
+        return jsonify({
+            "success" : True,
+            "comment_id" : comment_id
+        })
+
+    @app.route("/comment/<comment_id>", methods = ["DELETE"])
+    def delete_comment(comment_id):
+        comment = Comment.query.filter(Comment.id == comment_id).one_or_none()
+
+        if comment is None:
+            abort(404, description = "El comentario no se ha encontrado.")
+
+        comment.delete()
+
+        return jsonify({
+            "success" : True,
+            "comment_id" : comment_id
+        })
 
     # ------------- ERROR HANDLRES -------------
 
