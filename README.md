@@ -145,3 +145,7 @@ Para saber que nuestra aplicacion web funciona correctamente, y nuestros endpoin
 Para usuarios de Linux:
 
 `./test.sh`
+
+## Modelo relacional
+
+![Modelo relacional](imageReadMe/modeloRelacional.PNG)
