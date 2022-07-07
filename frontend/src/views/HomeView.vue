@@ -152,6 +152,8 @@
 </template>
 
 <script>
+import { store } from "@/store";
+
 export default {
   name: "HomeView",
   data() {
@@ -191,9 +193,12 @@ export default {
       })
         .then((res) => res.json())
         .then((resJson) => {
-          // error handling
-          this.productsData = resJson;
-          this.productsData.original = this.productsData.products;
+          if (resJson["success"]) {
+            this.productsData = resJson;
+            this.productsData.original = this.productsData.products;
+          } else {
+            store.displayNotification(resJson["message"], "danger");
+          }
         });
     },
     searchProducts() {
@@ -214,7 +219,6 @@ export default {
         location.href = "#product-cards";
       }
       this.productsData.products = this.productsData.searched;
-      console.log(this.productsData.products);
     },
     filterBy(attribute, category) {
       this.productsData.products = this.productsData.original;
@@ -223,7 +227,6 @@ export default {
       ) {
         return product[attribute] == category;
       });
-      console.log(this.productsData.products);
     },
     orderBy(option) {
       this.productsData.products.sort((p1, p2) => {
@@ -252,12 +255,10 @@ export default {
         }
         return 0;
       });
-      console.log(this.productsData.products);
     },
   },
   mounted() {
     this.getProducts();
-    console.log(this.productsData);
   },
 };
 </script>

@@ -190,20 +190,6 @@
             </select>
           </div>
         </div>
-
-        <!-- <div class="producto-campo">
-          <h3>Contacto del vendedor</h3>
-          <p>{{ user.name }}</p>
-          <a
-            :href="`https://api.whatsapp.com/send?phone=51${user.phone}`"
-            target="_blank"
-          >
-            <div class="whatsapp-logo">
-              <img src="@/assets/whatsapp_logo.png" />
-              <p>Contactar con el vendedor</p>
-            </div>
-          </a>
-        </div> -->
         <div class="d-flex justify-content-center">
           <input
             class="btn btn-danger btn-lg"
@@ -237,19 +223,16 @@ export default {
   },
   methods: {
     getProduct() {
-      console.log(this.product_id);
       fetch("http://127.0.0.1:5000/products/" + this.product_id, {
         method: "GET",
       })
         .then((res) => res.json())
         .then((resJson) => {
-          console.log(resJson);
           this.product = resJson.product;
           this.user = resJson.user;
         });
     },
     updateProduct() {
-      console.log(this.product_id);
       fetch("http://127.0.0.1:5000/products/" + this.product_id, {
         method: "PATCH",
         headers: {
@@ -267,8 +250,11 @@ export default {
       })
         .then((res) => res.json())
         .then((resJson) => {
-          console.log(resJson);
-          router.push("/producto/" + this.product_id);
+          if (resJson["success"]) {
+            router.push("/producto/" + this.product_id);
+          } else {
+            store.displayNotification(resJson["message"], "danger");
+          }
         });
     },
   },

@@ -23,7 +23,6 @@
                       id="file1"
                       name="file1"
                       accept="image/*"
-                      required
                       @change="addImage(1, $event)"
                     />
                   </label>
@@ -41,7 +40,6 @@
                       id="file2"
                       name="file2"
                       accept="image/*"
-                      required
                       @change="addImage(2, $event)"
                     />
                   </label>
@@ -60,7 +58,6 @@
                       id="file3"
                       name="file3"
                       accept="image/*"
-                      required
                       @change="addImage(3, $event)"
                     />
                   </label>
@@ -284,6 +281,14 @@ export default {
   },
   methods: {
     createProduct() {
+      console.log(this.images);
+      if (
+        Object.keys(this.images).length !== 3 &&
+        !this.images.find((elem) => elem === undefined)
+      ) {
+        store.displayNotification("Ingrese 3 imagenes.", "secondary");
+        return;
+      }
       fetch("http://127.0.0.1:5000/products", {
         method: "POST",
         body: JSON.stringify({
@@ -305,11 +310,9 @@ export default {
           if (resJson["success"]) {
             // add images to server
             this.images.forEach((file) => {
-              console.log(file);
               let formData = new FormData();
               formData.append("file", file, file.name);
               formData.append("product_id", resJson["product_id"]);
-              console.log(resJson);
               fetch(
                 `http://127.0.0.1:5000/products/${resJson["product_id"]}/images`,
                 {
@@ -317,23 +320,34 @@ export default {
                   body: formData,
                   headers: {},
                 }
-              );
+              )
+                .then((imgRes) => imgRes.json())
+                .then((imgResJson) => {
+                  if (!imgResJson["success"]) {
+                    router.push("/");
+                    store.displayNotification(imgResJson["message"], "danger");
+                  }
+                });
             });
-            console.log(resJson);
             router.push("/");
           } else {
-            console.log(resJson);
+            store.displayNotification(resJson["message"], "danger");
           }
+        })
+        .catch(() => {
+          store.displayNotification("No se pudo crear su producto.", "danger");
+          router.push("/");
         });
     },
     addImage(num, event) {
-      console.log(event);
-      console.log(event.target.files[0]);
-      this.images.push(event.target.files[0]);
-      console.log(this.$refs, "imageSource" + num);
-      this.$refs["imageSource" + num].src = URL.createObjectURL(
-        event.target.files[0]
-      );
+      try {
+        this.images[num - 1] = event.target.files[0];
+        this.$refs["imageSource" + num].src = URL.createObjectURL(
+          event.target.files[0]
+        );
+      } catch (error) {
+        store.displayNotification("Ingrese un archivo valido.", "warning");
+      }
     },
   },
 };

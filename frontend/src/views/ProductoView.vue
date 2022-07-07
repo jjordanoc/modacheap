@@ -185,13 +185,11 @@ export default {
   },
   methods: {
     getProduct() {
-      console.log(this.product_id);
       fetch("http://127.0.0.1:5000/products/" + this.product_id, {
         method: "GET",
       })
         .then((res) => res.json())
         .then((resJson) => {
-          console.log(resJson);
           this.product = resJson.product;
           this.user = resJson.user;
         });
@@ -202,11 +200,10 @@ export default {
       })
         .then((res) => res.json())
         .then((resJson) => {
-          console.log(resJson);
           if (resJson["success"]) {
             router.push("/");
           } else {
-            // error handling
+            store.displayNotification(resJson["message"], "danger");
           }
         });
     },
@@ -227,8 +224,11 @@ export default {
         .then((res) => res.json())
         .then((resJson) => {
           if (resJson["success"]) {
+            comment.id = resJson["comment_id"];
             this.product.comments.push(comment);
             this.content = "";
+          } else {
+            store.displayNotification(resJson["message"], "danger");
           }
         });
     },
@@ -240,8 +240,10 @@ export default {
         .then((resJson) => {
           if (resJson["success"]) {
             this.product.comments = this.product.comments.filter(
-              (elem) => elem.id === id
+              (elem) => elem.id !== id
             );
+          } else {
+            store.displayNotification(resJson["message"], "danger");
           }
         });
     },

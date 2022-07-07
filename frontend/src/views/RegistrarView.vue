@@ -108,8 +108,7 @@ export default {
           if (resJson["success"]) {
             store.login(this.email, this.password);
           } else {
-            // error handling
-            console.log(resJson);
+            store.displayNotification(resJson["message"], "danger");
           }
         });
     },
