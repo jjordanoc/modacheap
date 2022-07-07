@@ -126,10 +126,12 @@
         </a>
       </div>
 
-      <div class="producto-campo">
+      <div class="producto-campo" v-if="store.user.id == user.id">
         <div class="d-grid gap-2">
           <a class="btn btn-warning" href="">Editar producto</a>
-          <button class="btn btn-danger">Eliminar producto</button>
+          <button class="btn btn-danger" @click="deleteProduct()">
+            Eliminar producto
+          </button>
         </div>
       </div>
     </div>
@@ -138,6 +140,7 @@
 
 <script>
 import router from "@/router";
+import { store } from "@/store";
 
 export default {
   name: "ProductoView",
@@ -151,6 +154,7 @@ export default {
     return {
       product: {},
       user: {},
+      store,
     };
   },
   methods: {

@@ -14,7 +14,8 @@
       <form
         class="d-flex m-2"
         role="search"
-        href="HomeView.vue#product-cards"
+        action="/producto/buscar"
+        method="GET"
       >
         <div class="input-group">
           <input
