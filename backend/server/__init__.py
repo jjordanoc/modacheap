@@ -262,7 +262,7 @@ def create_app():
         user.delete()
         return jsonify({
             "success": True,
-            "product_id" : user_id
+            "user_id" : user_id
         })
         
 

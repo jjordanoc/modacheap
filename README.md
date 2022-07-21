@@ -1,9 +1,5 @@
-# proyectodbp
-Proyecto para el curso Desarrollo Basado en Plataformas.
-
-## Nombre del proyecto
-
-ModaCheap
+# ModaCheap
+Proyecto para el curso Desarrollo Basado en Plataformas (CS2031).
 
 ## Integrantes
 - Joaquín Francisco Jordán O`Connor 
